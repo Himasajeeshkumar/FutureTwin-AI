@@ -3,7 +3,7 @@ export async function analyzeJobMatch(resume, jobDescription) {
     const token = localStorage.getItem("token");
 
     const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/jobmatch`,
+        `${import.meta.env.VITE_API_URL}/job-match`,
         {
             method: "POST",
             headers: {
