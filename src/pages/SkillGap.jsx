@@ -48,7 +48,7 @@ const [error, setError] = useState("");
 
             const token = localStorage.getItem("token");
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/skillgap`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/skill-gap`, {
 
                 method: "POST",
 
