@@ -1,0 +1,69 @@
+:root{
+
+    --bg:#0B0B11;
+
+    --surface:#1E1E27;
+
+    --surface-light:#272733;
+
+    --primary:#8B5CF6;
+
+    --secondary:#3B82F6;
+
+    --text:#FFFFFF;
+
+    --muted:#A1A1AA;
+
+    --radius:20px;
+
+    --shadow:0 20px 40px rgba(139,92,246,.18);
+
+    --transition:.3s ease;
+
+}
+
+.glass-card{
+
+    background:var(--surface);
+
+    border:1px solid rgba(139,92,246,.18);
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+}
+
+.section-spacing{
+
+    margin:80px auto;
+
+}
+
+.primary-btn{
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    color:white;
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:16px 30px;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.primary-btn:hover{
+
+    transform:translateY(-4px);
+
+}

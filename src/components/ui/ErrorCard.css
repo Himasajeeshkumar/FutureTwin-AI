@@ -1,0 +1,57 @@
+.error-card{
+
+    max-width:550px;
+
+    margin:50px auto;
+
+    padding:40px;
+
+    text-align:center;
+
+    background:white;
+
+    border-radius:20px;
+
+    border:1px solid #fca5a5;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+}
+
+.error-icon{
+
+    font-size:60px;
+
+    margin-bottom:20px;
+
+}
+
+.error-card h2{
+
+    margin-bottom:12px;
+
+}
+
+.error-card p{
+
+    color:#6b7280;
+
+    margin-bottom:25px;
+
+}
+
+.error-card button{
+
+    padding:12px 28px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#6366f1;
+
+    color:white;
+
+    cursor:pointer;
+
+}

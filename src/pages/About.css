@@ -1,0 +1,108 @@
+.about-section{
+    padding:100px 8%;
+    text-align:center;
+}
+
+.section-tag{
+    display:inline-block;
+    padding:10px 20px;
+    border-radius:999px;
+    background:rgba(139,92,246,.12);
+    color:#A78BFA;
+    font-size:15px;
+    font-weight:600;
+    margin-bottom:20px;
+    min-height:20px
+}
+
+.about-title{
+    font-size:48px;
+    color:white;
+    margin-bottom:20px;
+    font-weight:800;
+}
+
+.about-description{
+    max-width:700px;
+    margin:0 auto 60px;
+    color:#B4B4C3;
+    line-height:1.8;
+    font-size:18px;
+}
+
+.about-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:28px;
+}
+
+.about-card{
+    background:#1D1D25;
+    border:1px solid #2E2E35;
+    border-radius:22px;
+    padding:30px;
+    transition:.35s;
+    text-align:left;
+}
+
+.about-card:hover{
+    transform:translateY(-8px);
+    border-color:#8B5CF6;
+    box-shadow:0 18px 40px rgba(139,92,246,.22);
+}
+
+.about-icon{
+    width:60px;
+    height:60px;
+    border-radius:16px;
+    background:rgba(139,92,246,.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    margin-bottom:20px;
+    transition:.35s;
+}
+
+.about-card:hover .about-icon{
+    transform:scale(1.1) rotate(6deg);
+}
+
+.about-card h3{
+    color:white;
+    margin-bottom:15px;
+    font-size:22px;
+}
+
+.about-card p{
+    color:#B4B4C3;
+    line-height:1.7;
+}
+
+.about-title{
+    position:relative;
+}
+
+.about-title::after{
+
+content:"";
+
+position:absolute;
+
+width:220px;
+height:220px;
+
+background:#8B5CF6;
+
+filter:blur(130px);
+
+opacity:.08;
+
+left:50%;
+top:50%;
+
+transform:translate(-50%,-50%);
+
+z-index:-1;
+
+}

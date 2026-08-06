@@ -1,0 +1,373 @@
+.job-match{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:40px 20px;
+
+}
+
+.job-match-hero{
+
+    background:linear-gradient(135deg,#8B5CF6,#6366F1);
+
+    color:white;
+
+    padding:45px;
+
+    border-radius:24px;
+
+    margin-bottom:35px;
+
+    box-shadow:0 20px 40px rgba(139,92,246,.25);
+
+}
+
+.job-match-hero h1{
+
+    font-size:42px;
+
+    margin-bottom:15px;
+
+}
+
+.job-match-hero p{
+
+    color:#E5E7EB;
+
+    font-size:18px;
+
+    line-height:1.8;
+
+    max-width:700px;
+
+}
+
+.summary-cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:25px;
+
+    margin:35px 0;
+
+}
+
+.summary-card{
+
+    background:#1d1d25;
+
+    border:1px solid rgba(139,92,246,.25);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    text-align:center;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+
+}
+
+.summary-card:hover{
+
+    transform:translateY(-8px);
+
+    border-color:#8B5CF6;
+
+    box-shadow:0 20px 40px rgba(139,92,246,.25);
+
+}
+
+.summary-icon{
+
+    font-size:38px;
+
+    margin-bottom:15px;
+
+}
+
+.summary-card h3{
+
+    color:#9CA3AF;
+
+    margin-bottom:10px;
+
+}
+
+.summary-card h2{
+
+    color:white;
+
+    font-size:34px;
+
+}
+
+.match-progress{
+
+    margin:40px 0;
+
+}
+
+.match-progress h3{
+
+    color:white;
+
+    margin-bottom:15px;
+
+}
+
+.progress-bar{
+
+    width:100%;
+
+    height:12px;
+
+    background:#2b2b35;
+
+    border-radius:50px;
+
+    overflow:hidden;
+
+}
+
+.progress-fill{
+
+    height:100%;
+
+    background:linear-gradient(90deg,#8B5CF6,#3B82F6);
+
+    border-radius:50px;
+
+    transition:width .8s ease;
+
+}
+
+.match-progress p{
+
+    margin-top:12px;
+
+    color:#9CA3AF;
+
+    font-weight:600;
+
+}
+
+.ai-verdict{
+
+    background:#1d1d25;
+
+    border:1px solid rgba(139,92,246,.25);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    margin:35px 0;
+
+}
+
+.ai-verdict h2{
+
+    color:#8B5CF6;
+
+    margin-bottom:15px;
+
+}
+
+.ai-verdict p{
+
+    color:#E5E7EB;
+
+    line-height:1.8;
+
+    font-size:17px;
+
+}
+
+.recommendation-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:25px;
+
+    margin-top:30px;
+
+}
+
+.recommendation-card{
+
+    background:#1d1d25;
+
+    border:1px solid rgba(139,92,246,.25);
+
+    border-radius:20px;
+
+    padding:25px;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+
+}
+
+.recommendation-card:hover{
+
+    transform:translateY(-8px);
+
+    border-color:#8B5CF6;
+
+    box-shadow:0 20px 40px rgba(139,92,246,.25);
+
+}
+
+.recommendation-icon{
+
+    font-size:32px;
+
+    margin-bottom:15px;
+
+}
+
+.recommendation-card p{
+
+    color:#E5E7EB;
+
+    line-height:1.8;
+
+    margin:0;
+
+}
+
+.hiring-card{
+
+    margin-top:30px;
+
+    padding:35px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    border:2px solid;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+.hiring-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
+
+}
+
+.hiring-icon{
+
+    font-size:48px;
+
+    margin-bottom:15px;
+
+}
+
+.hiring-card h2{
+
+    font-size:34px;
+
+    margin-bottom:12px;
+
+}
+
+.hiring-card p{
+
+    color:#E5E7EB;
+
+    line-height:1.8;
+
+}
+
+.high{
+
+    background:rgba(34,197,94,.12);
+
+    border-color:#22C55E;
+
+}
+
+.medium{
+
+    background:rgba(245,158,11,.12);
+
+    border-color:#F59E0B;
+
+}
+
+.low{
+
+    background:rgba(239,68,68,.12);
+
+    border-color:#EF4444;
+
+}
+
+.download-section{
+
+    display:flex;
+
+    justify-content:center;
+
+    margin:50px 0 20px;
+
+}
+
+.download-btn{
+
+    background:linear-gradient(135deg,#8B5CF6,#3B82F6);
+
+    color:white;
+
+    border:none;
+
+    border-radius:16px;
+
+    padding:18px 40px;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+
+    box-shadow:0 12px 30px rgba(139,92,246,.35);
+
+}
+
+.download-btn:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 20px 40px rgba(139,92,246,.45);
+
+}
+
+.download-btn:active{
+
+    transform:translateY(-2px);
+
+}

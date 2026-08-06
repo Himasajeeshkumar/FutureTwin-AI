@@ -1,0 +1,15 @@
+.loading{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:80vh;
+
+    font-size:26px;
+
+    color:#8B5CF6;
+
+}

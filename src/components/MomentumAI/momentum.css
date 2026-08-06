@@ -1,0 +1,370 @@
+.momentum-page{
+
+    max-width:1400px;
+
+    margin:auto;
+
+    padding:40px;
+
+    display:grid;
+
+    gap:30px;
+
+}
+
+.momentum-heading{
+
+    text-align:center;
+
+    color:white;
+
+    font-size:48px;
+
+    margin-bottom:10px;
+
+}
+
+.momentum-subtitle{
+
+    text-align:center;
+
+    color:#bbbbbb;
+
+    margin-bottom:40px;
+
+    font-size:18px;
+
+}
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+
+    gap:25px;
+
+}
+.dashboard-card{
+
+    background:#171717;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    border:1px solid #2c2c2c;
+
+    transition:.3s;
+
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:#7b61ff;
+
+    box-shadow:0 15px 35px rgba(123,97,255,.2);
+
+}
+
+
+.page-container{
+
+    min-height:100vh;
+
+    padding:40px;
+
+    background:#0f0f0f;
+
+}
+
+.progress-bar{
+
+    width:100%;
+
+    height:12px;
+
+    background:#333;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+}
+
+.progress-fill{
+
+    height:100%;
+
+    background:linear-gradient(90deg,#6a5cff,#a855f7);
+
+}
+
+.momentum-page button{
+
+    background:#6a5cff;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+}
+
+.momentum-page button:hover{
+
+    background:#825fff;
+
+}
+
+@media(max-width:900px){
+
+.dashboard-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+.week-chart{
+
+    display:flex;
+
+    justify-content:space-around;
+
+    align-items:flex-end;
+
+    height:220px;
+
+    margin-top:30px;
+
+}
+.day-column{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:flex-end;
+
+    align-items:center;
+
+    height:100%;
+
+}
+
+.bar{
+
+    width:30px;
+
+    min-height:20px;
+
+    background:linear-gradient(180deg,#8b5cf6,#5b3df5);
+
+    border-radius:10px 10px 0 0;
+
+    transition:0.3s;
+
+}
+
+.bar:hover{
+
+    transform:scaleY(1.05);
+
+    box-shadow:0 0 15px #8b5cf6;
+
+}
+
+.day-column p{
+
+    color:#ccc;
+
+    font-size:14px;
+
+}
+
+.achievement-item{
+
+    margin-top:20px;
+
+}
+
+.achievement-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    color:white;
+
+    margin-bottom:8px;
+
+    font-size:15px;
+
+}
+
+.achievement-header span:last-child{
+
+    color:#9b7bff;
+
+    font-weight:bold;
+
+}
+
+.timer-display{
+
+    font-size:42px;
+
+    text-align:center;
+
+    color:#8b5cf6;
+
+    font-weight:bold;
+
+    margin:20px 0;
+
+}
+
+.timer-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    margin:20px 0;
+
+    flex-wrap:wrap;
+
+}
+
+.timer-buttons button{
+
+    padding:12px 18px;
+
+}
+
+.dashboard-card h3{
+
+    margin-top:20px;
+
+    color:white;
+
+}
+
+.dashboard-card p{
+
+    color:#cfcfcf;
+
+    margin:12px 0;
+
+}
+
+.dashboard-card hr{
+
+    margin:20px 0;
+
+    border:1px solid #333;
+
+}
+
+.risk{
+
+    font-weight:bold;
+
+    margin-left:8px;
+
+}
+
+.low{
+
+    color:#4ade80;
+
+}
+
+.medium{
+
+    color:#facc15;
+
+}
+
+.high{
+
+    color:#ef4444;
+
+}
+
+.burnout-advice{
+
+    margin:15px 0;
+
+    color:#d4d4d4;
+
+    line-height:1.7;
+
+}
+
+.highlight-value{
+    color:#8b5cf6;
+    font-weight:bold;
+}
+
+.coach-list{
+
+    margin-top:15px;
+
+    padding-left:20px;
+
+}
+
+.coach-list li{
+
+    margin:10px 0;
+
+    color:#d4d4d4;
+
+}
+
+.coach-advice{
+
+    margin:15px 0;
+
+    line-height:1.7;
+
+    color:#e5e5e5;
+
+}
+
+.coach-reward{
+
+    color:#8b5cf6;
+
+    font-weight:bold;
+
+    margin-top:10px;
+
+}
+
+.day-label{
+
+    text-align:center;
+
+}
+
+.day-label small{
+
+    color:#8b5cf6;
+
+    font-size:12px;
+
+}
