@@ -279,7 +279,7 @@ Rules:
 
 });
 
-app.post("/jobmatch", verifyToken, async (req, res) => {
+app.post("/job-match", verifyToken, async (req, res) => {
 
     try {
 
@@ -466,7 +466,7 @@ reply = reply.trim();
 
 });
 
-app.post("/skillgap",verifyToken, async (req, res) => {
+app.post("/skill-gap",verifyToken, async (req, res) => {
 
     try {
 
