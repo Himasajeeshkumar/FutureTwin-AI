@@ -20,7 +20,11 @@ connectDB();
 const app = express();
 
 app.use(cors({
-    origin: process.env.CLIENT_URL,
+  origin: [
+    "http://localhost:5173",
+    "https://futuretwin-ai-1.onrender.com"
+  ],
+  credentials: true,
 }));
 app.use(express.json());
 
