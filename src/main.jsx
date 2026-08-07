@@ -15,17 +15,13 @@ import "./styles/forms.css";
 import "./styles/loading.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <AuthProvider>
-        <React.StrictMode>
-            <ResumeProvider>
-
-                <BrowserRouter>
-
-                    <App />
-
-             </BrowserRouter>
-
-            </ResumeProvider>
-        </React.StrictMode>
-    </AuthProvider> 
+  <React.StrictMode>
+    <BrowserRouter>
+      <AuthProvider>
+        <ResumeProvider>
+          <App />
+        </ResumeProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 );

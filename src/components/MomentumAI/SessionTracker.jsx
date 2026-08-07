@@ -59,6 +59,14 @@ function SessionTracker() {
 
     const finishMission = () => {
 
+        if (seconds < 60) {
+
+            alert("Study for at least 1 minute before finishing.");
+
+            return;
+
+        }
+
         setRunning(false);
 
         const earnedXP = Math.floor(seconds / 60) * 5;
@@ -67,13 +75,15 @@ function SessionTracker() {
         setXP(prev => prev + earnedXP);
 
         // Save completed mission
-        setCompletedMissions(prev => [
+        setCompletedMissions(prev =>
 
-            ...prev,
+        prev.includes(currentMission)
 
-            currentMission
+            ? prev
 
-        ]);
+            : [...prev, currentMission]
+
+    );
 
         // Update today's XP (for the current weekday)
         const today = new Date().getDay();
@@ -92,8 +102,10 @@ function SessionTracker() {
         });
 
         alert(`🎉 Mission Complete!\n\n+${earnedXP} XP Earned`);
+        setSeconds(0);
 
     };
+
 
     return (
 
@@ -119,7 +131,7 @@ function SessionTracker() {
 
                 {running
                     ? "🟢 Focus Mode"
-                    : "⚪ Not Running"}
+                    : "⚪ Ready to Start"}
 
             </p>
 
@@ -153,12 +165,10 @@ function SessionTracker() {
 
             </h3>
 
-            <h1
-                style={{
-                    color:"#8b5cf6"
-                }}
-            >
-                +{xp} XP
+            <h1 className="highlight-value">
+
+            {xp} XP
+
             </h1>
 
         </div>

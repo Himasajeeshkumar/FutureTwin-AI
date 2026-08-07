@@ -6,19 +6,22 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import EmptyState from "../components/ui/EmptyState";
 import Toast from "../components/ui/Toast";
 import ErrorCard from "../components/ui/ErrorCard";
+import { useResume } from "../context/ResumeContext";
 
 function JobMatch({resumeText}) {
   const {analyze, loading} = useJobMatch();
 
   const [jobDescription, setJobDescription] = useState("");
-  const [result, setResult] = useState(null);
+  const { jobMatch, setJobMatch } = useResume();
+
+ const result = jobMatch;
   const [error, setError] = useState("");
 
   const analyzeMatch = async () => {
 
       if (loading) return;
 
-      setResult(null);
+      setJobMatch(null);
 
       if (!resumeText) {
 
@@ -52,7 +55,7 @@ function JobMatch({resumeText}) {
 
           );
 
-          setResult(ai);
+          setJobMatch(ai);
           setError("");
 
           showToast(

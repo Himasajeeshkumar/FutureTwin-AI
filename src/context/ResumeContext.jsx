@@ -5,45 +5,210 @@ import { calculateMomentum } from "../utils/momentum/momentumEngine";
 
 const ResumeContext = createContext();
 
+const loadSession = (key, defaultValue) => {
+
+    try {
+
+        const saved = sessionStorage.getItem(key);
+
+        return saved ? JSON.parse(saved) : defaultValue;
+
+    } catch {
+
+        return defaultValue;
+
+    }
+
+};
+
+const saveSession = (key, value) => {
+
+    try {
+
+        sessionStorage.setItem(
+
+            key,
+
+            JSON.stringify(value)
+
+        );
+
+    } catch {
+
+        // Ignore storage errors
+
+    }
+
+};
+
 export function ResumeProvider({ children }) {
 
-    const [resumeText, setResumeText] = useState("");
+    const [resumeText, setResumeText] = useState(() =>
+        loadSession("resumeText", "")
+    );
 
-    const [parsedResume, setParsedResume] = useState(null);
+    const [parsedResume, setParsedResume] = useState(() =>
+        loadSession("parsedResume", null)
+    );
 
-    const [skills, setSkills] = useState([]);
+    const [skills, setSkills] = useState(() =>
+        loadSession("skills", [])
+    );
 
-    const [analysis, setAnalysis] = useState(null);
+    const [analysis, setAnalysis] = useState(() =>
+        loadSession("analysis", null)
+    );
 
-    const [selectedCareer, setSelectedCareer] = useState("AI Engineer");
+    const [selectedCareer, setSelectedCareer] = useState(() =>
+        loadSession("selectedCareer", "AI Engineer")
+    );
 
-    const [jobMatch, setJobMatch] = useState(null);
+    const [jobMatch, setJobMatch] = useState(() =>
+        loadSession("jobMatch", null)
+    );
 
-    const [futureSimulation, setFutureSimulation] = useState(null);
+    const [futureSimulation, setFutureSimulation] = useState(() =>
+        loadSession("futureSimulation", null)
+    );
 
-    const [skillGap, setSkillGap] = useState(null);
+    const [skillGap, setSkillGap] = useState(() =>
+        loadSession("skillGap", null)
+    );
 
-    const [momentum, setMomentum] = useState(null);
+    const [momentum, setMomentum] = useState(() =>
+        loadSession("momentum", null)
+    );
 
-    const [careerHealth, setCareerHealth] = useState(0);
+    const [careerHealth, setCareerHealth] = useState(() =>
+        loadSession("careerHealth", 0)
+    );
 
-    const [placementReadiness, setPlacementReadiness] = useState(0);
+    const [placementReadiness, setPlacementReadiness] = useState(() =>
+        loadSession("placementReadiness", 0)
+    );
 
-    const [xp, setXP] = useState(0);
+    const [xp, setXP] = useState(() =>
+        loadSession("xp", 0)
+    );
 
-    const [currentMission, setCurrentMission] = useState(null);
+    const [currentMission, setCurrentMission] = useState(() =>
+        loadSession("currentMission", "Complete today's learning task")
+    );
 
-    const [completedMissions, setCompletedMissions] = useState([]);
+    const [completedMissions, setCompletedMissions] = useState(() =>
+        loadSession("completedMissions", [])
+    );
 
-    const [studyMinutes, setStudyMinutes] = useState(0);
+    const [studyMinutes, setStudyMinutes] = useState(() =>
+        loadSession("studyMinutes", 0)
+    );
 
-    const [burnoutRisk, setBurnoutRisk] = useState("Low");
+    const [weeklyXP, setWeeklyXP] = useState(() =>
+        loadSession("weeklyXP", 0)
+    );
 
-    const [coachMessage, setCoachMessage] = useState("");
+    const [burnoutRisk, setBurnoutRisk] = useState(() =>
+        loadSession("burnoutRisk", "Low")
+    );
 
-    const [weeklyXP, setWeeklyXP] = useState([
-        0,0,0,0,0,0,0
-    ]);
+    const [coachMessage, setCoachMessage] = useState(() =>
+        loadSession(
+            "coachMessage",
+            "Complete today's mission to boost your placement readiness."
+        )
+    );
+
+    const [level, setLevel] = useState(() =>
+        loadSession("level", 1)
+    );
+
+    const [nextLevelXP, setNextLevelXP] = useState(() =>
+        loadSession("nextLevelXP", 100)
+    );
+
+    const [achievements, setAchievements] = useState(() =>
+        loadSession("achievements", [])
+    );
+
+    const [completedPercent, setCompletedPercent] = useState(() =>
+        loadSession("completedPercent", 0)
+    );
+
+    const [todayXP, setTodayXP] = useState(() =>
+        loadSession("todayXP", 0)
+    );
+
+    
+    useEffect(() => {
+
+    saveSession("resumeText", resumeText);
+
+    saveSession("parsedResume", parsedResume);
+
+    saveSession("skills", skills);
+
+    saveSession("analysis", analysis);
+
+    saveSession("jobMatch", jobMatch);
+
+    saveSession("skillGap", skillGap);
+
+    saveSession("currentMission", currentMission);
+
+    saveSession("futureSimulation", futureSimulation);
+
+    saveSession("selectedCareer", selectedCareer);
+
+    saveSession("momentum", momentum);
+
+    saveSession("careerHealth", careerHealth);
+
+    saveSession("burnoutRisk", burnoutRisk);
+
+    saveSession("placementReadiness", placementReadiness);
+
+    saveSession("xp", xp);
+
+    saveSession("completedMissions", completedMissions);
+
+    saveSession("studyMinutes", studyMinutes);
+
+    saveSession("weeklyXP", weeklyXP);
+
+    saveSession("level", level);
+
+    saveSession("nextLevelXP", nextLevelXP);
+
+    saveSession("achievements", achievements);
+
+    saveSession("completedPercent", completedPercent);
+
+    saveSession("todayXP", todayXP);
+
+}, [
+    resumeText,
+    parsedResume,
+    skills,
+    analysis,
+    jobMatch,
+    skillGap,
+    currentMission,
+    futureSimulation,
+    selectedCareer,
+    momentum,
+    careerHealth,
+    burnoutRisk,
+    placementReadiness,
+    xp,
+    completedMissions,
+    studyMinutes,
+    weeklyXP,
+    level,
+    nextLevelXP,
+    achievements,
+    completedPercent,
+    todayXP,
+]);
     useEffect(() => {
 
         const result = calculateMomentum({
@@ -73,6 +238,16 @@ export function ResumeProvider({ children }) {
         setCurrentMission(result.currentMission);
 
         setCoachMessage(result.coachMessage);
+
+        setLevel(result.level);
+
+        setNextLevelXP(result.nextLevelXP);
+
+        setAchievements(result.achievements);
+
+        setCompletedPercent(result.completedPercent);
+
+        setTodayXP(result.todayXP);
 
     }, [
 
@@ -148,8 +323,25 @@ export function ResumeProvider({ children }) {
                 coachMessage,
                 setCoachMessage,
 
+                level,
+                setLevel,
+
+                nextLevelXP,
+                setNextLevelXP,
+
+                achievements,
+                setAchievements,
+
+                completedPercent,
+                setCompletedPercent,
+
+                todayXP,
+                setTodayXP,
+
                 weeklyXP,
                 setWeeklyXP
+
+                
 
             }}
 

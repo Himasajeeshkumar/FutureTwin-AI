@@ -46,50 +46,72 @@ function Achievements() {
         <div className="dashboard-card">
 
             <h2>🏆 Achievements</h2>
+            <p className="coach-advice">
+                Unlock achievements by improving your resume, ATS score, consistency, and placement readiness.
+            </p>
 
-            {
+            {achievements.map((item, index) => (
 
-                achievements.map((item,index)=>(
+                <div
+                    key={index}
+                    className="achievement-item"
+                >
 
-                    <div
-                        key={index}
-                        className="achievement-item"
-                    >
+                    <div className="achievement-header">
 
-                        <div className="achievement-header">
+                        <span>
 
-                            <span>
+                            {item.icon} {item.title}
 
-                                {item.icon} {item.title}
+                        </span>
 
-                            </span>
+                        <span>
 
-                            <span>
+                            {item.progress}%
 
-                                {item.progress}%
-
-                            </span>
-
-                        </div>
-
-                        <div className="progress-bar">
-
-                            <div
-                                className="progress-fill"
-                                style={{
-
-                                    width:`${item.progress}%`
-
-                                }}
-                            ></div>
-
-                        </div>
+                        </span>
 
                     </div>
 
-                ))
+                    <div className="progress-bar">
 
-            }
+                        <div
+                            className="progress-fill"
+                            style={{
+
+                                width: `${item.progress}%`
+
+                            }}
+                        ></div>
+
+                    </div>
+
+
+                </div>
+
+            ))}
+
+            <hr/>
+
+            <h3>Completed Missions</h3>
+
+            <p>
+
+                {completedMissions.length} Completed
+
+            </p>
+
+            {completedMissions.length === 0 ? (
+                <p>No missions completed yet. Start today's mission! 🚀</p>
+            ) : (
+                <ul>
+                    {completedMissions.map((mission, index) => (
+                        <li key={index}>
+                            ✅ {mission}
+                        </li>
+                    ))}
+                </ul>
+            )}
 
         </div>
 

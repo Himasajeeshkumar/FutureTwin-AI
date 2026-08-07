@@ -9,41 +9,33 @@ import BurnoutStatus from "./BurnoutStatus";
 import AICoach from "./AICoach";
 
 function MomentumAI() {
-
     return (
+        <div className="page-container">
+            <div className="momentum-page fade-in">
 
-        <div className="momentum-page">
+                <div className="momentum-header">
+                    <h1 className="momentum-heading">
+                        🔥 Momentum AI
+                    </h1>
 
-            <h1 className="momentum-heading">
-                🔥 Momentum AI
-            </h1>
+                    <p className="momentum-subtitle">
+                        Stay consistent. Build skills. Track progress. Get placement-ready with your personal AI coach.
+                    </p>
+                </div>
 
-            <p className="momentum-subtitle">
-                Your AI Career Productivity Dashboard
-            </p>
-
-            <div className="dashboard-grid">
-
-                <CareerHealth />
-
-                <MissionCard />
-
-                <WeeklyProgress />
-
-                <Achievements />
-
-                <SessionTracker />
-
-                <BurnoutStatus />
-
-                <AICoach />
+                <div className="dashboard-grid">
+                    <MissionCard />
+                    <CareerHealth />
+                    <WeeklyProgress />
+                    <SessionTracker />
+                    <Achievements />
+                    <BurnoutStatus />
+                    <AICoach />
+                </div>
 
             </div>
-
         </div>
-
     );
-
 }
 
 export default MomentumAI;

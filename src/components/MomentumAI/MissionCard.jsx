@@ -5,23 +5,51 @@ function MissionCard() {
 
     const {
 
-        currentMission
+    currentMission,
 
-    } = useResume();
+    xp,
+    setXP,
 
-    const [started, setStarted] = useState(false);
+    completedMissions,
+    setCompletedMissions
+
+} = useResume();
+
+    const [started, setStarted] = useState(
+
+    completedMissions.includes(currentMission)
+
+);
 
     const mission = {
 
-        difficulty: "⭐⭐⭐☆☆",
+    difficulty: "⭐⭐⭐☆☆",
 
-        duration: "45 mins",
+    duration: "45 mins",
 
-        reward: 25,
+    reward: 25,
 
-        progress: 0
+    progress: started ? 100 : 0
 
-    };
+};
+
+const completeMission = () => {
+
+    if (started) return;
+
+    setStarted(true);
+
+    setXP(xp + mission.reward);
+
+    setCompletedMissions([
+
+        ...completedMissions,
+
+        currentMission
+
+    ]);
+
+};
 
     return (
 
@@ -34,6 +62,10 @@ function MissionCard() {
                 {currentMission}
 
             </h3>
+
+            <p className="coach-advice">
+            Complete today's focused task to gain XP and improve your placement readiness.
+            </p>
 
             <p>
 
@@ -66,7 +98,7 @@ function MissionCard() {
                 Status :
 
                 {started
-                    ? " 🟢 In Progress"
+                    ? " 🟢 Completed"
                     : " ⚪ Not Started"}
 
             </p>
@@ -89,11 +121,17 @@ function MissionCard() {
 
             <button
 
-                onClick={() => setStarted(true)}
+                onClick={completeMission}
+
+                disabled={started}
 
             >
 
-                🚀 Start Mission
+                {started
+
+                    ? "✅ Mission Completed"
+
+                    : "🚀 Complete Mission"}
 
             </button>
 

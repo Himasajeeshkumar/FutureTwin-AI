@@ -1,58 +1,72 @@
 import { useNavigate } from "react-router-dom";
 
 function FeatureCard({ title, description, icon }) {
-  const navigate = useNavigate();
 
-  const handleClick = () => {
-    switch (title) {
-      case "Resume Analysis":
-        navigate("/resume-analysis");
-        break;
+    const navigate = useNavigate();
 
-      case "Job Match":
-        navigate("/job-match");
-        break;
+    const handleClick = () => {
 
-      case "Skill Gap":
-        navigate("/skill-gap");
-        break;
+        switch (title) {
 
-      case "Future Simulator":
-        navigate("/simulator");
-        break;
+            case "Resume Analysis":
+                navigate("/resume-analysis");
+                break;
 
-      case "AI Mentor":
-        navigate("/mentor");
-        break;
+            case "Job Match":
+                navigate("/job-match");
+                break;
 
-      case "Momentum AI":
-        navigate("/momentum");
-        break;
+            case "Skill Gap":
+                navigate("/skill-gap");
+                break;
 
-      default:
-        break;
-    }
-  };
+            case "Future Simulator":
+                navigate("/simulator");
+                break;
 
-  return (
-    <div
-      className="card"
-      onClick={handleClick}
-      style={{ cursor: "pointer" }}
-    >
-      <div className="feature-icon">
-        {icon}
-      </div>
+            case "AI Mentor":
+                navigate("/mentor");
+                break;
 
-      <h2>{title}</h2>
+            case "Momentum AI":
+                navigate("/momentum");
+                break;
 
-      <p>{description}</p>
+            default:
+                break;
 
-      <button className="feature-btn">
-        Explore →
-      </button>
-    </div>
-  );
+        }
+
+    };
+
+    return (
+
+        <div
+            className="card"
+            onClick={handleClick}
+            style={{ cursor: "pointer" }}
+        >
+
+            <div className="feature-icon">
+
+                {icon}
+
+            </div>
+
+            <h2>{title}</h2>
+
+            <p>{description}</p>
+
+            <button className="feature-btn">
+
+                Explore →
+
+            </button>
+
+        </div>
+
+    );
+
 }
 
 export default FeatureCard;

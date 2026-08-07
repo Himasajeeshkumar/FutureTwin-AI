@@ -447,22 +447,48 @@
 
 }
 
-@keyframes fadeUp{
+@keyframes fadeUp {
 
-from{
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-opacity:0;
-
-transform:translateY(20px);
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 
 }
 
-to{
+@media (max-width:768px){
 
-opacity:1;
+.skill-gap{
+    padding:20px 16px;
+}
 
-transform:translateY(0);
+.skill-gap-hero{
+    padding:28px 20px;
+    text-align:center;
+}
 
+.skill-gap-hero h1{
+    font-size:clamp(2rem,6vw,2.8rem);
+}
+
+.skill-gap-hero p{
+    font-size:1rem;
+}
+
+.time-card{
+    flex-direction:column;
+    text-align:center;
+}
+
+.roadmap-item{
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
 }
 
 }

@@ -42,14 +42,51 @@ export function calculateMomentum(data) {
         careerHealth = 100;
 
     //---------------------------------------
+    // XP & Level
+    //---------------------------------------
+
+    let level = 1;
+let nextLevelXP = 100;
+
+if (xp >= 800) {
+
+    level = 5;
+    nextLevelXP = 1200;
+
+} else if (xp >= 500) {
+
+    level = 4;
+    nextLevelXP = 800;
+
+} else if (xp >= 250) {
+
+    level = 3;
+    nextLevelXP = 500;
+
+} else if (xp >= 100) {
+
+    level = 2;
+    nextLevelXP = 250;
+
+}
+
+    //---------------------------------------
     // Placement Readiness
     //---------------------------------------
 
-    const placementReadiness = Math.round(
+    const placementReadiness = Math.min(
 
-        careerHealth * 0.8 +
+        100,
 
-        Math.min(xp,100) * 0.2
+        Math.round(
+
+            careerHealth * 0.7 +
+
+            Math.min(xp,100) * 0.15 +
+
+            ((analysis?.atsScore || 0) * 0.15)
+
+        )
 
     );
 
@@ -111,40 +148,130 @@ export function calculateMomentum(data) {
     // AI Coach
     //---------------------------------------
 
-    let coachMessage="";
+    let coachMessage = "";
 
-    if(careerHealth<40){
+    if (!analysis) {
 
-        coachMessage="Start by uploading your resume and analyzing it.";
+        coachMessage =
+            "Upload your resume to begin your AI career journey.";
 
-    }
+    } else if ((analysis?.atsScore || 0) < 80) {
 
-    else if(careerHealth<70){
+        coachMessage =
+            "Improve your ATS score to increase your chances of getting shortlisted.";
 
-        coachMessage="You're improving well. Complete today's mission to boost your placement readiness.";
+    } else if (!jobMatch) {
 
-    }
+        coachMessage =
+            "Run Job Match Analysis to see how well your resume matches your dream job.";
 
-    else{
+    } else if (!skillGap) {
 
-        coachMessage="Excellent progress! Focus on DSA practice and maintain your consistency.";
+        coachMessage =
+            "Complete Skill Gap Analysis to discover the technologies you should learn next.";
 
+    } else if (!futureSimulation) {
+
+        coachMessage =
+            "Run Future Simulator to visualize your career growth and salary potential.";
+
+    } else if (careerHealth < 70) {
+
+        coachMessage =
+            "Keep improving your profile. Every completed task increases your placement readiness.";
+
+    } else {
+
+        coachMessage =
+            "Excellent progress! Stay consistent with DSA, projects, and interview preparation.";
     }
 
     //---------------------------------------
+// Achievements
+//---------------------------------------
 
-    return{
+const achievements = [];
 
-        careerHealth,
+if (analysis)
 
-        placementReadiness,
+    achievements.push("🥉 First Resume");
 
-        burnoutRisk,
+if ((analysis?.atsScore || 0) >= 80)
 
-        currentMission:mission,
+    achievements.push("🥈 ATS Expert");
 
-        coachMessage
+if (jobMatch)
 
-    };
+    achievements.push("💼 Job Ready");
+
+if (skillGap)
+
+    achievements.push("🧠 Skill Master");
+
+if (futureSimulation)
+
+    achievements.push("🚀 Future Planner");
+
+if (xp >= 500)
+
+    achievements.push("🏆 Consistency Master");
+
+    //---------------------------------------
+// Overall Progress
+//---------------------------------------
+
+const completedPercent = Math.round(
+
+    (
+
+        (analysis ? 1 : 0) +
+
+        (jobMatch ? 1 : 0) +
+
+        (skillGap ? 1 : 0) +
+
+        (futureSimulation ? 1 : 0)
+
+    ) / 4 * 100
+
+);
+
+//---------------------------------------
+// Today's XP
+//---------------------------------------
+
+const todayXP = Math.min(
+
+    xp,
+
+    100
+
+);
+
+    //---------------------------------------
+
+    return {
+
+    careerHealth,
+
+    placementReadiness,
+
+    burnoutRisk,
+
+    currentMission: mission,
+
+    coachMessage,
+
+    level,
+
+    nextLevelXP,
+
+    achievements,
+
+    completedPercent,
+
+    todayXP
+
+};
 
 }

@@ -4,6 +4,7 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import EmptyState from "../components/ui/EmptyState";
 import Toast from "../components/ui/Toast";
 import ErrorCard from "../components/ui/ErrorCard";
+import { useResume } from "../context/ResumeContext";
 
 function FutureSimulator({
 
@@ -12,7 +13,9 @@ function FutureSimulator({
 
 }){
 
-    const [result, setResult] = useState(null);
+    const { futureSimulation, setFutureSimulation } = useResume();
+
+    const result = futureSimulation;
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -48,7 +51,17 @@ function FutureSimulator({
 
             setLoading(true);
             setError("");
-            setResult(null);
+            if (!skills || skills.length === 0) {
+
+                showToast(
+                    "warning",
+                    "Please upload and analyze your resume first."
+                );
+
+                return;
+
+            }
+            setFutureSimulation(null);
             const token = localStorage.getItem("token");
 
             const response = await fetch(`${import.meta.env.VITE_API_URL}/simulator`, {
@@ -89,7 +102,7 @@ function FutureSimulator({
             console.log("Simulator Response:", response.status);
             console.log("Simulator Data:", data);
 
-            setResult(data);
+            setFutureSimulation(data);
             showToast(
                 "success",
                 "Future simulation completed successfully."

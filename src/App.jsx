@@ -1,9 +1,15 @@
 import { useResume } from "./context/ResumeContext";
-import { Routes, Route, useLocation } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation
+} from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+
 
 import "./App.css";
 
@@ -90,48 +96,65 @@ function App() {
         <Route
           path="/job-match"
           element={
-            <JobMatchPage
-              resumeText={resumeText}
-            />
+            <ProtectedRoute>
+              <JobMatchPage
+                resumeText={resumeText}
+              />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/mentor"
           element={
-            <Mentor
-              selectedCareer={selectedCareer}
-            />
+            <ProtectedRoute>
+              <Mentor
+                selectedCareer={selectedCareer}
+              />
+            </ProtectedRoute>
           }
         />
         <Route
             path="/momentum"
-            element={<Momentum />}
+            element={
+                <ProtectedRoute>
+                    <Momentum />
+                </ProtectedRoute>
+            }
         />
 
         <Route
           path="/simulator"
           element={
-            <Simulator
-              skills={skills}
-              selectedCareer={selectedCareer}
-            />
+            <ProtectedRoute>
+              <Simulator
+                skills={skills}
+                selectedCareer={selectedCareer}
+              />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/skill-gap"
           element={
-            <SkillGapPage
-              skills={skills}
-              selectedCareer={selectedCareer}
-            />
+            <ProtectedRoute>
+              <SkillGapPage
+                skills={skills}
+                selectedCareer={selectedCareer}
+              />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/about"
           element={<About />}
+        />
+
+        <Route
+            path="*"
+            element={<Navigate to="/" replace />}
         />
 
       </Routes>

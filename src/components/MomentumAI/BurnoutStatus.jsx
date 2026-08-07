@@ -10,6 +10,18 @@ function BurnoutStatus() {
 
     } = useResume();
 
+    const recovery =
+
+    burnoutRisk === "High"
+
+        ? 35
+
+        : burnoutRisk === "Medium"
+
+        ? 65
+
+        : 90;
+
     return (
 
         <div className="dashboard-card">
@@ -34,7 +46,13 @@ function BurnoutStatus() {
 
                 <span className="highlight-value">
 
-                    85%
+                    {
+                        burnoutRisk === "High"
+                            ? "35%"
+                            : burnoutRisk === "Medium"
+                            ? "65%"
+                            : "90%"
+                    }
 
                 </span>
 
@@ -46,7 +64,19 @@ function BurnoutStatus() {
 
                 <span className="highlight-value">
 
-                    91%
+                    {
+
+                    studyMinutes > 240
+
+                    ? "40%"
+
+                    : studyMinutes > 150
+
+                    ? "70%"
+
+                    : "95%"
+
+                    }
 
                 </span>
 
@@ -58,7 +88,7 @@ function BurnoutStatus() {
 
                 <span className="highlight-value">
 
-                    {studyMinutes} mins
+                    {Math.round(studyMinutes)} mins
 
                 </span>
 
@@ -80,6 +110,10 @@ function BurnoutStatus() {
 
             <h3>Recovery Score</h3>
 
+            <p className="progress-text">
+                {recovery}% Recovery
+            </p>
+
             <div className="progress-bar">
 
                 <div
@@ -88,19 +122,14 @@ function BurnoutStatus() {
 
                     style={{
 
-                        width:
-
-                            burnoutRisk === "High"
-                                ? "35%"
-                                : burnoutRisk === "Medium"
-                                ? "65%"
-                                : "90%"
+                        width: `${recovery}%`
 
                     }}
 
                 ></div>
 
             </div>
+
 
         </div>
 

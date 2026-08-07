@@ -1,26 +1,28 @@
 import { useResume } from "../../context/ResumeContext";
 
-
 function CareerHealth() {
 
     const {
 
-        analysis,
-        jobMatch,
-        futureSimulation,
-        skillGap,
+    analysis,
+    jobMatch,
+    futureSimulation,
+    skillGap,
 
+    careerHealth,
+    placementReadiness,
 
-    } = useResume();
+    level,
+    xp,
+    nextLevelXP
 
-    let score = 0;
+} = useResume();
 
+    const score = careerHealth;
+    
     const breakdown = [];
 
-    // Resume Uploaded
     if (analysis) {
-
-        score += 15;
 
         breakdown.push({
             title: "Resume Uploaded",
@@ -29,10 +31,7 @@ function CareerHealth() {
 
     }
 
-    // Resume Score
     if ((analysis?.resumeScore || 0) >= 80) {
-
-        score += 15;
 
         breakdown.push({
             title: "Strong Resume",
@@ -41,11 +40,7 @@ function CareerHealth() {
 
     }
 
-    // ATS
-
     if ((analysis?.atsScore || 0) >= 80) {
-
-        score += 15;
 
         breakdown.push({
             title: "ATS Optimized",
@@ -54,11 +49,7 @@ function CareerHealth() {
 
     }
 
-    // Job Match
-
     if (jobMatch) {
-
-        score += 20;
 
         breakdown.push({
             title: "Job Match",
@@ -66,12 +57,7 @@ function CareerHealth() {
         });
 
     }
-
-    // Skill Gap
-
     if (skillGap) {
-
-        score += 15;
 
         breakdown.push({
             title: "Skill Gap",
@@ -79,20 +65,14 @@ function CareerHealth() {
         });
 
     }
-
-    // Simulator
-
     if (futureSimulation) {
-
-        score += 20;
 
         breakdown.push({
             title: "Future Simulator",
             points: 20
         });
-    
+
     }
-    
     let status = "";
 
     if (score < 40)
@@ -106,7 +86,7 @@ function CareerHealth() {
 
     return (
 
-        <div className="health-card">
+        <div className="dashboard-card">
 
             <h2>
 
@@ -114,10 +94,8 @@ function CareerHealth() {
 
             </h2>
 
-            <h1>
-
+            <h1 className="highlight-value">
                 {score}%
-
             </h1>
 
             <div className="progress-bar">
@@ -147,6 +125,38 @@ function CareerHealth() {
                 </strong>
 
             </p>
+
+            <p className="coach-advice">
+                Your career health is calculated using your resume, ATS score, job matching, skills and learning consistency.
+            </p>
+
+            <div className="career-stats">
+
+                <div className="career-stat">
+
+                    <h4>🏆 Level</h4>
+
+                    <p>{level}</p>
+
+                </div>
+
+                <div className="career-stat">
+
+                    <h4>⭐ XP</h4>
+
+                    <p>{xp} / {nextLevelXP}</p>
+
+                </div>
+
+            </div>
+
+            <div className="placement-box">
+
+                <h4>🎯 Placement Readiness</h4>
+
+                <h2>{placementReadiness}%</h2>
+
+            </div>
 
             <hr />
 

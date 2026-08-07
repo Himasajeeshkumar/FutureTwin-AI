@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { HashLink } from "react-router-hash-link";
+import { useState, useEffect } from "react";
 
 import "../styles/navbar.css";
 
@@ -13,11 +14,35 @@ function Navbar() {
     const isLoggedIn = !!token;
 
     const [showMenu, setShowMenu] = useState(false);
+    const [mobileMenu, setMobileMenu] = useState(false);
+
+    useEffect(() => {
+
+        const handleResize = () => {
+
+            if (window.innerWidth > 768) {
+
+                setMobileMenu(false);
+
+            }
+
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
+
+    }, []);
 
     function logout() {
 
         localStorage.removeItem("token");
+
         localStorage.removeItem("user");
+
+        setShowMenu(false);
+
+        setMobileMenu(false);
 
         navigate("/login");
 
@@ -29,29 +54,85 @@ function Navbar() {
 
             <div className="logo">
 
-                <Link to="/">
+                <HashLink smooth to="/#home">
                     FutureTwin AI
-                </Link>
+                </HashLink>
 
             </div>
 
-            <div className="nav-links">
+            <div
 
-                <Link to="/">
+                className={`nav-links ${mobileMenu ? "active" : ""}`}
+
+            >
+
+                <Link
+
+                to="/"
+
+                onClick={() => setMobileMenu(false)}
+
+            >
                     Home
                 </Link>
 
-                <Link to="/#features">Features</Link>
+                <Link
+                to="/resume-analysis"
+                onClick={() => {
+                    setShowMenu(false);
+                    setMobileMenu(false);
+                }}
+            >
+                📄 Resume Analysis
+            </Link>
 
-                <Link to="/#momentum">Momentum</Link>
+                <HashLink
+                smooth
+                to="/#features"
+                onClick={() => setMobileMenu(false)}
+            >
+                Features
+            </HashLink>
 
-                <Link to="/#about">About</Link>
+            <HashLink
+                smooth
+                to="/#momentum"
+                onClick={() => setMobileMenu(false)}
+            >
+                Momentum
+            </HashLink>
+
+            <HashLink
+                smooth
+                to="/#about"
+                onClick={() => setMobileMenu(false)}
+            >
+                About
+            </HashLink>
 
                 {isLoggedIn && (
-                    <Link to="/dashboard">Dashboard</Link>
+                    <Link
+                        to="/dashboard"
+                        onClick={() => {
+
+                            setShowMenu(false);
+
+                            setMobileMenu(false);
+
+                        }}
+                    >
+                        Dashboard
+                    </Link>
                 )}
 
             </div>
+
+            <button
+                className="menu-btn"
+                onClick={() => setMobileMenu(!mobileMenu)}
+            >
+                {mobileMenu ? "✕" : "☰"}
+            </button>
 
             <div className="profile">
 
@@ -77,7 +158,10 @@ function Navbar() {
                                     📊 Dashboard
                                 </Link>
 
-                                <Link to="/resume-analysis">
+                                <Link
+                                to="/resume-analysis"
+                                onClick={()=>setShowMenu(false)}
+                                >
                                     📄 Resume Analysis
                                 </Link>
 
@@ -96,11 +180,18 @@ function Navbar() {
                 ) : (
 
                     <>
-                        <Link to="/login">
+                        <Link
+                            to="/login"
+                            onClick={()=>setMobileMenu(false)}
+                            >
                             Login
                         </Link>
 
-                        <Link className="signup-btn" to="/signup">
+                        <Link
+                            className="signup-btn"
+                            to="/signup"
+                            onClick={() => setMobileMenu(false)}
+                        >
                             Sign Up
                         </Link>
                     </>

@@ -19,7 +19,9 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.CLIENT_URL,
+}));
 app.use(express.json());
 
 
@@ -27,11 +29,8 @@ app.get("/", (req, res) => {
   res.send("FutureTwin AI Backend Running 🚀");
 });
 app.post("/resume", verifyToken, async (req, res) => {
-    console.log("Request received!");
   try {
     const { message } = req.body;
-    console.log("Request received!");
-    console.log(message.substring(0, 300));
     const prompt = `
 You are FutureTwin AI Resume Analyzer.
 
@@ -162,7 +161,6 @@ ${message}
     reply = reply.replace(/```$/i, "");
 
     console.log("AI Response:");
-    console.log(reply);
 
     const analysis = JSON.parse(reply);
 
@@ -201,7 +199,7 @@ ${message}
   }
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.post("/mentor", verifyToken, async (req, res) => {
 
     try {
@@ -261,15 +259,13 @@ Rules:
 
         });
 
-        console.log(reply);
-
         res.json({
             reply
         });
 
     }catch (error) {
 
-        console.log(error);
+    
 
         res.status(500).json({
             error: error.message
@@ -354,7 +350,6 @@ ${jobDescription}
 
         });
 
-        console.log(reply);
 
         res.json(result);
 
@@ -451,12 +446,12 @@ reply = reply.trim();
 
         });
 
-        console.log(reply);
+      
         res.json(result);
 
     } catch (error) {
 
-        console.log(error);
+    
 
         res.status(500).json({
             error: error.message
@@ -538,7 +533,7 @@ Rules:
     }
     catch (error) {
 
-        console.log(error);
+  
 
         res.status(500).json({
             error: error.message
@@ -580,7 +575,6 @@ app.post("/signup", async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
 
     res.status(500).json({
       error: error.message,
@@ -648,7 +642,7 @@ app.post("/login", async (req, res) => {
 
   catch (error) {
 
-    console.log(error);
+    
 
     res.status(500).json({
 
@@ -664,7 +658,7 @@ app.get("/dashboard", verifyToken, async (req, res) => {
 
     try {
 
-        console.log("Dashboard API Hit");
+        
         const latestResume = await Resume
             .findOne({ userId: req.user.id })
             .sort({ createdAt: -1 });
@@ -704,8 +698,6 @@ app.get("/dashboard", verifyToken, async (req, res) => {
     }
 
     catch (error) {
-
-        console.log(error);
 
         res.status(500).json({
 

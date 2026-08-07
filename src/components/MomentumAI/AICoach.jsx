@@ -19,28 +19,52 @@ function AICoach() {
             <h2>🤖 AI Coach</h2>
 
             <h3>
-
-                Hello Future Professional 👋
-
+            Good to see you! 👋
             </h3>
 
             <hr />
 
-            <h3>Today's Summary</h3>
+            <h3>Today's Progress</h3>
 
             <ul className="coach-list">
 
-                <li>📄 Resume Analysis</li>
+                <li>
 
-                <li>💼 Job Match</li>
+                    {placementReadiness >= 25 ? "✅" : "⬜"}
 
-                <li>🎯 Momentum Tracking</li>
+                    {" "}Resume Analysis
+
+                </li>
+
+                <li>
+
+                    {placementReadiness >= 50 ? "✅" : "⬜"}
+
+                    {" "}Job Match
+
+                </li>
+
+                <li>
+
+                    {placementReadiness >= 75 ? "✅" : "⬜"}
+
+                    {" "}Skill Gap
+
+                </li>
+
+                <li>
+
+                    {placementReadiness >= 100 ? "✅" : "⬜"}
+
+                    {" "}Future Simulator
+
+                </li>
 
             </ul>
 
             <hr />
 
-            <h3>AI Advice</h3>
+            <h3>Today's Recommendation</h3>
 
             <p className="coach-advice">
 

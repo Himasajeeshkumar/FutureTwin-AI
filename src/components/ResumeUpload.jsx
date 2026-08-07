@@ -15,20 +15,23 @@ import Toast from "../components/ui/Toast";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 function ResumeUpload({ setSkills, setResumeText, setParsedResume }) {
     const {
-      setAnalysis
+        analysis,
+        setAnalysis
   } = useResume();
 
-  const [uploaded, setUploaded] = useState(false);
+  const [uploaded, setUploaded] = useState(!!analysis);
   const [score, setScore] = useState(0);
   const [suggestions, setSuggestions] = useState([]);
   const [detectedSkills, setDetectedSkills] = useState([]);
   const [ats, setAts] = useState({});
-  const [aiResult, setAiResult] = useState(null);
+  const [aiResult, setAiResult] = useState(analysis);
   const atsRef = useRef(null);
   const reviewRef = useRef(null);
   const strengthsRef = useRef(null);
   const careerRef = useRef(null);
   const missingSkillsRef = useRef(null);
+
+  
 
   const scrollToSection = (ref) => {
 
@@ -58,11 +61,14 @@ function ResumeUpload({ setSkills, setResumeText, setParsedResume }) {
 
 
   const handleUpload = async (event) => {
-    try{
-      setUploaded(false);
 
-      const file = event.target.files[0];
-      if (!file) return;
+    try {
+
+        const file = event.target.files[0];
+
+        if (!file) return;
+
+        setUploaded(false);
 
       if (file.type !== "application/pdf") {
         showToast(

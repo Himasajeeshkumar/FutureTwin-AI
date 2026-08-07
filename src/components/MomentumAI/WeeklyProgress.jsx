@@ -1,7 +1,9 @@
 import { useResume } from "../../context/ResumeContext";
 function WeeklyProgress() {
 
-    const { weeklyXP } = useResume();
+    const { weeklyXP, 
+        xp 
+    } = useResume();
 
     const days = [
 
@@ -39,6 +41,10 @@ function WeeklyProgress() {
 
             <h2>📈 Weekly Progress</h2>
 
+            <p className="coach-advice">
+            Track how consistently you earn XP throughout the week.
+            </p>
+
             <div className="week-chart">
 
                 {progress.map((item) => (
@@ -72,6 +78,16 @@ function WeeklyProgress() {
                 ))}
 
             </div>
+
+            <hr />
+
+            <h3>Total Weekly XP</h3>
+
+            <h2>
+
+                {weeklyXP.reduce((sum, value) => sum + value, 0)} XP
+
+            </h2>
 
         </div>
 

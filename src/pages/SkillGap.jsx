@@ -6,10 +6,13 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import EmptyState from "../components/ui/EmptyState";
 import Toast from "../components/ui/Toast";
 import ErrorCard from "../components/ui/ErrorCard";
+import { useResume } from "../context/ResumeContext";
 
 function SkillGap({ skills, selectedCareer }) {
 
-    const [result, setResult] = useState(null);
+    const { skillGap, setSkillGap } = useResume();
+
+    const result = skillGap;
     const [loading, setLoading] = useState(false);
     const [toast, setToast] = useState({
     show: false,
@@ -40,7 +43,17 @@ const [error, setError] = useState("");
 
     const analyzeGap = async () => {
         setError("");
-        setResult(null);
+        if (!skills || skills.length === 0) {
+
+            showToast(
+                "warning",
+                "Please upload and analyze your resume first."
+            );
+
+            return;
+
+        }
+        setSkillGap(null);
 
         try {
 
@@ -80,7 +93,7 @@ const [error, setError] = useState("");
                 return;
             }
 
-            setResult(data);
+            setSkillGap(data);
 
             showToast(
                 "success",
