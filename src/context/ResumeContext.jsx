@@ -103,9 +103,13 @@ export function ResumeProvider({ children }) {
         loadSession("studyMinutes", 0)
     );
 
-    const [weeklyXP, setWeeklyXP] = useState(() =>
-        loadSession("weeklyXP", 0)
-    );
+    const [weeklyXP, setWeeklyXP] = useState(() => {
+        const saved = loadSession("weeklyXP", [0,0,0,0,0,0,0]);
+    
+        return Array.isArray(saved)
+            ? saved
+            : [0,0,0,0,0,0,0];
+    });
 
     const [burnoutRisk, setBurnoutRisk] = useState(() =>
         loadSession("burnoutRisk", "Low")
