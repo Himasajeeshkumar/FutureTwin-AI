@@ -1,38 +1,23 @@
 import { useResume } from "../../context/ResumeContext";
 function WeeklyProgress() {
 
-    const { weeklyXP, 
-        xp 
-    } = useResume();
+    const { weeklyXP } = useResume();
 
-    const days = [
-
-        "Mon",
-
-        "Tue",
-
-        "Wed",
-
-        "Thu",
-
-        "Fri",
-
-        "Sat",
-
-        "Sun"
-
-    ];
-
-    const maxXP = Math.max(...weeklyXP, 1);
-
-    const progress = days.map((day, index) => ({
-
+    const safeWeeklyXP = Array.isArray(weeklyXP)
+        ? weeklyXP
+        : [0, 0, 0, 0, 0, 0, 0];
+    
+    console.log("weeklyXP =", weeklyXP);
+    console.log("safeWeeklyXP =", safeWeeklyXP);
+    
+    const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    
+    const maxXP = Math.max(...safeWeeklyXP, 1);
+    
+    const progress = days.map((day,index)=>({
         day,
-
-        xp: weeklyXP[index],
-
-        value: (weeklyXP[index] / maxXP) * 100
-
+        xp: safeWeeklyXP[index],
+        value:(safeWeeklyXP[index]/maxXP)*100
     }));
 
     return (
@@ -85,7 +70,7 @@ function WeeklyProgress() {
 
             <h2>
 
-                {weeklyXP.reduce((sum, value) => sum + value, 0)} XP
+                {safeWeeklyXP.reduce((sum, value) => sum + value, 0)} XP
 
             </h2>
 
