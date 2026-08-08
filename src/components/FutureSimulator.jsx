@@ -70,6 +70,72 @@ function FutureSimulator({
 
     };
 
+    const awardFutureSimulatorXP = async () => {
+
+        try {
+
+            const token =
+                localStorage.getItem("token");
+
+            if (!token) return;
+
+            const response = await fetch(
+                `${import.meta.env.VITE_API_URL}/momentum/reward`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify({
+                        activityKey: "future_simulator",
+                        activityType: "future-simulator"
+                    })
+                }
+            );
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+
+                console.warn(
+                    "Future Simulator XP request failed:",
+                    data
+                );
+
+                return;
+            }
+
+            if (data.rewarded) {
+
+                console.log(
+                    `Future Simulator: +${data.xpEarned} XP`
+                );
+
+            } else {
+
+                console.log(
+                    "Future Simulator XP already earned."
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Future Simulator XP error:",
+                error
+            );
+
+        }
+
+    };
+
 
     const simulateFuture = async () => {
 
@@ -154,6 +220,16 @@ function FutureSimulator({
 
             setFutureSimulation(data);
 
+            /*
+            =================================================
+            MOMENTUM XP
+
+            Award +5 XP after the first successful
+            Future Simulator run.
+            =================================================
+            */
+
+            await awardFutureSimulatorXP();
 
             showToast(
                 "success",

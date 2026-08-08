@@ -77,6 +77,76 @@ function JobMatch({ resumeText }) {
 
     };
 
+    const awardJobMatchXP = async () => {
+
+        try {
+
+            const token =
+                localStorage.getItem("token");
+
+            if (!token) return;
+
+            const response = await fetch(
+                `${import.meta.env.VITE_API_URL}/momentum/reward`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify({
+                        activityKey: "job_match",
+                        activityType: "job-match"
+                    })
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                console.warn(
+                    "Job Match XP request failed:",
+                    data
+                );
+
+                return;
+
+            }
+
+
+            if (data.rewarded) {
+
+                console.log(
+                    `Job Match: +${data.xpEarned} XP`
+                );
+
+            } else {
+
+                console.log(
+                    "Job Match XP already earned."
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Job Match XP error:",
+                error
+            );
+
+        }
+
+    };
+
 
     const analyzeMatch = async () => {
 
@@ -114,18 +184,30 @@ function JobMatch({ resumeText }) {
 
 
             const ai = await analyze(
-                resumeText,
-                jobDescription
-            );
+    resumeText,
+    jobDescription
+);
+
+setJobMatch(ai);
 
 
-            setJobMatch(ai);
+/*
+=================================================
+MOMENTUM XP
+
+Award +5 XP after successful Job Match analysis.
+
+Backend prevents duplicate rewards.
+=================================================
+*/
+
+await awardJobMatchXP();
 
 
-            showToast(
-                "success",
-                "Job Match analysis completed successfully."
-            );
+showToast(
+    "success",
+    "Job Match analysis completed successfully."
+);
 
         }
         catch (error) {

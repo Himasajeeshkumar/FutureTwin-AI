@@ -35,6 +35,71 @@ const showToast = (type, message) => {
     }, 3000);
 
 };
+const awardMentorXP = async () => {
+
+    try {
+
+        const token =
+            localStorage.getItem("token");
+
+        if (!token) return;
+
+        const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/momentum/reward`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+
+                body: JSON.stringify({
+                    activityKey: "ai_mentor",
+                    activityType: "ai-mentor"
+                })
+            }
+        );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            console.warn(
+                "AI Mentor XP request failed:",
+                data
+            );
+
+            return;
+        }
+
+        if (data.rewarded) {
+
+            console.log(
+                `AI Mentor: +${data.xpEarned} XP`
+            );
+
+        } else {
+
+            console.log(
+                "AI Mentor XP already earned."
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "AI Mentor XP error:",
+            error
+        );
+
+    }
+
+};
 
   const generateAnswer = async () => {
      if (loading) return;
@@ -107,18 +172,32 @@ const showToast = (type, message) => {
       // Success
       const userQuestion = question.trim();
       setMessages(prev => [
-        ...prev,
-        {
-          sender: "user",
-          text: userQuestion
-        },
-        {
-          sender: "ai",
-          text: data.reply
-        }
+          ...prev,
+          {
+              sender: "user",
+              text: userQuestion
+          },
+          {
+              sender: "ai",
+              text: data.reply
+          }
       ]);
 
-      setQuestion("");
+
+      /*
+      =================================================
+      MOMENTUM XP
+
+      Award +5 XP for the first meaningful
+      AI Mentor interaction.
+      Backend prevents duplicate rewards.
+      =================================================
+      */
+
+      await awardMentorXP();
+
+
+setQuestion("");
 
 
       }

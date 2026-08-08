@@ -132,6 +132,72 @@ function ResumeUpload({
     // Resume Upload
     // =========================================
 
+    const awardResumeXP = async () => {
+
+        try {
+
+            const token =
+                localStorage.getItem("token");
+
+            if (!token) return;
+
+            const response = await fetch(
+                `${import.meta.env.VITE_API_URL}/momentum/reward`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify({
+                        activityKey: "resume_analysis",
+                        activityType: "resume-analysis"
+                    })
+                }
+            );
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+
+                console.warn(
+                    "Resume XP request failed:",
+                    data
+                );
+
+                return;
+            }
+
+            if (data.rewarded) {
+
+                console.log(
+                    `Resume Analysis: +${data.xpEarned} XP`
+                );
+
+            } else {
+
+                console.log(
+                    "Resume Analysis XP already earned."
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Resume XP error:",
+                error
+            );
+
+        }
+
+    };
+
     const handleUpload = async (event) => {
 
         try {
@@ -500,6 +566,16 @@ function ResumeUpload({
 
             setUploaded(true);
 
+            /*
+            =================================================
+            MOMENTUM XP
+
+            Award +5 XP after successful resume analysis.
+            Backend prevents duplicate rewards.
+            =================================================
+            */
+
+            await awardResumeXP();
 
             showToast(
                 "success",

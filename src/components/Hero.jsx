@@ -12,13 +12,37 @@ import { useResume } from "../context/ResumeContext";
 
 import "./Hero.css";
 
-
 function Hero() {
 
     const {
         parsedResume,
         analysis
     } = useResume();
+
+    /*
+     * Get the currently logged-in account
+     * from localStorage.
+     */
+    let currentUser = null;
+
+    try {
+        currentUser = JSON.parse(
+            localStorage.getItem("user")
+        );
+    } catch (error) {
+        console.log("Unable to read logged-in user.");
+    }
+
+    /*
+     * IMPORTANT:
+     * Greeting comes from the ACCOUNT,
+     * not from parsedResume.
+     */
+    const accountName =
+        currentUser?.name?.trim() || "there";
+
+    const firstName =
+        accountName.split(" ")[0];
 
 
     /*
@@ -53,12 +77,7 @@ function Hero() {
 
                             <h1>
 
-                                Hi,{" "}
-
-                                {
-                                    parsedResume.personal?.name
-                                        ?.split(" ")[0]
-                                }!
+                                Hi, {firstName}!
 
                             </h1>
 
@@ -218,7 +237,9 @@ function Hero() {
                     <Link to="/about">
 
                         <button className="secondary-btn">
+
                             Learn More
+
                         </button>
 
                     </Link>

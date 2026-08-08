@@ -15,10 +15,10 @@
 
 .momentum-page {
     width: 100%;
-    max-width: 1400px;
+    max-width: 1450px;
     margin: 0 auto;
-    padding: 32px 24px 48px;
-    min-height: 100vh;
+    padding: 40px 32px 70px;
+    color: #ffffff;
 }
 
 
@@ -27,832 +27,497 @@
 ========================================= */
 
 .momentum-header {
-    text-align: center;
-    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 34px;
+}
+
+.momentum-header-icon {
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 16px;
+
+    color: #a855f7;
+    background: rgba(139, 92, 246, 0.12);
+
+    border: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .momentum-heading {
-    margin: 0 0 8px;
+    margin: 0 0 5px;
+
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    font-weight: 800;
+
     color: #ffffff;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    line-height: 1.2;
-    font-weight: 700;
 }
 
 .momentum-subtitle {
-    max-width: 680px;
-    margin: 0 auto;
-    color: #a9a9b2;
-    font-size: clamp(0.95rem, 2vw, 1.08rem);
+    margin: 0;
+
+    color: #9ca3af;
+
+    font-size: 15px;
     line-height: 1.6;
 }
 
 
 /* =========================================
-   DASHBOARD GRID
+   OVERVIEW
 ========================================= */
 
-.dashboard-grid {
+.momentum-overview {
     display: grid;
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(300px, 1fr)
-    );
+    grid-template-columns: 1.6fr 1fr;
+
     gap: 20px;
-    align-items: stretch;
+
+    margin-bottom: 42px;
 }
 
 
-/* =========================================
-   DASHBOARD CARD
-========================================= */
+/* Main overview */
 
-.dashboard-card {
-    display: flex;
-    flex-direction: column;
+.overview-main {
+    padding: 28px;
 
-    width: 100%;
-    height: 100%;
+    border-radius: 22px;
 
-    padding: 22px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124, 58, 237, 0.16),
+            rgba(168, 85, 247, 0.04)
+        );
 
-    background: #171717;
-    border: 1px solid #2b2b2b;
-    border-radius: 16px;
-
-    transition:
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-.dashboard-card:hover {
-    border-color: #5948c7;
+    border: 1px solid rgba(139, 92, 246, 0.25);
 
     box-shadow:
-        0 10px 28px
-        rgba(0, 0, 0, 0.22);
+        0 18px 45px rgba(0, 0, 0, 0.2);
 }
 
-
-/* =========================================
-   CARD TYPOGRAPHY
-========================================= */
-
-.dashboard-card h2 {
-    margin: 0 0 14px;
-    color: #ffffff;
-    font-size: 1.25rem;
-    line-height: 1.3;
-}
-
-.dashboard-card h3 {
-    margin: 14px 0 7px;
-    color: #ffffff;
-    font-size: 1rem;
-    line-height: 1.4;
-}
-
-.dashboard-card p {
-    margin: 8px 0;
-    color: #c7c7cc;
-    line-height: 1.55;
-}
-
-.dashboard-card hr {
-    width: 100%;
-    margin: 16px 0;
-
-    border: 0;
-    border-top: 1px solid #303030;
-}
-
-.card-title-with-icon {
+.overview-title {
     display: flex;
     align-items: center;
-    gap: 8px;
-
-    margin: 0 0 14px;
-
-    min-height: 26px;
-    line-height: 1.3;
+    gap: 14px;
 }
 
-.card-title-with-icon svg {
-    flex-shrink: 0;
-    color: #a855f7;
-}
+.overview-icon {
+    width: 46px;
+    height: 46px;
 
-
-/* =========================================
-   COMMON BUTTONS
-========================================= */
-
-.momentum-page button {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
 
-    min-height: 44px;
-    padding: 10px 18px;
+    border-radius: 13px;
 
-    border: 0;
-    border-radius: 10px;
+    color: #c084fc;
+    background: rgba(139, 92, 246, 0.15);
+}
 
-    background: #635bdb;
+.overview-title span {
+    display: block;
+
+    color: #a1a1aa;
+
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.overview-title h2 {
+    margin: 0;
+
     color: #ffffff;
 
+    font-size: 22px;
+}
+
+.overview-description {
+    max-width: 650px;
+
+    margin: 22px 0;
+
+    color: #b4b4c3;
+
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.overview-progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 9px;
+
+    color: #c4c4cc;
+
     font-size: 14px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        opacity 0.2s ease,
-        transform 0.2s ease;
 }
 
-.momentum-page button:hover:not(:disabled) {
-    background: #7169e8;
-    transform: translateY(-1px);
+.overview-progress-label strong {
+    color: #c084fc;
 }
 
-.momentum-page button:disabled {
-    cursor: not-allowed;
-    opacity: 0.45;
-    transform: none;
-}
-
-
-/* =========================================
-   PROGRESS BAR
-========================================= */
-
-.progress-bar {
+.momentum-progress-bar {
     width: 100%;
     height: 9px;
 
     overflow: hidden;
 
-    background: #292929;
     border-radius: 999px;
+
+    background: #292936;
 }
 
-.progress-fill {
+.momentum-progress-fill {
     height: 100%;
 
     border-radius: inherit;
 
     background: linear-gradient(
         90deg,
-        #635bdb,
-        #a855f7
+        #7c3aed,
+        #a855f7,
+        #c084fc
     );
 
-    transition: width 0.5s ease;
-}
-
-.highlight-value {
-    color: #a78bfa;
-    font-weight: 700;
+    transition: width 0.4s ease;
 }
 
 
 /* =========================================
-   MISSION CARD
+   OVERVIEW STATS
 ========================================= */
 
-.mission-detail {
-    display: flex;
-    align-items: center;
-    gap: 7px;
+.overview-stats {
+    display: grid;
+    grid-template-columns: 1fr;
 
-    margin: 8px 0;
-}
-
-.mission-detail strong {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.mission-status {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 10px;
-    margin-bottom: 10px;
-
-    color: #d1d5db;
-}
-
-.status-completed,
-.status-pending {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.status-completed {
-    color: #22c55e;
-}
-
-.status-pending {
-    color: #9ca3af;
-}
-
-.mission-button {
-    width: 100%;
-    margin-top: 12px;
-}
-
-
-/* =========================================
-   CAREER HEALTH
-========================================= */
-
-.career-stats {
-    display: flex;
-    flex-wrap: wrap;
     gap: 12px;
-
-    margin: 16px 0;
 }
 
-.career-stat {
-    flex: 1;
-    min-width: 120px;
+.overview-stat {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 
-    padding: 13px;
+    padding: 20px;
 
-    border-radius: 10px;
+    border-radius: 18px;
 
-    background: rgba(255, 255, 255, 0.045);
+    background: #171717;
 
-    text-align: center;
+    border: 1px solid #2b2b2b;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
 }
 
-.career-stat h4 {
-    margin: 0 0 6px;
+.overview-stat:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(139, 92, 246, 0.5);
 }
 
-.career-stat p {
-    margin: 0;
+.stat-icon {
+    width: 42px;
+    height: 42px;
 
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.stat-label {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-}
 
-.stat-label svg {
     flex-shrink: 0;
-    color: #a855f7;
-}
-
-.placement-box {
-    margin: 16px 0;
-    padding: 16px;
 
     border-radius: 12px;
 
-    background: linear-gradient(
-        135deg,
-        #536fcf,
-        #7045c7
-    );
-
-    text-align: center;
-}
-
-.placement-box h4 {
-    margin: 0;
-}
-
-.placement-box h2 {
-    margin: 8px 0 0;
-
-    font-size: 2.25rem;
-    line-height: 1.2;
-}
-
-.career-breakdown {
-    display: flex;
-    flex-direction: column;
-
-    gap: 8px;
-
-    padding: 0;
-    margin: 12px 0 0;
-
-    list-style: none;
-}
-
-.career-breakdown li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    padding: 9px 11px;
-
-    border-radius: 9px;
-
-    background: rgba(139, 92, 246, 0.06);
-
-    color: #d1d5db;
-    font-size: 14px;
-}
-
-.career-breakdown li svg {
-    flex-shrink: 0;
-    color: #22c55e;
-}
-
-.career-breakdown li strong {
     color: #a855f7;
+
+    background: rgba(139, 92, 246, 0.12);
 }
 
+.overview-stat span {
+    display: block;
 
-/* =========================================
-   WEEKLY PROGRESS
-========================================= */
+    margin-bottom: 4px;
 
-.week-chart {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-around;
+    color: #8f8f99;
 
-    gap: 8px;
-
-    height: 175px;
-
-    margin-top: 20px;
-}
-
-.day-column {
-    display: flex;
-    flex: 1;
-
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-
-    height: 100%;
-    min-width: 0;
-}
-
-.bar-wrapper {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-
-    width: 100%;
-    height: 100%;
-}
-
-.bar {
-    width: 24px;
-    min-height: 4px;
-
-    border-radius: 8px 8px 2px 2px;
-
-    background: linear-gradient(
-        180deg,
-        #8b5cf6,
-        #5b3df5
-    );
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.bar:hover {
-    transform: scaleY(1.03);
-
-    box-shadow:
-        0 0 12px
-        rgba(139, 92, 246, 0.45);
-}
-
-.day-label {
-    text-align: center;
-}
-
-.day-label p {
-    margin: 7px 0 2px;
-
-    color: #c8c8cc;
     font-size: 13px;
 }
 
-.day-label small {
-    color: #9b7bff;
-    font-size: 11px;
+.overview-stat strong {
+    color: #ffffff;
+
+    font-size: 20px;
 }
 
-.weekly-total {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 
-    gap: 12px;
+/* =========================================
+   SECTION
+========================================= */
 
-    margin-top: 16px;
-    padding-top: 14px;
-
-    border-top: 1px solid #303030;
+.momentum-section {
+    margin-top: 10px;
 }
 
-.weekly-total span {
-    color: #bdbdbd;
+.section-heading {
+    margin-bottom: 20px;
+}
+
+.section-heading h2 {
+    margin: 0 0 5px;
+
+    color: #ffffff;
+
+    font-size: 24px;
+}
+
+.section-heading p {
+    margin: 0;
+
+    color: #85858f;
+
     font-size: 14px;
 }
 
-.weekly-total strong {
-    color: #ffffff;
+
+/* =========================================
+   MAIN GRID
+========================================= */
+
+.momentum-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(12, minmax(0, 1fr));
+
+    gap: 20px;
+
+    align-items: stretch;
 }
 
 
 /* =========================================
-   TODAY HIGHLIGHT
+   COMMON CARD
 ========================================= */
 
-.day-column.today .day-label p {
-    color: #ffffff;
-    font-weight: 700;
+.momentum-card {
+    min-width: 0;
+
+    padding: 1px;
+
+    border-radius: 20px;
+
+    background: #171717;
+
+    border: 1px solid #2b2b2b;
+
+    overflow: hidden;
+
+    transition:
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-.day-column.today .day-label small {
-    color: #a855f6;
-    font-weight: 700;
-}
+.momentum-card:hover {
+    transform: translateY(-3px);
 
-.day-column.today .bar {
+    border-color: rgba(139, 92, 246, 0.45);
+
     box-shadow:
-        0 0 12px
-        rgba(139, 92, 246, 0.45);
+        0 14px 35px rgba(0, 0, 0, 0.2);
+}
+
+
+/*
+   Important:
+   Existing child components already use
+   .dashboard-card.
+*/
+
+.momentum-card .dashboard-card {
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+    border-radius: 19px;
+
+    background: #171717;
+
+    box-shadow: none;
 }
 
 
 /* =========================================
-   SESSION TRACKER
+   GRID PLACEMENT
 ========================================= */
 
-.session-mission {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-
-    line-height: 1.5;
+.mission-card-wrapper {
+    grid-column: span 4;
 }
 
-.session-mission svg {
-    flex-shrink: 0;
+.health-card-wrapper {
+    grid-column: span 4;
+}
 
-    margin-top: 3px;
+.weekly-card-wrapper {
+    grid-column: span 4;
+}
 
+.session-card-wrapper {
+    grid-column: span 5;
+}
+
+.achievement-card-wrapper {
+    grid-column: span 4;
+}
+
+.burnout-card-wrapper {
+    grid-column: span 3;
+}
+
+.coach-card-wrapper {
+    grid-column: span 7;
+}
+
+
+/* =========================================
+   AI COACH LABEL
+========================================= */
+
+.coach-section-label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 22px 22px 0;
+
+    color: #ffffff;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.coach-section-label svg {
     color: #a855f7;
 }
 
-.session-status {
+.coach-card-wrapper .dashboard-card {
+    padding-top: 14px;
+}
+
+
+/* =========================================
+   MOTIVATION
+========================================= */
+
+.momentum-motivation {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    margin-top: 30px;
+    padding: 22px 24px;
+
+    border-radius: 18px;
+
+    background: rgba(139, 92, 246, 0.07);
+
+    border: 1px solid rgba(139, 92, 246, 0.18);
+}
+
+.motivation-icon {
+    width: 46px;
+    height: 46px;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
-    gap: 8px;
+    flex-shrink: 0;
 
-    margin: 10px 0;
+    border-radius: 13px;
+
+    color: #c084fc;
+
+    background: rgba(139, 92, 246, 0.12);
+}
+
+.momentum-motivation h3 {
+    margin: 0 0 5px;
+
+    color: #ffffff;
+
+    font-size: 17px;
+}
+
+.momentum-motivation p {
+    margin: 0;
 
     color: #9ca3af;
+
     font-size: 14px;
-}
-
-.session-status.active {
-    color: #22c55e;
-}
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
-    background: #6b7280;
-}
-
-.active-dot {
-    background: #22c55e;
-
-    box-shadow:
-        0 0 8px
-        rgba(34, 197, 94, 0.5);
-}
-
-.timer-display {
-    margin: 16px 0 6px;
-
-    color: #ffffff;
-
-    font-size: clamp(
-        2rem,
-        7vw,
-        2.8rem
-    );
-
-    font-weight: 700;
-    letter-spacing: 2px;
-
-    text-align: center;
-}
-
-.timer-buttons {
-    display: flex;
-    gap: 8px;
-
-    margin-top: 14px;
-}
-
-.timer-buttons button {
-    flex: 1;
 }
 
 
 /* =========================================
-   ACHIEVEMENTS
+   RESPONSIVE
 ========================================= */
 
-.achievement-item {
-    margin-top: 15px;
-}
+@media (max-width: 1100px) {
 
-.achievement-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 10px;
-
-    margin-bottom: 7px;
-
-    color: #ffffff;
-    font-size: 14px;
-}
-
-.achievement-header span:last-child {
-    color: #a78bfa;
-    font-weight: 700;
-}
-
-.achievement-title {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-}
-
-.achievement-title svg {
-    flex-shrink: 0;
-    color: #a855f7;
-}
-
-.mission-count {
-    margin-top: 4px;
-    font-weight: 600;
-}
-
-.completed-missions {
-    display: flex;
-    flex-direction: column;
-
-    gap: 7px;
-
-    padding: 0;
-    margin: 12px 0 0;
-
-    list-style: none;
-}
-
-.completed-missions li {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-
-    padding: 8px 10px;
-
-    border-radius: 9px;
-
-    background: rgba(139, 92, 246, 0.06);
-
-    color: #d1d5db;
-    font-size: 14px;
-}
-
-.completed-missions li svg {
-    flex-shrink: 0;
-
-    margin-top: 2px;
-
-    color: #22c55e;
-}
-
-
-/* =========================================
-   BURNOUT STATUS
-========================================= */
-
-.burnout-detail {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 12px;
-
-    margin: 9px 0;
-}
-
-.detail-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.detail-label svg {
-    flex-shrink: 0;
-    color: #a855f7;
-}
-
-.risk {
-    font-weight: 700;
-}
-
-.low {
-    color: #4ade80;
-}
-
-.medium {
-    color: #facc15;
-}
-
-.high {
-    color: #ef4444;
-}
-
-.burnout-advice {
-    margin-top: 6px;
-
-    color: #d4d4d4;
-    line-height: 1.6;
-}
-
-.progress-text {
-    margin-bottom: 7px;
-
-    font-weight: 600;
-}
-
-
-/* =========================================
-   AI COACH
-========================================= */
-
-.coach-list {
-    display: flex;
-    flex-direction: column;
-
-    gap: 7px;
-
-    padding: 0;
-    margin: 12px 0;
-
-    list-style: none;
-}
-
-.coach-list li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    padding: 8px 10px;
-
-    border-radius: 9px;
-
-    background: rgba(139, 92, 246, 0.06);
-
-    color: #d1d5db;
-    font-size: 14px;
-}
-
-.coach-list li svg {
-    flex-shrink: 0;
-}
-
-.coach-list li svg:first-child {
-    color: #22c55e;
-}
-
-.coach-advice {
-    margin: 10px 0;
-
-    color: #e0e0e0;
-    line-height: 1.6;
-}
-
-.coach-reward {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 10px;
-
-    margin-top: 12px;
-
-    color: #d1d5db;
-}
-
-.coach-reward strong {
-    color: #a855f7;
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media (max-width: 992px) {
-
-    .dashboard-grid {
-        grid-template-columns: repeat(
-            2,
-            minmax(0, 1fr)
-        );
+    .momentum-overview {
+        grid-template-columns: 1fr;
     }
 
+    .mission-card-wrapper,
+    .health-card-wrapper,
+    .weekly-card-wrapper {
+        grid-column: span 6;
+    }
+
+    .session-card-wrapper,
+    .achievement-card-wrapper,
+    .burnout-card-wrapper,
+    .coach-card-wrapper {
+        grid-column: span 6;
+    }
 }
 
 
 /* =========================================
-   TABLET / MOBILE
+   TABLET
 ========================================= */
 
 @media (max-width: 768px) {
 
     .momentum-page {
-        padding: 24px 16px 40px;
+        padding: 28px 16px 50px;
     }
 
     .momentum-header {
-        margin-bottom: 24px;
+        align-items: flex-start;
+
+        margin-bottom: 28px;
     }
 
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .dashboard-card {
-        padding: 18px;
-    }
-
-    .timer-buttons {
-        flex-direction: row;
-    }
-
-    .timer-buttons button {
-        width: auto;
-    }
-
-    .career-stats {
-        flex-direction: row;
-    }
-
-    .week-chart {
-        height: 165px;
-    }
-
-    .bar {
-        width: 20px;
-    }
-
-}
-
-
-/* =========================================
-   SMALL MOBILE
-========================================= */
-
-@media (max-width: 480px) {
-
-    .momentum-page {
-        padding: 20px 12px 32px;
+    .momentum-header-icon {
+        width: 46px;
+        height: 46px;
     }
 
     .momentum-heading {
@@ -860,66 +525,142 @@
     }
 
     .momentum-subtitle {
-        font-size: 0.92rem;
+        font-size: 14px;
     }
 
-    .dashboard-card {
-        padding: 16px;
-        border-radius: 14px;
+    .overview-main {
+        padding: 22px;
     }
 
-    .dashboard-card h2 {
-        font-size: 1.15rem;
+    .overview-title h2 {
+        font-size: 19px;
     }
 
-    .dashboard-card h3 {
-        font-size: 0.95rem;
+    .momentum-grid {
+        grid-template-columns: 1fr;
+
+        gap: 16px;
     }
 
-    .career-stats {
-        flex-direction: column;
+    .mission-card-wrapper,
+    .health-card-wrapper,
+    .weekly-card-wrapper,
+    .session-card-wrapper,
+    .achievement-card-wrapper,
+    .burnout-card-wrapper,
+    .coach-card-wrapper {
+        grid-column: span 1;
     }
 
-    .week-chart {
-        height: 150px;
-        gap: 4px;
+    .momentum-motivation {
+        align-items: flex-start;
     }
+}
 
-    .bar {
-        width: 15px;
-    }
 
-    .day-label p {
-        font-size: 12px;
-    }
+/* =========================================
+   PHONE
+========================================= */
 
-    .day-label small {
-        font-size: 10px;
-    }
+@media (max-width: 480px) {
 
-    .weekly-total {
-        font-size: 13px;
-    }
-
-    .timer-display {
-        font-size: 2.1rem;
-        letter-spacing: 1px;
-    }
-
-    .timer-buttons {
-        flex-direction: column;
-    }
-
-    .timer-buttons button {
+    .momentum-page {
         width: 100%;
+
+        padding:
+            22px
+            12px
+            40px;
     }
 
-    .placement-box {
-        padding: 14px;
+    .momentum-header {
+        gap: 11px;
     }
 
-    .placement-box h2 {
-        font-size: 2rem;
+    .momentum-header-icon {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 12px;
     }
 
+    .momentum-heading {
+        font-size: 1.75rem;
+    }
+
+    .momentum-subtitle {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .momentum-overview {
+        gap: 12px;
+
+        margin-bottom: 30px;
+    }
+
+    .overview-main {
+        padding: 19px;
+
+        border-radius: 18px;
+    }
+
+    .overview-description {
+        margin: 18px 0;
+
+        font-size: 14px;
+    }
+
+    .overview-stat {
+        padding: 17px;
+
+        border-radius: 15px;
+    }
+
+    .overview-stat strong {
+        font-size: 18px;
+    }
+
+    .section-heading h2 {
+        font-size: 21px;
+    }
+
+    .momentum-card {
+        border-radius: 17px;
+    }
+
+    .momentum-card .dashboard-card {
+        border-radius: 16px;
+    }
+
+    .coach-section-label {
+        padding: 18px 18px 0;
+
+        font-size: 16px;
+    }
+
+    .momentum-motivation {
+        padding: 18px;
+
+        gap: 12px;
+    }
+
+    .motivation-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+
+/* =========================================
+   PREVENT HORIZONTAL OVERFLOW
+========================================= */
+
+.momentum-page,
+.momentum-page * {
+    max-width: 100%;
+}
+
+.momentum-page {
+    overflow-x: hidden;
 }

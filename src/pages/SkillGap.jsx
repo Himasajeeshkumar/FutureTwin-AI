@@ -59,6 +59,71 @@ function SkillGap({ skills, selectedCareer }) {
         }, 3000);
 
     };
+    const awardSkillGapXP = async () => {
+
+        try {
+
+            const token =
+                localStorage.getItem("token");
+
+            if (!token) return;
+
+            const response = await fetch(
+                `${import.meta.env.VITE_API_URL}/momentum/reward`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify({
+                        activityKey: "skill_gap",
+                        activityType: "skill-gap"
+                    })
+                }
+            );
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+
+                console.warn(
+                    "Skill Gap XP request failed:",
+                    data
+                );
+
+                return;
+            }
+
+            if (data.rewarded) {
+
+                console.log(
+                    `Skill Gap: +${data.xpEarned} XP`
+                );
+
+            } else {
+
+                console.log(
+                    "Skill Gap XP already earned."
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Skill Gap XP error:",
+                error
+            );
+
+        }
+
+    };
 
 
     const analyzeGap = async () => {
@@ -127,6 +192,16 @@ function SkillGap({ skills, selectedCareer }) {
 
             setSkillGap(data);
 
+            /*
+            =================================================
+            MOMENTUM XP
+
+            Award +5 XP after the first successful
+            Skill Gap analysis.
+            =================================================
+            */
+
+            await awardSkillGapXP();
 
             showToast(
                 "success",

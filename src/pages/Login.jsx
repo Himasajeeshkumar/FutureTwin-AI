@@ -1,174 +1,299 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+
 import { login as loginUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const { login } = useAuth();
+    const { login } = useAuth();
 
-  const [form, setForm] = useState({
-
-    email: "",
-
-    password: ""
-
-  });
-
-  const [loading, setLoading] = useState(false);
-
-  const [error, setError] = useState("");
-
-  const handleChange = (e) => {
-
-    setForm({
-
-      ...form,
-
-      [e.target.name]: e.target.value
-
+    const [form, setForm] = useState({
+        email: "",
+        password: ""
     });
 
-  };
+    const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+    const [error, setError] = useState("");
 
-    e.preventDefault();
 
-    setLoading(true);
+    const handleChange = (e) => {
 
-    setError("");
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        });
 
-    try {
+    };
 
-      const data = await loginUser(form);
 
-      if (data.error) {
+    const handleSubmit = async (e) => {
 
-        setError(data.error);
+        e.preventDefault();
 
-      }
+        setLoading(true);
 
-      else {
+        setError("");
 
-        login(data);
 
-        navigate("/dashboard");
+        try {
 
-      }
+            /*
+            =========================================
+            LOGIN
+            =========================================
+            */
 
-    }
+            const data =
+                await loginUser(form);
 
-    catch (err) {
 
-      setError("Login failed.");
+            if (data.error) {
 
-    }
+                setError(data.error);
 
-    setLoading(false);
-
-  };
-
-  return (
-
-    <div className="auth-container">
-
-      <div className="auth-card">
-
-        <h1>FutureTwin AI</h1>
-
-        <h2>Welcome Back</h2>
-
-        <form onSubmit={handleSubmit}>
-
-          <input
-
-            type="email"
-
-            name="email"
-
-            placeholder="Email"
-
-            value={form.email}
-
-            onChange={handleChange}
-
-            required
-
-          />
-
-          <input
-
-            type="password"
-
-            name="password"
-
-            placeholder="Password"
-
-            value={form.password}
-
-            onChange={handleChange}
-
-            required
-
-          />
-
-          {error &&
-
-            <p className="error">
-
-              {error}
-
-            </p>
-
-          }
-
-          <button disabled={loading}>
-
-            {
-
-              loading
-
-              ?
-
-              "Logging in..."
-
-              :
-
-              "Login"
+                return;
 
             }
 
-          </button>
 
-        </form>
+            /*
+            =========================================
+            IMPORTANT
 
-        <p>
+            Remove data belonging to the previous
+            logged-in account.
 
-          Don't have an account?
+            This prevents:
+            Hima's resume
+            Hima's parsedResume
+            Hima's analysis
+            etc.
 
-          <Link to="/signup">
+            from appearing for the new user.
+            =========================================
+            */
 
-            {" "}Sign Up
+            sessionStorage.clear();
 
-          </Link>
 
-        </p>
+            /*
+            =========================================
+            SAVE NEW LOGIN SESSION
+            =========================================
+            */
 
-        <Link
-            to="/forgot-password"
-            className="forgot-link"
-        >
-            Forgot Password?
-        </Link>
+            login(data);
 
-      </div>
 
-    </div>
+            /*
+            =========================================
+            LOGIN XP
 
-  );
+            Backend decides whether today's
+            +5 XP has already been awarded.
+            =========================================
+            */
+
+            try {
+
+                const token =
+                    data.token ||
+                    localStorage.getItem("token");
+
+
+                if (token) {
+
+                    const rewardResponse =
+                        await fetch(
+                            `${import.meta.env.VITE_API_URL}/momentum/reward`,
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    Authorization:
+                                        `Bearer ${token}`
+                                },
+
+                                body: JSON.stringify({
+                                    activityKey: "login",
+                                    activityType: "daily-login"
+                                })
+                            }
+                        );
+
+
+                    const rewardData =
+                        await rewardResponse.json();
+
+
+                    if (
+                        rewardResponse.ok &&
+                        rewardData.rewarded
+                    ) {
+
+                        console.log(
+                            `Login XP: +${rewardData.xpEarned} XP`
+                        );
+
+                    }
+
+                    else if (
+                        rewardResponse.ok
+                    ) {
+
+                        console.log(
+                            "Login XP already earned today."
+                        );
+
+                    }
+
+                    else {
+
+                        console.warn(
+                            "Login XP request failed:",
+                            rewardData
+                        );
+
+                    }
+
+                }
+
+            }
+
+            catch (rewardError) {
+
+                console.error(
+                    "Unable to award login XP:",
+                    rewardError
+                );
+
+            }
+
+            /*
+            =================================================
+            START A COMPLETELY FRESH SESSION
+            =================================================
+            */
+
+            window.location.href = "/dashboard";
+                    }
+
+        catch (err) {
+
+            console.error(
+                "Login error:",
+                err
+            );
+
+            setError(
+                "Login failed."
+            );
+
+        }
+
+        finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+
+    return (
+
+        <div className="auth-container">
+
+            <div className="auth-card">
+
+                <h1>
+                    FutureTwin AI
+                </h1>
+
+
+                <h2>
+                    Welcome Back
+                </h2>
+
+
+                <form
+                    onSubmit={handleSubmit}
+                >
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={form.email}
+                        onChange={handleChange}
+                        required
+                    />
+
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={form.password}
+                        onChange={handleChange}
+                        required
+                    />
+
+
+                    {error && (
+
+                        <p className="error">
+                            {error}
+                        </p>
+
+                    )}
+
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                    >
+
+                        {loading
+                            ? "Logging in..."
+                            : "Login"
+                        }
+
+                    </button>
+
+                </form>
+
+
+                <p>
+
+                    Don't have an account?
+
+                    <Link to="/signup">
+                        {" "}Sign Up
+                    </Link>
+
+                </p>
+
+
+                <Link
+                    to="/forgot-password"
+                    className="forgot-link"
+                >
+                    Forgot Password?
+                </Link>
+
+            </div>
+
+        </div>
+
+    );
 
 }
 

@@ -15,6 +15,7 @@ function SessionTracker() {
 
     const [seconds, setSeconds] = useState(0);
     const [running, setRunning] = useState(false);
+    const [finishing, setFinishing] = useState(false);
 
     const {
         xp,
@@ -34,35 +35,89 @@ function SessionTracker() {
     } = useResume();
 
 
+    /*
+    =====================================================
+    MISSION TITLE → BACKEND MISSION KEY
+    =====================================================
+    */
+
+    const missionKeyMap = {
+
+        "Upload Resume":
+            "upload_resume",
+
+        "Improve Resume":
+            "improve_resume",
+
+        "Analyze Job Match":
+            "analyze_job_match",
+
+        "Complete Skill Gap Analysis":
+            "complete_skill_gap",
+
+        "Run Future Simulator":
+            "run_future_simulator",
+
+        "AI Mentor Session":
+            "ai_mentor",
+
+        "Solve 2 DSA Problems":
+            "dsa_problems",
+
+        "Continue DSA and interview preparation":
+            "continue_dsa"
+
+    };
+
+
+    /*
+    =====================================================
+    TIMER
+    =====================================================
+    */
+
     useEffect(() => {
 
         if (!running) {
             return;
         }
 
-        const timer = setInterval(() => {
 
-            setSeconds(prev => prev + 1);
+        const timer =
+            setInterval(() => {
 
-            setStudyMinutes(
-                prev => prev + (1 / 60)
-            );
+                setSeconds(
+                    previous =>
+                        previous + 1
+                );
 
-        }, 1000);
+            }, 1000);
+
 
         return () => {
+
             clearInterval(timer);
+
         };
 
-    }, [running, setStudyMinutes]);
+    }, [running]);
 
+
+    /*
+    =====================================================
+    FORMAT TIME
+    =====================================================
+    */
 
     const formatTime = () => {
 
         const hours =
             String(
-                Math.floor(seconds / 3600)
+                Math.floor(
+                    seconds / 3600
+                )
             ).padStart(2, "0");
+
 
         const minutes =
             String(
@@ -71,35 +126,83 @@ function SessionTracker() {
                 )
             ).padStart(2, "0");
 
+
         const secs =
-            String(seconds % 60)
-                .padStart(2, "0");
+            String(
+                seconds % 60
+            ).padStart(2, "0");
+
 
         return `${hours}:${minutes}:${secs}`;
+
     };
 
+
+    /*
+    =====================================================
+    START
+    =====================================================
+    */
 
     const startTimer = () => {
+
         setRunning(true);
+
     };
 
+
+    /*
+    =====================================================
+    PAUSE
+    =====================================================
+    */
 
     const pauseTimer = () => {
+
         setRunning(false);
+
     };
 
 
-    const finishMission = () => {
+    /*
+    =====================================================
+    FINISH MISSION
+    =====================================================
+    */
 
-        if (seconds < 60) {
+    const finishMission = async () => {
 
-            alert(
-                "Study for at least 1 minute before finishing."
-            );
-
+        if (finishing) {
             return;
         }
 
+
+        const missionKey =
+            missionKeyMap[currentMission];
+
+
+        /*
+        -----------------------------------------------
+        Check mission exists
+        -----------------------------------------------
+        */
+
+        if (!missionKey) {
+
+            alert(
+                "This mission is not configured yet."
+            );
+
+            return;
+
+        }
+
+
+        /*
+        -----------------------------------------------
+        Check duplicate completion
+        -----------------------------------------------
+        */
 
         if (
             completedMissions.includes(
@@ -115,79 +218,258 @@ function SessionTracker() {
             setSeconds(0);
 
             return;
+
         }
 
 
+        const actualMinutes =
+            Math.floor(
+                seconds / 60
+            );
+
+
+        /*
+        -----------------------------------------------
+        Backend will decide the required time.
+
+        For example:
+
+        DSA mission:
+        45 minutes = 25 XP
+
+        We don't calculate XP here.
+        -----------------------------------------------
+        */
+
+        setFinishing(true);
         setRunning(false);
 
 
-        const earnedXP =
-            Math.floor(seconds / 60) * 5;
+        try {
+
+            const token =
+                localStorage.getItem(
+                    "token"
+                );
 
 
-        if (earnedXP <= 0) {
-            return;
-        }
+            if (!token) {
 
+                alert(
+                    "Please login again."
+                );
 
-        // Add lifetime XP
-        setXP(prev => prev + earnedXP);
+                return;
 
-
-        // Add today's XP
-        setTodayXP(prev => prev + earnedXP);
-
-
-        // Mark mission as completed
-        setCompletedMissions(prev =>
-            prev.includes(currentMission)
-                ? prev
-                : [...prev, currentMission]
-        );
-
-
-        // Get current weekday
-        // Monday = 0 ... Sunday = 6
-        const today =
-            new Date().getDay();
-
-        const index =
-            today === 0
-                ? 6
-                : today - 1;
-
-
-        // Update weekly XP
-        setWeeklyXP(prev => {
-
-            const updated =
-                Array.isArray(prev)
-                    ? [...prev]
-                    : [0, 0, 0, 0, 0, 0, 0];
-
-
-            while (updated.length < 7) {
-                updated.push(0);
             }
 
 
-            updated[index] =
-                (Number(updated[index]) || 0)
-                + earnedXP;
+            const response =
+                await fetch(
+                    `${import.meta.env.VITE_API_URL}/momentum/mission`,
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${token}`
+
+                        },
+
+                        body: JSON.stringify({
+
+                            missionKey,
+
+                            actualMinutes
+
+                        })
+
+                    }
+                );
 
 
-            return updated;
-        });
+            const data =
+                await response.json();
 
 
-        alert(
-            `Mission Complete!\n\n+${earnedXP} XP Earned`
-        );
+            /*
+            -----------------------------------------------
+            Backend rejected the mission.
+
+            Example:
+            User studied 10 minutes
+            Required 45 minutes
+            -----------------------------------------------
+            */
+
+            if (!response.ok) {
+
+                alert(
+                    data.error ||
+                    "Mission could not be completed."
+                );
+
+                return;
+
+            }
 
 
-        setSeconds(0);
+            /*
+            -----------------------------------------------
+            IMPORTANT:
+
+            XP comes ONLY from backend.
+
+            No:
+                minutes × 5
+
+            No:
+                local XP calculation
+            -----------------------------------------------
+            */
+
+            if (data.rewarded) {
+
+                /*
+                Update lifetime XP
+                */
+
+                setXP(
+                    data.totalXP
+                );
+
+
+                /*
+                Update today's XP
+                */
+
+                setTodayXP(
+                    data.todayXP
+                );
+
+
+                /*
+                Update weekly XP
+                */
+
+                if (
+                    Array.isArray(
+                        data.weeklyXP
+                    )
+                ) {
+
+                    setWeeklyXP(
+                        data.weeklyXP
+                    );
+
+                }
+
+
+                /*
+                Mark mission completed
+                */
+
+                setCompletedMissions(
+                    previous => {
+
+                        if (
+                            previous.includes(
+                                currentMission
+                            )
+                        ) {
+
+                            return previous;
+
+                        }
+
+
+                        return [
+                            ...previous,
+                            currentMission
+                        ];
+
+                    }
+                );
+
+
+                /*
+                -----------------------------------------
+                Success notification
+                -----------------------------------------
+                */
+
+                const extraMessage =
+                    data.extraXP > 0
+                        ? `\nExtra work bonus: +${data.extraXP} XP`
+                        : "";
+
+
+                alert(
+                    `Mission Complete!\n\n` +
+                    `+${data.xpEarned} XP Earned` +
+                    extraMessage
+                );
+
+            }
+
+
+            /*
+            -----------------------------------------------
+            Mission already completed
+            -----------------------------------------------
+            */
+
+            else {
+
+                alert(
+                    data.message ||
+                    "Mission already completed."
+                );
+
+            }
+
+
+            /*
+            Reset timer
+            */
+
+            setSeconds(0);
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Mission completion error:",
+                error
+            );
+
+
+            alert(
+                "Unable to connect to the Momentum server."
+            );
+
+        }
+
+        finally {
+
+            setFinishing(false);
+
+        }
+
     };
 
+
+    /*
+    =====================================================
+    RETURN UI
+    =====================================================
+    */
 
     return (
 
@@ -214,6 +496,7 @@ function SessionTracker() {
 
                 <Target
                     size={17}
+                    strokeWidth={2}
                 />
 
                 <span>
@@ -270,10 +553,16 @@ function SessionTracker() {
                 <button
                     type="button"
                     onClick={startTimer}
-                    disabled={running}
+                    disabled={
+                        running ||
+                        finishing
+                    }
                 >
 
-                    <Play size={17} />
+                    <Play
+                        size={17}
+                        strokeWidth={2}
+                    />
 
                     Start
 
@@ -283,10 +572,16 @@ function SessionTracker() {
                 <button
                     type="button"
                     onClick={pauseTimer}
-                    disabled={!running}
+                    disabled={
+                        !running ||
+                        finishing
+                    }
                 >
 
-                    <Pause size={17} />
+                    <Pause
+                        size={17}
+                        strokeWidth={2}
+                    />
 
                     Pause
 
@@ -296,11 +591,18 @@ function SessionTracker() {
                 <button
                     type="button"
                     onClick={finishMission}
+                    disabled={finishing}
                 >
 
-                    <CheckCircle2 size={17} />
+                    <CheckCircle2
+                        size={17}
+                        strokeWidth={2}
+                    />
 
-                    Finish
+                    {finishing
+                        ? "Finishing..."
+                        : "Finish"
+                    }
 
                 </button>
 
@@ -314,6 +616,7 @@ function SessionTracker() {
 
                 <Trophy
                     size={19}
+                    strokeWidth={2}
                 />
 
                 XP Earned
@@ -328,6 +631,7 @@ function SessionTracker() {
         </div>
 
     );
+
 }
 
 export default SessionTracker;
