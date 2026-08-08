@@ -1,30 +1,27 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
+import {
+    ArrowRight,
+    Brain,
+    CheckCircle2,
+    FileCheck,
+    FileText,
+    Hand,
+    MessageSquare,
+    Rocket,
+    Sparkles,
+    Target
+} from "lucide-react";
+
 import { getDashboard } from "../services/dashboardService";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import ErrorCard from "../components/ui/ErrorCard";
 
-import {
-
-FileCheck,
-
-Target,
-
-Brain,
-
-Rocket,
-
-MessageSquare
-
-} from "lucide-react";
-
-
 function Dashboard() {
 
     const [dashboard, setDashboard] = useState(null);
-
     const [loading, setLoading] = useState(true);
-
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -34,13 +31,31 @@ function Dashboard() {
             try {
 
                 const data = await getDashboard();
+
                 console.log("Resume:", data.resume);
-                console.log("Resume Analysis:", data.resume?.analysis);
+                console.log(
+                    "Resume Analysis:",
+                    data.resume?.analysis
+                );
 
-                console.log("Job Match:", JSON.stringify(data.jobMatch, null, 2));
-                console.log("Job Match Result:", data.jobMatch?.result);
+                console.log(
+                    "Job Match:",
+                    JSON.stringify(
+                        data.jobMatch,
+                        null,
+                        2
+                    )
+                );
 
-                console.log("Skill Gap:", data.skillGap);
+                console.log(
+                    "Job Match Result:",
+                    data.jobMatch?.result
+                );
+
+                console.log(
+                    "Skill Gap:",
+                    data.skillGap
+                );
 
                 setDashboard(data);
 
@@ -49,7 +64,10 @@ function Dashboard() {
             catch (err) {
 
                 console.log(err);
-                setError("Unable to load dashboard.");
+
+                setError(
+                    "Unable to load dashboard."
+                );
 
             }
 
@@ -65,6 +83,7 @@ function Dashboard() {
 
     }, []);
 
+
     if (loading) {
 
         return (
@@ -74,77 +93,126 @@ function Dashboard() {
         );
 
     }
+
+
     if (error) {
 
-    return (
-        <ErrorCard
-            title="Dashboard Failed"
-            message={error}
-            onRetry={() => window.location.reload()}
-        />
-    );
+        return (
+            <ErrorCard
+                title="Dashboard Failed"
+                message={error}
+                onRetry={() =>
+                    window.location.reload()
+                }
+            />
+        );
 
-}
-    
+    }
+
 
     return (
 
         <div className="dashboard">
+
+            {/* =========================================
+                DASHBOARD HEADER
+            ========================================= */}
 
             <div className="dashboard-header">
 
                 <div className="dashboard-header-left">
 
                     <span className="dashboard-tag">
-                        ✨ FutureTwin Dashboard
+
+                        <Sparkles
+                            size={16}
+                        />
+
+                        FutureTwin Dashboard
+
                     </span>
 
+
                     <h1>
-                        Welcome Back <span>👋</span>
+
+                        Welcome Back
+
+                        <span className="welcome-icon">
+
+                            <Hand
+                                size={42}
+                                strokeWidth={2}
+                            />
+
+                        </span>
+
                     </h1>
 
+
                     <p>
+
                         Your AI-powered career command center.
-                        Track your resume, job readiness, skill growth,
-                        and career progress in one place.
+                        Track your resume, job readiness,
+                        skill growth, and career progress
+                        in one place.
+
                     </p>
 
                 </div>
+
+
+                {/* =====================================
+                    MINI STATS
+                ===================================== */}
 
                 <div className="dashboard-header-right">
 
                     <div className="dashboard-mini-card">
 
-                        <span>Resume</span>
+                        <span>
+                            Resume
+                        </span>
 
                         <h3>
+
                             {dashboard.resume
                                 ? `${dashboard.resume.analysis?.atsScore ?? "--"}%`
                                 : "--"}
+
                         </h3>
 
                     </div>
 
+
                     <div className="dashboard-mini-card">
 
-                        <span>Job Match</span>
+                        <span>
+                            Job Match
+                        </span>
 
                         <h3>
+
                             {dashboard.jobMatch
                                 ? `${dashboard.jobMatch.result.matchScore}%`
                                 : "--"}
+
                         </h3>
 
                     </div>
+
 
                     <div className="dashboard-mini-card">
 
-                        <span>Career Success</span>
+                        <span>
+                            Career Success
+                        </span>
 
                         <h3>
+
                             {dashboard.simulation
                                 ? `${dashboard.simulation.result.successProbability}%`
                                 : "--"}
+
                         </h3>
 
                     </div>
@@ -153,312 +221,563 @@ function Dashboard() {
 
             </div>
 
+
+            {/* =========================================
+                CAREER OVERVIEW
+            ========================================= */}
+
             <h2 className="dashboard-section-title">
+
                 Career Overview
+
             </h2>
+
 
             <div className="dashboard-stats">
 
+
+                {/* Resume */}
+
                 <div className="dashboard-stat-card">
 
-                    <FileCheck className="dashboard-icon"/>
+                    <FileCheck
+                        className="dashboard-icon"
+                    />
 
                     <h3>
-
-                    Resume Status
-
+                        Resume Status
                     </h3>
 
                     <div className="stat-value">
+
                         {dashboard.resume
                             ? `${dashboard.resume.analysis?.atsScore ?? "--"}%`
                             : "--"}
+
                     </div>
 
                     <span className="stat-status">
-                        {dashboard.resume ? "ATS Score" : "Resume Missing"}
+
+                        {dashboard.resume
+                            ? "ATS Score"
+                            : "Resume Missing"}
+
                     </span>
 
                 </div>
 
+
+                {/* Job Match */}
+
                 <div className="dashboard-stat-card">
 
-                    <Target className="dashboard-icon" />
+                    <Target
+                        className="dashboard-icon"
+                    />
 
-                    <h3>Job Match</h3>
+                    <h3>
+                        Job Match
+                    </h3>
 
                     <div className="stat-value">
+
                         {dashboard.jobMatch
                             ? `${dashboard.jobMatch.result.matchScore}%`
                             : "--"}
+
                     </div>
 
                     <span className="stat-status">
-                        {dashboard.jobMatch ? "AI Match Score" : "No Analysis"}
+
+                        {dashboard.jobMatch
+                            ? "AI Match Score"
+                            : "No Analysis"}
+
                     </span>
 
                 </div>
 
+
+                {/* Skill Gap */}
+
                 <div className="dashboard-stat-card">
 
-                    <Brain className="dashboard-icon" />
+                    <Brain
+                        className="dashboard-icon"
+                    />
 
-                    <h3>Skill Gap</h3>
+                    <h3>
+                        Skill Gap
+                    </h3>
 
                     <div className="stat-value">
+
                         {dashboard.skillGap
                             ? `${dashboard.skillGap.result.matchPercentage}%`
                             : "--"}
+
                     </div>
 
                     <span className="stat-status">
-                        {dashboard.skillGap ? "Skills Covered" : "No Analysis"}
+
+                        {dashboard.skillGap
+                            ? "Skills Covered"
+                            : "No Analysis"}
+
                     </span>
 
                 </div>
 
+
+                {/* Career Simulator */}
+
                 <div className="dashboard-stat-card">
 
-                    <Rocket className="dashboard-icon" />
+                    <Rocket
+                        className="dashboard-icon"
+                    />
 
-                    <h3>Career Simulator</h3>
+                    <h3>
+                        Career Simulator
+                    </h3>
 
                     <div className="stat-value">
+
                         {dashboard.simulation
                             ? `${dashboard.simulation.result.successProbability}%`
                             : "--"}
+
                     </div>
 
                     <span className="stat-status">
-                        {dashboard.simulation ? "Success Probability" : "Not Run"}
+
+                        {dashboard.simulation
+                            ? "Success Probability"
+                            : "Not Run"}
+
                     </span>
 
                 </div>
+
+
+                {/* AI Mentor */}
 
                 <div className="dashboard-stat-card">
 
-                    <MessageSquare className="dashboard-icon" />
+                    <MessageSquare
+                        className="dashboard-icon"
+                    />
 
-                    <h3>AI Mentor</h3>
+                    <h3>
+                        AI Mentor
+                    </h3>
 
                     <div className="stat-value">
+
                         {dashboard.mentorChats}
+
                     </div>
 
                     <span className="stat-status">
+
                         Total Conversations
+
                     </span>
 
                 </div>
 
             </div>
 
+
+            {/* =========================================
+                CAREER JOURNEY
+            ========================================= */}
+
             <h2 className="dashboard-section-title">
+
                 Career Journey
+
             </h2>
+
 
             <div className="journey-card">
 
+
+                {/* Resume Uploaded */}
+
                 <div className="journey-step completed">
 
-                    <div className="journey-icon">✅</div>
+                    <div className="journey-icon">
+
+                        <CheckCircle2
+                            size={24}
+                        />
+
+                    </div>
 
                     <div>
 
-                        <h3>Resume Uploaded</h3>
+                        <h3>
+                            Resume Uploaded
+                        </h3>
 
                         <p>
+
                             {dashboard.resume
                                 ? "Completed"
                                 : "Pending"}
+
                         </p>
 
                     </div>
 
                 </div>
 
+
+                {/* Resume Analysis */}
+
                 <div className="journey-step completed">
 
-                    <div className="journey-icon">📄</div>
+                    <div className="journey-icon">
+
+                        <FileText
+                            size={24}
+                        />
+
+                    </div>
 
                     <div>
 
-                        <h3>Resume Analysis</h3>
+                        <h3>
+                            Resume Analysis
+                        </h3>
 
                         <p>
+
                             {dashboard.resume
                                 ? "Completed"
                                 : "Pending"}
+
                         </p>
 
                     </div>
 
                 </div>
+
+
+                {/* Job Match */}
 
                 <div className="journey-step">
 
-                    <div className="journey-icon">🎯</div>
+                    <div className="journey-icon">
+
+                        <Target
+                            size={24}
+                        />
+
+                    </div>
 
                     <div>
 
-                        <h3>Job Match</h3>
+                        <h3>
+                            Job Match
+                        </h3>
 
                         <p>
+
                             {dashboard.jobMatch
                                 ? "Completed"
                                 : "Pending"}
+
                         </p>
 
                     </div>
 
                 </div>
 
+
+                {/* Skill Gap */}
+
                 <div className="journey-step">
 
-                    <div className="journey-icon">🧠</div>
+                    <div className="journey-icon">
+
+                        <Brain
+                            size={24}
+                        />
+
+                    </div>
 
                     <div>
 
-                        <h3>Skill Gap</h3>
+                        <h3>
+                            Skill Gap
+                        </h3>
 
                         <p>
+
                             {dashboard.skillGap
                                 ? "Completed"
                                 : "Pending"}
+
                         </p>
 
                     </div>
 
                 </div>
+
+
+                {/* Future Simulator */}
 
                 <div className="journey-step">
 
-                    <div className="journey-icon">🚀</div>
+                    <div className="journey-icon">
+
+                        <Rocket
+                            size={24}
+                        />
+
+                    </div>
 
                     <div>
 
-                        <h3>Future Simulator</h3>
+                        <h3>
+                            Future Simulator
+                        </h3>
 
                         <p>
+
                             {dashboard.simulation
                                 ? "Completed"
                                 : "Pending"}
+
                         </p>
 
                     </div>
 
                 </div>
 
-        <div className="journey-step">
 
-            <div className="journey-icon">🤖</div>
+                {/* AI Mentor */}
 
-            <div>
+                <div className="journey-step">
 
-                <h3>AI Mentor</h3>
+                    <div className="journey-icon">
 
-                <p>
-                    {dashboard.mentorChats > 0
-                        ? `${dashboard.mentorChats} conversations`
-                        : "Not Started"}
-                </p>
+                        <MessageSquare
+                            size={24}
+                        />
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            AI Mentor
+                        </h3>
+
+                        <p>
+
+                            {dashboard.mentorChats > 0
+                                ? `${dashboard.mentorChats} conversations`
+                                : "Not Started"}
+
+                        </p>
+
+                    </div>
+
+                </div>
 
             </div>
 
-        </div>
 
-    </div>
+            {/* =========================================
+                QUICK ACTIONS
+            ========================================= */}
+
             <h2 className="dashboard-section-title">
+
                 Quick Actions
+
             </h2>
+
+
             <div className="quick-actions">
 
-                <Link to="/resume-analysis" className="dashboard-action-card">
 
-                    <FileCheck className="dashboard-action-icon"/>
+                <Link
+                    to="/resume-analysis"
+                    className="dashboard-action-card"
+                >
 
-                    <h3>Resume Analysis</h3>
+                    <FileCheck
+                        className="dashboard-action-icon"
+                    />
 
-                    <p>Analyze ATS & Resume</p>
+                    <h3>
+                        Resume Analysis
+                    </h3>
+
+                    <p>
+                        Analyze ATS & Resume
+                    </p>
+
                     <span className="dashboard-action-arrow">
-                        →
+
+                        <ArrowRight
+                            size={22}
+                        />
+
                     </span>
 
                 </Link>
 
-                <Link to="/job-match" className="dashboard-action-card">
 
-                    <Target className="dashboard-action-icon"/>
+                <Link
+                    to="/job-match"
+                    className="dashboard-action-card"
+                >
 
-                    <h3>Job Match</h3>
+                    <Target
+                        className="dashboard-action-icon"
+                    />
 
-                    <p>Find matching job roles</p>
+                    <h3>
+                        Job Match
+                    </h3>
+
+                    <p>
+                        Find matching job roles
+                    </p>
 
                     <span className="dashboard-action-arrow">
-                        →
+
+                        <ArrowRight
+                            size={22}
+                        />
+
                     </span>
 
                 </Link>
 
-                <Link to="/skill-gap" className="dashboard-action-card">
 
-                    <Brain className="dashboard-action-icon"/>
+                <Link
+                    to="/skill-gap"
+                    className="dashboard-action-card"
+                >
 
-                    <h3>Skill Gap</h3>
+                    <Brain
+                        className="dashboard-action-icon"
+                    />
 
-                    <p>Identify missing skills</p>
+                    <h3>
+                        Skill Gap
+                    </h3>
+
+                    <p>
+                        Identify missing skills
+                    </p>
 
                     <span className="dashboard-action-arrow">
-                        →
+
+                        <ArrowRight
+                            size={22}
+                        />
+
                     </span>
 
                 </Link>
 
-                <Link to="/simulator" className="dashboard-action-card">
 
-                    <Rocket className="dashboard-action-icon"/>
+                <Link
+                    to="/simulator"
+                    className="dashboard-action-card"
+                >
 
-                    <h3>Career Simulator</h3>
+                    <Rocket
+                        className="dashboard-action-icon"
+                    />
 
-                    <p>Predict career success</p>
+                    <h3>
+                        Career Simulator
+                    </h3>
+
+                    <p>
+                        Predict career success
+                    </p>
 
                     <span className="dashboard-action-arrow">
-                        →
+
+                        <ArrowRight
+                            size={22}
+                        />
+
                     </span>
 
                 </Link>
 
-                <Link to="/mentor" className="dashboard-action-card">
 
-                    <MessageSquare className="dashboard-action-icon"/>
+                <Link
+                    to="/mentor"
+                    className="dashboard-action-card"
+                >
 
-                    <h3>AI Mentor</h3>
+                    <MessageSquare
+                        className="dashboard-action-icon"
+                    />
 
-                    <p>Chat with your AI mentor</p>
+                    <h3>
+                        AI Mentor
+                    </h3>
+
+                    <p>
+                        Chat with your AI mentor
+                    </p>
 
                     <span className="dashboard-action-arrow">
-                        →
+
+                        <ArrowRight
+                            size={22}
+                        />
+
                     </span>
 
                 </Link>
 
             </div>
 
-            <h2 className="dashboard-section-title">
-                🤖 AI Insight
+
+            {/* =========================================
+                AI INSIGHT
+            ========================================= */}
+
+            <h2 className="dashboard-section-title dashboard-title-icon">
+
+                <Sparkles
+                    size={28}
+                />
+
+                AI Insight
+
             </h2>
+
 
             <div className="dashboard-insight-card">
 
                 <div className="dashboard-insight-icon">
 
-                    <Brain size={42} />
+                    <Brain
+                        size={42}
+                    />
 
                 </div>
 
+
                 <div className="dashboard-insight-content">
 
-                    <h2>Your Next Best Move</h2>
+                    <h2>
+                        Your Next Best Move
+                    </h2>
 
                     <p>
 
@@ -468,20 +787,26 @@ function Dashboard() {
 
                     </p>
 
+
                     <div className="dashboard-insight-actions">
 
                         <Link
                             to="/skill-gap"
                             className="insight-btn"
                         >
+
                             Improve Skills
+
                         </Link>
+
 
                         <Link
                             to="/mentor"
                             className="insight-btn secondary"
                         >
+
                             Ask AI Mentor
+
                         </Link>
 
                     </div>

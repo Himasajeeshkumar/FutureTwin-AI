@@ -1,7 +1,8 @@
 import "./EmptyState.css";
+import { FileText } from "lucide-react";
 
 function EmptyState({
-    icon = "📄",
+    icon: Icon = FileText,
     title,
     description,
     action
@@ -10,7 +11,7 @@ function EmptyState({
         <div className="empty-state">
 
             <div className="empty-icon">
-                {icon}
+                <Icon size={52} strokeWidth={1.8} />
             </div>
 
             <h2>{title}</h2>

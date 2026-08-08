@@ -1,21 +1,13 @@
-.footer{
-
-    padding:80px 8% 40px;
-
-    border-top:1px solid rgba(255,255,255,.08);
-
+.footer {
+    padding: 48px 8% 24px;
+    border-top: 1px solid rgba(255,255,255,.08);
 }
 
-.footer-top{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    gap:100px;
-
-    margin-bottom:50px;
-
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+    margin-bottom: 32px;
 }
 
 .footer-brand{
@@ -28,9 +20,9 @@
 
     color:white;
 
-    font-size:32px;
+    font-size:26px;
 
-    margin-bottom:18px;
+    margin-bottom:12px;
 
 }
 
@@ -38,11 +30,11 @@
 
     color:#9CA3AF;
 
-    line-height:1.8;
+    line-height:1.6;
 
-     margin-top:20px;
+    margin-top: 0;
 
-    margin-bottom:35px;
+    margin-bottom:24px;
 
 }
 
@@ -88,7 +80,7 @@
 
     display:flex;
 
-    gap:90px;
+    gap:60px;
 
 }
 

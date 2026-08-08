@@ -1,39 +1,109 @@
 import { useRef, useState } from "react";
 import * as pdfjsLib from "pdfjs-dist";
+
+import {
+    Brain,
+    FileText,
+    Sparkles,
+    CheckCircle2,
+    Target,
+    TrendingUp,
+    BriefcaseBusiness,
+    Rocket,
+    Download,
+    Lightbulb,
+    Dumbbell,
+    AlertTriangle,
+    XCircle
+} from "lucide-react";
+
+import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+
 import { skillList } from "../data/skills";
 import { parseResume } from "../utils/parser/resumeParser";
 import { useResume } from "../context/ResumeContext";
 import { useResumeAnalysis } from "../hooks/useResumeAnalysis";
+
 import "./ResumeUpload.css";
+
 import SectionScores from "./SectionScores";
 import { downloadReport } from "../utils/pdf/downloadReport";
+
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import EmptyState from "./ui/EmptyState";
 import Toast from "../components/ui/Toast";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
-function ResumeUpload({ setSkills, setResumeText, setParsedResume }) {
+
+function ResumeUpload({
+    setSkills,
+    setResumeText,
+    setParsedResume
+}) {
+
     const {
         analysis,
         setAnalysis
-  } = useResume();
+    } = useResume();
 
-  const [uploaded, setUploaded] = useState(!!analysis);
-  const [score, setScore] = useState(0);
-  const [suggestions, setSuggestions] = useState([]);
-  const [detectedSkills, setDetectedSkills] = useState([]);
-  const [ats, setAts] = useState({});
-  const [aiResult, setAiResult] = useState(analysis);
-  const atsRef = useRef(null);
-  const reviewRef = useRef(null);
-  const strengthsRef = useRef(null);
-  const careerRef = useRef(null);
-  const missingSkillsRef = useRef(null);
+    const [uploaded, setUploaded] = useState(!!analysis);
 
-  
+    const [score, setScore] = useState(0);
 
-  const scrollToSection = (ref) => {
+    const [suggestions, setSuggestions] = useState([]);
+
+    const [detectedSkills, setDetectedSkills] = useState([]);
+
+    const [ats, setAts] = useState({});
+
+    const [aiResult, setAiResult] = useState(analysis);
+
+    const [toast, setToast] = useState({
+        show: false,
+        type: "success",
+        message: ""
+    });
+
+    const atsRef = useRef(null);
+    const reviewRef = useRef(null);
+    const strengthsRef = useRef(null);
+    const careerRef = useRef(null);
+    const missingSkillsRef = useRef(null);
+
+    const {
+        analyze,
+        loading
+    } = useResumeAnalysis();
+
+
+    // =========================================
+    // Toast
+    // =========================================
+
+    const showToast = (type, message) => {
+
+        setToast({
+            show: true,
+            type,
+            message
+        });
+
+        setTimeout(() => {
+
+            setToast(prev => ({
+                ...prev,
+                show: false
+            }));
+
+        }, 3000);
+    };
+
+
+    // =========================================
+    // Scroll To Section
+    // =========================================
+
+    const scrollToSection = (ref) => {
 
         if (!ref.current) return;
 
@@ -42,637 +112,1385 @@ function ResumeUpload({ setSkills, setResumeText, setParsedResume }) {
             block: "start"
         });
 
-        ref.current.classList.add("section-highlight");
+        ref.current.classList.add(
+            "section-highlight"
+        );
 
         setTimeout(() => {
 
-            ref.current.classList.remove("section-highlight");
+            if (ref.current) {
+                ref.current.classList.remove(
+                    "section-highlight"
+                );
+            }
 
         }, 1000);
-
     };
-  const {
-
-      analyze,
-
-      loading
-
-  } = useResumeAnalysis();
 
 
-  const handleUpload = async (event) => {
+    // =========================================
+    // Resume Upload
+    // =========================================
 
-    try {
+    const handleUpload = async (event) => {
 
-        const file = event.target.files[0];
+        try {
 
-        if (!file) return;
+            const file = event.target.files?.[0];
 
-        setUploaded(false);
+            if (!file) return;
 
-      if (file.type !== "application/pdf") {
-        showToast(
-            "warning",
-            "Please upload your resume first."
-        );
-        return;
-      }
 
-      if (file.size > 5 * 1024 * 1024) {
-        showToast(
-            "warning",
-            "Maximum file size is 5 MB."
-        );
-        return;
-      }
+            setUploaded(false);
 
-      const arrayBuffer = await file.arrayBuffer();
 
-      const pdf = await pdfjsLib.getDocument({
-        data: arrayBuffer
-      }).promise;
+            // -------------------------------------
+            // File Validation
+            // -------------------------------------
 
-      const extractedSkills = [];
-      let text = "";
+            if (file.type !== "application/pdf") {
 
-      for (let i = 1; i <= pdf.numPages; i++) {
+                showToast(
+                    "warning",
+                    "Please upload a PDF resume."
+                );
 
-        const page = await pdf.getPage(i);
+                return;
+            }
 
-        const content = await page.getTextContent();
 
-        text += content.items
-          .map(item => item.str)
-          .join(" ");
-      }
+            if (file.size > 5 * 1024 * 1024) {
 
-      const originalText = text;
-      text = text.toLowerCase();
-      setResumeText(originalText);
-      setParsedResume(
-      parseResume(originalText)
-      );
-      const data = await analyze(text);
-      console.log("SERVER RESPONSE:");
-      console.log(data);
+                showToast(
+                    "warning",
+                    "Maximum file size is 5 MB."
+                );
 
-      const ai = data;
+                return;
+            }
 
-      console.log("AI RESPONSE:");
-      console.log(ai);
-      console.log("AI RESPONSE");
-      console.log(JSON.stringify(ai, null, 2));
 
-      setAiResult(ai);
-      console.log("AI RESULT:", ai);
-    console.log("Parsed Resume:", ai.parsedResume);
-    console.log("Weaknesses:", ai.parsedResume?.weaknesses);
-    console.log("Missing Skills:", ai.parsedResume?.missingSkills);
-      setAnalysis(ai);
-      if (ai.parsedResume) {
-        setParsedResume(ai.parsedResume);
-      }
+            // -------------------------------------
+            // Read PDF
+            // -------------------------------------
 
-      skillList.forEach(skill => {
+            const arrayBuffer =
+                await file.arrayBuffer();
 
-        if (text.includes(skill)) {
 
-          extractedSkills.push(
-            skill
-              .split(" ")
-              .map(
-                word =>
-                  word.charAt(0).toUpperCase() +
-                  word.slice(1)
-              )
-              .join(" ")
-          );
+            const pdf =
+                await pdfjsLib
+                    .getDocument({
+                        data: arrayBuffer
+                    })
+                    .promise;
+
+
+            let text = "";
+
+
+            for (
+                let pageNumber = 1;
+                pageNumber <= pdf.numPages;
+                pageNumber++
+            ) {
+
+                const page =
+                    await pdf.getPage(
+                        pageNumber
+                    );
+
+
+                const content =
+                    await page.getTextContent();
+
+
+                text += content.items
+                    .map(item => item.str)
+                    .join(" ");
+            }
+
+
+            // -------------------------------------
+            // Validate Extracted Text
+            // -------------------------------------
+
+            if (!text.trim()) {
+
+                showToast(
+                    "error",
+                    "Unable to extract text from this PDF."
+                );
+
+                return;
+            }
+
+
+            const originalText = text;
+
+            const normalizedText =
+                text.toLowerCase();
+
+
+            // -------------------------------------
+            // Store Resume Data
+            // -------------------------------------
+
+            setResumeText(originalText);
+
+
+            setParsedResume(
+                parseResume(originalText)
+            );
+
+
+            // -------------------------------------
+            // AI Resume Analysis
+            // -------------------------------------
+
+            const data =
+                await analyze(normalizedText);
+
+
+            console.log(
+                "SERVER RESPONSE:",
+                data
+            );
+
+
+            const ai = data;
+
+
+            console.log(
+                "AI RESPONSE:",
+                ai
+            );
+
+
+            setAiResult(ai);
+
+            setAnalysis(ai);
+
+
+            // -------------------------------------
+            // AI Parsed Resume
+            // -------------------------------------
+
+            if (ai?.parsedResume) {
+
+                setParsedResume(
+                    ai.parsedResume
+                );
+            }
+
+
+            // -------------------------------------
+            // Skill Detection
+            // -------------------------------------
+
+            const extractedSkills = [];
+
+
+            skillList.forEach(skill => {
+
+                if (
+                    normalizedText.includes(
+                        skill.toLowerCase()
+                    )
+                ) {
+
+                    const formattedSkill =
+                        skill
+                            .split(" ")
+                            .map(word =>
+                                word
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                word.slice(1)
+                            )
+                            .join(" ");
+
+
+                    extractedSkills.push(
+                        formattedSkill
+                    );
+                }
+
+            });
+
+
+            // -------------------------------------
+            // Remove Duplicate Skills
+            // -------------------------------------
+
+            const uniqueSkills = [
+                ...new Set(extractedSkills)
+            ];
+
+
+            setSkills(uniqueSkills);
+
+            setDetectedSkills(
+                uniqueSkills
+            );
+
+
+            // -------------------------------------
+            // Resume Structure Analysis
+            // -------------------------------------
+
+            const analysisResult = {
+
+                education:
+                    normalizedText.includes("b.tech") ||
+                    normalizedText.includes("bachelor") ||
+                    normalizedText.includes("university"),
+
+                projects:
+                    normalizedText.includes("project"),
+
+                experience:
+                    normalizedText.includes("experience") ||
+                    normalizedText.includes("intern"),
+
+                certifications:
+                    ai?.parsedResume?.certifications
+                        ?.length > 0,
+
+                github:
+                    normalizedText.includes("github"),
+
+                linkedin:
+                    normalizedText.includes("linkedin"),
+
+                email:
+                    normalizedText.includes("@"),
+
+                phone:
+                    /\d{10}/.test(
+                        normalizedText
+                    )
+            };
+
+
+            // -------------------------------------
+            // ATS Calculation
+            // -------------------------------------
+
+            const atsResult = {
+
+                skills:
+                    Math.min(
+                        uniqueSkills.length * 20,
+                        100
+                    ),
+
+                projects:
+                    analysisResult.projects
+                        ? 100
+                        : 20,
+
+                experience:
+                    analysisResult.experience
+                        ? 100
+                        : 20,
+
+                certifications:
+                    analysisResult.certifications
+                        ? 100
+                        : 20,
+
+                profile:
+                    (
+                        (analysisResult.github
+                            ? 50
+                            : 0) +
+
+                        (analysisResult.linkedin
+                            ? 50
+                            : 0)
+                    )
+            };
+
+
+            setAts(atsResult);
+
+
+            // -------------------------------------
+            // Resume Score
+            // -------------------------------------
+
+            let resumeScore =
+                uniqueSkills.length * 15;
+
+
+            resumeScore =
+                Math.min(
+                    resumeScore,
+                    100
+                );
+
+
+            setScore(resumeScore);
+
+
+            // -------------------------------------
+            // Suggestions
+            // -------------------------------------
+
+            const aiSuggestions = [];
+
+
+            if (
+                !normalizedText.includes(
+                    "github"
+                )
+            ) {
+
+                aiSuggestions.push(
+                    "Add GitHub Profile"
+                );
+            }
+
+
+            if (
+                !normalizedText.includes(
+                    "intern"
+                )
+            ) {
+
+                aiSuggestions.push(
+                    "Add Internship Experience"
+                );
+            }
+
+
+            if (
+                !normalizedText.includes(
+                    "certificate"
+                )
+            ) {
+
+                aiSuggestions.push(
+                    "Add Certifications"
+                );
+            }
+
+
+            if (
+                !normalizedText.includes(
+                    "project"
+                )
+            ) {
+
+                aiSuggestions.push(
+                    "Improve Project Descriptions"
+                );
+            }
+
+
+            setSuggestions(
+                aiSuggestions
+            );
+
+
+            // -------------------------------------
+            // Complete
+            // -------------------------------------
+
+            setUploaded(true);
+
+
+            showToast(
+                "success",
+                "Resume analyzed successfully."
+            );
 
         }
 
-      });
+        catch (error) {
 
-      const analysisResult = {
-        education:
-          text.includes("b.tech") ||
-          text.includes("bachelor") ||
-          text.includes("university"),
+            console.error(
+                "Resume analysis error:",
+                error
+            );
 
-        projects:
-          text.includes("project"),
 
-        experience:
-          text.includes("experience") ||
-          text.includes("intern"),
+            setUploaded(false);
 
-        certifications:
-          ai?.parsedResume?.certifications?.length > 0,
 
-        github:
-          text.includes("github"),
+            showToast(
+                "error",
+                "Unable to analyze resume."
+            );
+        }
+    };
 
-        linkedin:
-          text.includes("linkedin"),
 
-        email:
-          text.includes("@"),
+    // =========================================
+    // Loading
+    // =========================================
 
-        phone:
-          /\d{10}/.test(text)
+    if (loading) {
 
-      };
+        return (
 
-      const atsResult = {
+            <LoadingSpinner
+                message="FutureTwin AI is analyzing your resume..."
+            />
 
-      skills:
-        Math.min(extractedSkills.length * 20, 100),
+        );
+    }
 
-      projects:
-        analysisResult.projects ? 100 : 20,
 
-      experience:
-        analysisResult.experience ? 100 : 20,
-
-      certifications:
-        analysisResult.certifications ? 100 : 20,
-
-      profile:
-
-        (
-          (analysisResult.github ? 50 : 0) +
-
-          (analysisResult.linkedin ? 50 : 0)
-
-        )
-
-      };
-      
-
-      setSkills(extractedSkills);
-      setDetectedSkills(extractedSkills);
-
-      setAts(atsResult);
-
-      let resumeScore = extractedSkills.length * 15;
-
-      if (resumeScore > 100) {
-        resumeScore = 100;
-      }
-      const aiSuggestions = [];
-
-      if (!text.includes("github"))
-        aiSuggestions.push("Add GitHub Profile");
-
-      if (!text.includes("intern"))
-        aiSuggestions.push("Add Internship Experience");
-
-      if (!text.includes("certificate"))
-        aiSuggestions.push("Add Certifications");
-
-      if (!text.includes("project"))
-        aiSuggestions.push("Improve Project Descriptions");
-
-      setScore(resumeScore);
-
-      setSuggestions(aiSuggestions);
-
-      setUploaded(true);
-    } catch (error) {
-      console.log(error);
-      showToast(
-          "error",
-          "Unable to analyze resume."
-      );
-    } 
-  };
-  const [toast, setToast] = useState({
-      show: false,
-      type: "success",
-      message: ""
-  });
-  const showToast = (type, message) => {
-
-    setToast({
-        show: true,
-        type,
-        message
-    });
-
-    setTimeout(() => {
-
-        setToast(prev => ({
-            ...prev,
-            show: false
-        }));
-
-    }, 3000);
-
-};
-
-  if (loading) {
-    return (
-        <LoadingSpinner
-            message="FutureTwin AI is analyzing your resume..."
-        />
-    );
-}
+    // =========================================
+    // UI
+    // =========================================
 
     return (
-      <div className="resume-upload" id="resume">
 
-        <div className="resume-hero">
+        <div
+            className="resume-upload"
+            id="resume"
+        >
 
-          <div>
+            {/* =================================
+                HERO
+            ================================= */}
 
-            <h1>🤖 AI Resume Analysis</h1>
+            <div className="resume-hero">
 
-            <p>
-              Upload your resume and receive AI-powered insights,
-              ATS evaluation, skill analysis, strengths, weaknesses,
-              and personalized career recommendations.
-            </p>
+                <div>
 
-          </div>
+                    <h1 className="resume-hero-title">
 
-        </div>
+                        <Brain
+                            size={32}
+                        />
 
-        <div className="upload-grid">
+                        AI Resume Analysis
 
-          <div className="upload-card">
+                    </h1>
 
-              <h2>📄 Upload Resume</h2>
 
-              <p>
-                  Upload your latest resume in PDF format.
-                  Our AI will analyze it in a few seconds.
-              </p>
+                    <p>
 
-              <div className="upload-icon">
-                  📄
-              </div>
+                        Upload your resume and receive
+                        AI-powered insights, ATS evaluation,
+                        skill analysis, strengths,
+                        weaknesses, and personalized
+                        career recommendations.
 
-              <label className="upload-resume-btn">
+                    </p>
 
-                  Choose Resume
+                </div>
 
-                  <input
-                      type="file"
-                      accept=".pdf"
-                      onChange={handleUpload}
-                      hidden
-                  />
+            </div>
 
-              </label>
 
-          </div>
+            {/* =================================
+                UPLOAD AREA
+            ================================= */}
 
-          <div className="upload-info-card">
+            <div className="upload-grid">
 
-              <h2>✨ What You'll Get</h2>
 
-              <div
-                  className="feature-item"
-                  onClick={() => scrollToSection(atsRef)}
-              >
+                {/* Upload Card */}
 
-                  ✅ ATS Compatibility Score
+                <div className="upload-card">
 
-              </div>
+                    <h2 className="upload-card-title">
 
-              <div
-                  className="feature-item"
-                  onClick={() => scrollToSection(reviewRef)}
-              >
+                        <FileText
+                            size={24}
+                        />
 
-                  🧠 AI Resume Review
+                        Upload Resume
 
-              </div>
+                    </h2>
 
-              <div
-                  className="feature-item"
-                  onClick={() => scrollToSection(strengthsRef)}
-              >
-                  💪 Strengths & Weaknesses
-              </div>
 
-              <div
-                  className="feature-item"
-                  onClick={() => scrollToSection(careerRef)}
-              >
-                  📈 Career Recommendation
-              </div>
+                    <p>
 
-              <div
-                  className="feature-item"
-                  onClick={() => scrollToSection(missingSkillsRef)}
-              >
-                  🎯 Missing Skills Detection
-              </div>
+                        Upload your latest resume
+                        in PDF format. Our AI will
+                        analyze it in a few seconds.
 
-          </div>
+                    </p>
 
-      </div>
+
+                    <div className="upload-icon">
+
+                        <FileText
+                            size={42}
+                            strokeWidth={1.8}
+                        />
+
+                    </div>
+
+
+                    <label
+                        className="upload-resume-btn"
+                    >
+
+                        Choose Resume
+
+
+                        <input
+                            type="file"
+                            accept=".pdf,application/pdf"
+                            onChange={handleUpload}
+                            hidden
+                        />
+
+                    </label>
+
+                </div>
+
+
+                {/* Information Card */}
+
+                <div className="upload-info-card">
+
+                    <h2 className="upload-card-title">
+
+                        <Sparkles
+                            size={24}
+                        />
+
+                        What You'll Get
+
+                    </h2>
+
+
+                    <div
+                        className="feature-item"
+                        onClick={() =>
+                            scrollToSection(
+                                atsRef
+                            )
+                        }
+                    >
+
+                        <CheckCircle2
+                            size={20}
+                        />
+
+                        <span>
+                            ATS Compatibility Score
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        className="feature-item"
+                        onClick={() =>
+                            scrollToSection(
+                                reviewRef
+                            )
+                        }
+                    >
+
+                        <Brain
+                            size={20}
+                        />
+
+                        <span>
+                            AI Resume Review
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        className="feature-item"
+                        onClick={() =>
+                            scrollToSection(
+                                strengthsRef
+                            )
+                        }
+                    >
+
+                        <Dumbbell
+                            size={20}
+                        />
+
+                        <span>
+                            Strengths & Weaknesses
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        className="feature-item"
+                        onClick={() =>
+                            scrollToSection(
+                                careerRef
+                            )
+                        }
+                    >
+
+                        <TrendingUp
+                            size={20}
+                        />
+
+                        <span>
+                            Career Recommendation
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        className="feature-item"
+                        onClick={() =>
+                            scrollToSection(
+                                missingSkillsRef
+                            )
+                        }
+                    >
+
+                        <Target
+                            size={20}
+                        />
+
+                        <span>
+                            Missing Skills Detection
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {/* =================================
+                EMPTY STATE
+            ================================= */}
+
             {!uploaded && (
+
                 <EmptyState
-                    icon="📄"
+                    icon={FileText}
                     title="No Resume Uploaded"
                     description="Upload your resume to receive ATS analysis, AI feedback, skill detection, and personalized career recommendations."
                 />
+
             )}
 
-        {uploaded && (
 
-          <div className="resume-result">
-            <div className="analysis-success">
+            {/* =================================
+                RESULTS
+            ================================= */}
 
-            <div>
-            <div className="download-report-container">
+            {uploaded && (
 
-                <button
-                    className="download-report-btn"
-                    onClick={() => downloadReport(aiResult)}
-                >
-                    📥 Download AI Report
-                </button>
+                <div className="resume-result">
 
-            </div>
 
-                  <h2>✅ Analysis Complete</h2>
+                    {/* Analysis Complete */}
 
-                  <p>
-                      Your resume has been successfully analyzed by FutureTwin AI.
-                  </p>
+                    <div className="analysis-success">
 
-              </div>
+                        <div>
 
-          </div>
+                            <div className="download-report-container">
 
-          <div
-              className="analysis-stats top-row"
-              ref={atsRef}
-          >
+                                <button
+                                    type="button"
+                                    className="download-report-btn"
+                                    onClick={() =>
+                                        downloadReport(
+                                            aiResult
+                                        )
+                                    }
+                                    disabled={!aiResult}
+                                >
 
-              <div className="stat-card">
+                                    <Download
+                                        size={18}
+                                    />
 
-                  <div className="stat-icon">📄</div>
+                                    Download AI Report
 
-                  <span>Resume Score</span>
+                                </button>
 
-                  <h1>{aiResult?.resumeScore ?? score}%</h1>
+                            </div>
 
-              </div>
 
-              <div className="stat-card">
+                            <h2 className="analysis-complete-title">
 
-                <div className="stat-icon">🎯</div>
+                                <CheckCircle2
+                                    size={32}
+                                />
 
-                  <span>ATS Score</span>
+                                Analysis Complete
 
-                  <h1>
-                      {aiResult?.atsScore ?? ats.skills}%
-                  </h1>
+                            </h2>
 
-              </div>
 
-              <div className="stat-card">
+                            <p>
 
-                <div className="stat-icon">🧠</div>
+                                Your resume has been
+                                successfully analyzed
+                                by FutureTwin AI.
 
-                <span>Skills Found</span>
+                            </p>
 
-                <h1>
-                    {
-                    aiResult?.parsedResume?.skills
-                        ? aiResult.parsedResume.skills.reduce(
-                            (total, category) => total + category.items.length,
-                            0
+                        </div>
+
+                    </div>
+
+
+                    {/* =================================
+                        SCORE CARDS
+                    ================================= */}
+
+                    <div
+                        className="analysis-stats top-row"
+                        ref={atsRef}
+                    >
+
+
+                        {/* Resume Score */}
+
+                        <div className="stat-card">
+
+                            <div className="stat-icon">
+
+                                <FileText
+                                    size={24}
+                                />
+
+                            </div>
+
+                            <span>
+                                Resume Score
+                            </span>
+
+                            <h1>
+                                {
+                                    aiResult?.resumeScore ??
+                                    score
+                                }%
+                            </h1>
+
+                        </div>
+
+
+                        {/* ATS Score */}
+
+                        <div className="stat-card">
+
+                            <div className="stat-icon">
+
+                                <Target
+                                    size={24}
+                                />
+
+                            </div>
+
+                            <span>
+                                ATS Score
+                            </span>
+
+                            <h1>
+                                {
+                                    aiResult?.atsScore ??
+                                    ats.skills ??
+                                    0
+                                }%
+                            </h1>
+
+                        </div>
+
+
+                        {/* Skills */}
+
+                        <div className="stat-card">
+
+                            <div className="stat-icon">
+
+                                <Brain
+                                    size={24}
+                                />
+
+                            </div>
+
+                            <span>
+                                Skills Found
+                            </span>
+
+                            <h1>
+
+                                {
+                                    aiResult
+                                        ?.parsedResume
+                                        ?.skills
+                                        ? aiResult
+                                            .parsedResume
+                                            .skills
+                                            .reduce(
+                                                (
+                                                    total,
+                                                    category
+                                                ) =>
+                                                    total +
+                                                    (
+                                                        category
+                                                            ?.items
+                                                            ?.length ||
+                                                        0
+                                                    ),
+                                                0
+                                            )
+                                        : detectedSkills.length
+                                }
+
+                            </h1>
+
+                        </div>
+
+
+                        {/* Recruiter Score */}
+
+                        <div className="stat-card">
+
+                            <div className="stat-icon">
+
+                                <BriefcaseBusiness
+                                    size={24}
+                                />
+
+                            </div>
+
+                            <span>
+                                Recruiter Score
+                            </span>
+
+                            <h1>
+
+                                {
+                                    aiResult
+                                        ?.recruiterScore ??
+                                    "--"
+                                }
+
+                                {
+                                    aiResult
+                                        ?.recruiterScore !==
+                                    undefined
+                                        ? "%"
+                                        : ""
+                                }
+
+                            </h1>
+
+                        </div>
+
+
+                        {/* Interview Readiness */}
+
+                        <div className="stat-card">
+
+                            <div className="stat-icon">
+
+                                <Rocket
+                                    size={24}
+                                />
+
+                            </div>
+
+                            <span>
+                                Interview Ready
+                            </span>
+
+                            <h1>
+
+                                {
+                                    aiResult
+                                        ?.interviewReadiness ??
+                                    "--"
+                                }
+
+                                {
+                                    aiResult
+                                        ?.interviewReadiness !==
+                                    undefined
+                                        ? "%"
+                                        : ""
+                                }
+
+                            </h1>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* =================================
+                        RECRUITER VERDICT
+                    ================================= */}
+
+                    <div
+                        className="analysis-card"
+                        ref={reviewRef}
+                    >
+
+                        <h3 className="analysis-card-title">
+
+                            <BriefcaseBusiness
+                                size={22}
+                            />
+
+                            Recruiter Verdict
+
+                        </h3>
+
+
+                        <h2>
+
+                            {
+                                aiResult?.verdict ||
+                                "No verdict available."
+                            }
+
+                        </h2>
+
+
+                        <p>
+
+                            This evaluation combines
+                            ATS compatibility, resume
+                            quality, internships,
+                            projects, certifications,
+                            and technical skills.
+
+                        </p>
+
+                    </div>
+
+
+                    {/* =================================
+                        DETECTED SKILLS
+                    ================================= */}
+
+                    <div className="analysis-card">
+
+                        <h3 className="analysis-card-title">
+
+                            <Brain
+                                size={22}
+                            />
+
+                            Detected Skills
+
+                        </h3>
+
+
+                        <div className="skill-grid">
+
+                            {
+                                (
+                                    aiResult
+                                        ?.parsedResume
+                                        ?.skills ||
+                                    []
+                                )
+                                    .flatMap(
+                                        category =>
+                                            category
+                                                ?.items ||
+                                            []
+                                    )
+                                    .map(
+                                        (
+                                            skill,
+                                            index
+                                        ) => (
+
+                                            <span
+                                                key={index}
+                                                className="skill-badge"
+                                            >
+                                                {skill}
+                                            </span>
+
+                                        )
+                                    )
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    {/* =================================
+                        SECTION SCORES
+                    ================================= */}
+
+                    <SectionScores
+                        sectionScores={
+                            aiResult?.sectionScores
+                        }
+                    />
+
+
+                    {/* =================================
+                        AI SUGGESTIONS
+                    ================================= */}
+
+                    <div className="analysis-card">
+
+                        <h3 className="analysis-card-title">
+
+                            <Lightbulb
+                                size={22}
+                            />
+
+                            AI Suggestions
+
+                        </h3>
+
+
+                        {
+                            (
+                                aiResult?.suggestions ||
+                                suggestions
+                            ).length > 0
+                                ? (
+
+                                    <ul className="analysis-list">
+
+                                        {
+                                            (
+                                                aiResult
+                                                    ?.suggestions ||
+                                                suggestions
+                                            ).map(
+                                                (
+                                                    item,
+                                                    index
+                                                ) => (
+
+                                                    <li
+                                                        key={index}
+                                                    >
+
+                                                        <Lightbulb
+                                                            size={16}
+                                                        />
+
+                                                        <span>
+                                                            {item}
+                                                        </span>
+
+                                                    </li>
+
+                                                )
+                                            )
+                                        }
+
+                                    </ul>
+
+                                )
+                                : (
+
+                                    <p className="empty-message">
+
+                                        No suggestions.
+                                        Your resume looks great!
+
+                                    </p>
+
+                                )
+                        }
+
+                    </div>
+
+
+                    {/* =================================
+                        STRENGTHS / WEAKNESSES
+                    ================================= */}
+
+                    <div
+                        className="strength-weakness-grid"
+                        ref={strengthsRef}
+                    >
+
+
+                        {/* Strengths */}
+
+                        <div className="analysis-card">
+
+                            <h3 className="analysis-card-title">
+
+                                <Dumbbell
+                                    size={22}
+                                />
+
+                                Strengths
+
+                            </h3>
+
+
+                            {
+                                aiResult
+                                    ?.parsedResume
+                                    ?.strengths
+                                    ?.length > 0
+                                    ? (
+
+                                        <ul className="analysis-list">
+
+                                            {
+                                                aiResult
+                                                    .parsedResume
+                                                    .strengths
+                                                    .map(
+                                                        (
+                                                            item,
+                                                            index
+                                                        ) => (
+
+                                                            <li
+                                                                key={index}
+                                                            >
+
+                                                                <CheckCircle2
+                                                                    size={16}
+                                                                />
+
+                                                                <span>
+                                                                    {item}
+                                                                </span>
+
+                                                            </li>
+
+                                                        )
+                                                    )
+                                            }
+
+                                        </ul>
+
+                                    )
+                                    : (
+
+                                        <p className="empty-message">
+
+                                            No strengths detected.
+
+                                        </p>
+
+                                    )
+                            }
+
+                        </div>
+
+
+                        {/* Weaknesses */}
+
+                        <div className="analysis-card">
+
+                            <h3 className="analysis-card-title">
+
+                                <AlertTriangle
+                                    size={22}
+                                />
+
+                                Weaknesses
+
+                            </h3>
+
+
+                            {
+                                aiResult
+                                    ?.parsedResume
+                                    ?.weaknesses
+                                    ?.length > 0
+                                    ? (
+
+                                        <ul className="analysis-list">
+
+                                            {
+                                                aiResult
+                                                    .parsedResume
+                                                    .weaknesses
+                                                    .map(
+                                                        (
+                                                            item,
+                                                            index
+                                                        ) => (
+
+                                                            <li
+                                                                key={index}
+                                                            >
+
+                                                                <XCircle
+                                                                    size={16}
+                                                                />
+
+                                                                <span>
+                                                                    {item}
+                                                                </span>
+
+                                                            </li>
+
+                                                        )
+                                                    )
+                                            }
+
+                                        </ul>
+
+                                    )
+                                    : (
+
+                                        <p className="empty-message">
+
+                                            No weaknesses detected.
+
+                                        </p>
+
+                                    )
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    {/* =================================
+                        MISSING SKILLS
+                    ================================= */}
+
+                    <div
+                        className="analysis-card"
+                        ref={missingSkillsRef}
+                    >
+
+                        <h3 className="analysis-card-title">
+
+                            <Target
+                                size={22}
+                            />
+
+                            Missing Skills
+
+                        </h3>
+
+
+                        {
+                            aiResult
+                                ?.parsedResume
+                                ?.missingSkills
+                                ?.length > 0
+                                ? (
+
+                                    <div className="skill-grid">
+
+                                        {
+                                            aiResult
+                                                .parsedResume
+                                                .missingSkills
+                                                .map(
+                                                    (
+                                                        item,
+                                                        index
+                                                    ) => (
+
+                                                        <span
+                                                            key={index}
+                                                            className="missing-skill-badge"
+                                                        >
+
+                                                            {item}
+
+                                                        </span>
+
+                                                    )
+                                                )
+                                        }
+
+                                    </div>
+
+                                )
+                                : (
+
+                                    <p className="empty-message">
+
+                                        No missing skills detected.
+
+                                    </p>
+
+                                )
+                        }
+
+                    </div>
+
+
+                    {/* =================================
+                        CAREER RECOMMENDATION
+                    ================================= */}
+
+                    <div
+                        className="career-card"
+                        ref={careerRef}
+                    >
+
+                        <h3 className="analysis-card-title">
+
+                            <TrendingUp
+                                size={22}
+                            />
+
+                            AI Career Recommendation
+
+                        </h3>
+
+
+                        <p>
+
+                            {
+                                aiResult
+                                    ?.parsedResume
+                                    ?.careerRecommendation ||
+                                "No career recommendation available."
+                            }
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            )}
+
+
+            {/* =================================
+                TOAST
+            ================================= */}
+
+            {toast.show && (
+
+                <Toast
+                    type={toast.type}
+                    message={toast.message}
+                    onClose={() =>
+                        setToast(
+                            prev => ({
+                                ...prev,
+                                show: false
+                            })
                         )
-                        : detectedSkills.length
-                }
-                </h1>
-              </div>
-              <div className="stat-card">
-
-                  <div className="stat-icon">👨‍💼</div>
-
-                  <span>Recruiter Score</span>
-
-                  <h1>
-                      {aiResult?.recruiterScore ?? "--"}%
-                  </h1>
-
-              </div>
-
-              <div className="stat-card">
-
-                  <div className="stat-icon">🚀</div>
-
-                  <span>Interview Ready</span>
-
-                  <h1>
-                      {aiResult?.interviewReadiness ?? "--"}%
-                  </h1>
-
-              </div>
-
-            </div>
-            <div
-                className="analysis-card"
-                ref={reviewRef}
-            >
-
-                <h3>👨‍💼 Recruiter Verdict</h3>
-
-                <h2>{aiResult?.verdict}</h2>
-
-                <p>
-
-                    This evaluation combines ATS compatibility,
-                    resume quality, internships, projects,
-                    certifications, and technical skills.
-
-                </p>
-
-            </div>
-
-            <div className="analysis-card">
-
-              <h3>🛠 Detected Skills</h3>
-
-              <div className="skill-grid">
-
-                  {(aiResult?.parsedResume?.skills || []).flatMap(category => category.items).map((skill, index) => (
-                    <span key={index} className="skill-badge">
-                        {skill}
-                    </span>
-                    ))}
-
-              </div>
-
-          </div>
-
-            <SectionScores
-              sectionScores={aiResult?.sectionScores}
-          />
-
-          <div className="analysis-card">
-
-            <h3>💡 AI Suggestions</h3>
-
-            {(aiResult?.suggestions || suggestions).length > 0 ? (
-
-                <ul className="analysis-list">
-
-                    {(aiResult?.suggestions || suggestions).map((item,index)=>(
-
-                        <li key={index}>
-                            💡 {item}
-                        </li>
-
-                    ))}
-
-                </ul>
-
-            ) : (
-
-                <p className="empty-message">
-                    ✅ No suggestions. Your resume looks great!
-                </p>
+                    }
+                />
 
             )}
 
         </div>
-
-          <div
-              className="strength-weakness-grid"
-              ref={strengthsRef}
-          >
-
-              <div className="analysis-card">
-
-                  <h3>💪 Strengths</h3>
-
-                  {aiResult?.parsedResume?.strengths?.length > 0 ? (
-
-                    <ul className="analysis-list">
-
-                        {aiResult.parsedResume.strengths.map((item,index)=>(
-
-                            <li key={index}>
-                                ✅ {item}
-                            </li>
-
-                        ))}
-
-                    </ul>
-
-                ) : (
-
-                    <p className="empty-message">
-                        No strengths detected.
-                    </p>
-
-                )}
-
-              </div>
-
-              <div className="analysis-card">
-
-                  <h3>⚠ Weaknesses</h3>
-
-                  {aiResult?.parsedResume?.weaknesses?.length > 0 ? (
-
-                    <ul className="analysis-list">
-
-                        {aiResult.parsedResume.weaknesses.map((item,index)=>(
-
-                            <li key={index}>
-                                ❌ {item}
-                            </li>
-
-                        ))}
-
-                    </ul>
-
-                ) : (
-
-                    <p className="empty-message">
-                        🎉 No weaknesses detected.
-                    </p>
-
-                )}
-
-              </div>
-
-          </div>
-
-            <div
-                className="analysis-card"
-                ref={missingSkillsRef}
-            >
-
-
-              <h3>🎯 Missing Skills</h3>
-
-              {aiResult?.parsedResume?.missingSkills?.length > 0 ? (
-
-                  <div className="skill-grid">
-
-                      {aiResult.parsedResume.missingSkills.map((item, index) => (
-
-                          <span
-                              key={index}
-                              className="missing-skill-badge"
-                          >
-                              {item}
-                          </span>
-
-                      ))}
-
-                  </div>
-
-              ) : (
-
-                  <p>No missing skills detected. 🎉</p>
-
-              )}
-
-          </div>
-
-            <div
-                className="career-card"
-                ref={careerRef}
-            >
-
-                <h3>🎯 AI Career Recommendation</h3>
-
-                <p>
-
-                    {aiResult?.parsedResume?.careerRecommendation}
-
-                </p>
-
-            </div>
-
-          </div>
-
-        )}
-        {toast.show && (
-
-            <Toast
-                type={toast.type}
-                message={toast.message}
-                onClose={() =>
-                    setToast(prev => ({
-                        ...prev,
-                        show: false
-                    }))
-                }
-            />
-
-        )}
-
-      </div>
     );
 }
 

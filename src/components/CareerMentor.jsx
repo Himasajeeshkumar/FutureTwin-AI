@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EmptyState from "../components/ui/EmptyState";
 import "./CareerMentor.css";
 import Toast from "../components/ui/Toast";
@@ -147,116 +147,140 @@ const showToast = (type, message) => {
     }
 
   };
+  const chatEndRef = useRef(null);
+
+  useEffect(() => {
+      chatEndRef.current?.scrollIntoView({
+          behavior: "smooth"
+      });
+  }, [messages, loading]);
 
   return (
 
     <div className="mentor-card">
 
-      <h1 className="section-title">
+    <h1 className="section-title">
         AI Career Mentor
-      </h1>
+    </h1>
 
-      <textarea
-        placeholder="Ask anything about your career..."
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            generateAnswer();
-          }
-        }}
-      />
-
-      <br />
-
-      <button onClick={generateAnswer}>
-          Send
-      </button>
-      <button onClick={() => setShowConfirm(true)}>
-          Clear Chat
-      </button>
-      <div className="chat-box">
+    <div className="chat-box">
 
         {messages.length === 0 && (
             <EmptyState
-                icon="🤖"
+                icon="AI"
                 title="Start a Conversation"
-                description="Ask FutureTwin AI anything about careers, interviews, projects, skills, or your learning roadmap."
+                description="Ask FutureTwin AI about careers, interviews, projects, skills, or your learning roadmap."
             />
         )}
 
-        {messages.map((msg,index)=>(
+        {messages.map((msg, index) => (
+            <div
+                key={index}
+                className={
+                    msg.sender === "user"
+                        ? "user-message"
+                        : "ai-message"
+                }
+            >
+                <strong>
+                    {msg.sender === "user"
+                        ? "You"
+                        : "FutureTwin AI"}
+                </strong>
 
-          <div
-            key={index}
-            className={
-              msg.sender==="user"
-              ? "user-message"
-              : "ai-message"
-            }
-          >
-
-            <strong>
-
-            {msg.sender==="user"
-            ? "You"
-            : "FutureTwin AI"}
-
-            </strong>
-
-          <ReactMarkdown>
-            {msg.text}
-          </ReactMarkdown>
-        </div>
-
-      ))}
-
-      {showConfirm && (
-
-          <ConfirmDialog
-              title="Clear Chat?"
-              message="This will permanently remove the current conversation."
-              onConfirm={() => {
-                  setMessages([]);
-                  setShowConfirm(false);
-              }}
-              onCancel={() => setShowConfirm(false)}
-          />
-
-      )}
-
-      </div>
-      {loading && (
-        <div className="ai-message typing">
-
-            <strong>FutureTwin AI</strong>
-
-            <div className="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
+                <ReactMarkdown>
+                    {msg.text}
+                </ReactMarkdown>
             </div>
+        ))}
+
+        {loading && (
+            <div className="ai-message typing">
+                <strong>FutureTwin AI</strong>
+
+                <div className="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        )}
+
+        <div ref={chatEndRef} />
+
+    </div>
+
+
+    {/* CHAT INPUT */}
+
+    <div className="chat-input-area">
+
+        <textarea
+            placeholder="Ask anything about your career..."
+            value={question}
+            onChange={(e) =>
+                setQuestion(e.target.value)
+            }
+            onKeyDown={(e) => {
+                if (
+                    e.key === "Enter" &&
+                    !e.shiftKey
+                ) {
+                    e.preventDefault();
+                    generateAnswer();
+                }
+            }}
+        />
+
+        <div className="chat-actions">
+
+            <button
+                onClick={generateAnswer}
+                disabled={loading || !question.trim()}
+            >
+                {loading ? "Thinking..." : "Send"}
+            </button>
+
+            <button
+                className="secondary-btn"
+                onClick={() => setShowConfirm(true)}
+            >
+                Clear Chat
+            </button>
 
         </div>
+
+    </div>
+
+
+    {showConfirm && (
+        <ConfirmDialog
+            title="Clear Chat?"
+            message="This will permanently remove the current conversation."
+            onConfirm={() => {
+                setMessages([]);
+                setShowConfirm(false);
+            }}
+            onCancel={() =>
+                setShowConfirm(false)
+            }
+        />
     )}
 
     {toast.show && (
+        <Toast
+            type={toast.type}
+            message={toast.message}
+            onClose={() =>
+                setToast(prev => ({
+                    ...prev,
+                    show: false
+                }))
+            }
+        />
+    )}
 
-      <Toast
-          type={toast.type}
-          message={toast.message}
-          onClose={() =>
-              setToast(prev => ({
-                  ...prev,
-                  show: false
-              }))
-          }
-      />
-
-  )}
-
-    </div>
+</div>
 
   );
 

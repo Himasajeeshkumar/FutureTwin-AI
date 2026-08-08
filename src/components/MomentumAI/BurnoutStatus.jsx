@@ -1,140 +1,180 @@
+import {
+    Battery,
+    Brain,
+    Clock3,
+    HeartPulse,
+    ShieldCheck
+} from "lucide-react";
+
 import { useResume } from "../../context/ResumeContext";
 
 function BurnoutStatus() {
 
     const {
-
         burnoutRisk,
-
         studyMinutes
-
     } = useResume();
 
+
+    const energyLevel =
+        burnoutRisk === "High"
+            ? 35
+            : burnoutRisk === "Medium"
+                ? 65
+                : 90;
+
+
+    const focusLevel =
+        studyMinutes > 240
+            ? 40
+            : studyMinutes > 150
+                ? 70
+                : 95;
+
+
     const recovery =
+        burnoutRisk === "High"
+            ? 35
+            : burnoutRisk === "Medium"
+                ? 65
+                : 90;
 
-    burnoutRisk === "High"
 
-        ? 35
+    const riskClass =
+        burnoutRisk?.toLowerCase() || "low";
 
-        : burnoutRisk === "Medium"
 
-        ? 65
+    const recommendation =
+        burnoutRisk === "High"
+            ? "Take a break. You've been studying for a long time."
+            : burnoutRisk === "Medium"
+                ? "Keep going, but schedule a short break soon."
+                : "Excellent pace. Maintain your consistency.";
 
-        : 90;
 
     return (
 
         <div className="dashboard-card">
 
-            <h2>😴 Burnout Status</h2>
+            <h2 className="card-title-with-icon">
 
-            <p>
+                <HeartPulse
+                    size={22}
+                    strokeWidth={2}
+                />
 
-                <strong>Risk Level:</strong>{" "}
+                Burnout Status
 
-                <span className={`risk ${burnoutRisk.toLowerCase()}`}>
+            </h2>
 
+
+            <div className="burnout-detail">
+
+                <strong>
+                    Risk Level
+                </strong>
+
+                <span
+                    className={`risk ${riskClass}`}
+                >
                     {burnoutRisk}
-
                 </span>
 
-            </p>
+            </div>
 
-            <p>
 
-                <strong>⚡ Energy Level:</strong>
+            <div className="burnout-detail">
+
+                <strong className="detail-label">
+
+                    <Battery size={17} />
+
+                    Energy Level
+
+                </strong>
 
                 <span className="highlight-value">
-
-                    {
-                        burnoutRisk === "High"
-                            ? "35%"
-                            : burnoutRisk === "Medium"
-                            ? "65%"
-                            : "90%"
-                    }
-
+                    {energyLevel}%
                 </span>
 
-            </p>
+            </div>
 
-            <p>
 
-                <strong>🎯 Focus Level:</strong>
+            <div className="burnout-detail">
+
+                <strong className="detail-label">
+
+                    <Brain size={17} />
+
+                    Focus Level
+
+                </strong>
 
                 <span className="highlight-value">
-
-                    {
-
-                    studyMinutes > 240
-
-                    ? "40%"
-
-                    : studyMinutes > 150
-
-                    ? "70%"
-
-                    : "95%"
-
-                    }
-
+                    {focusLevel}%
                 </span>
 
-            </p>
+            </div>
 
-            <p>
 
-                <strong>⏱ Study Time:</strong>
+            <div className="burnout-detail">
+
+                <strong className="detail-label">
+
+                    <Clock3 size={17} />
+
+                    Study Time
+
+                </strong>
 
                 <span className="highlight-value">
-
                     {Math.round(studyMinutes)} mins
-
                 </span>
 
-            </p>
+            </div>
+
 
             <hr />
 
-            <h3>🤖 AI Recommendation</h3>
+
+            <h3 className="card-title-with-icon">
+
+                <ShieldCheck size={19} />
+
+                AI Recommendation
+
+            </h3>
+
 
             <p className="burnout-advice">
-
-                {burnoutRisk === "High"
-                    ? "Take a break. You've been studying for a long time."
-                    : burnoutRisk === "Medium"
-                    ? "Keep going, but schedule a short break soon."
-                    : "Excellent pace! Maintain your consistency."}
-
+                {recommendation}
             </p>
 
-            <h3>Recovery Score</h3>
+
+            <h3>
+                Recovery Score
+            </h3>
+
 
             <p className="progress-text">
                 {recovery}% Recovery
             </p>
 
+
             <div className="progress-bar">
 
                 <div
-
                     className="progress-fill"
-
                     style={{
-
                         width: `${recovery}%`
-
                     }}
-
-                ></div>
+                />
 
             </div>
-
 
         </div>
 
     );
-
 }
 
 export default BurnoutStatus;

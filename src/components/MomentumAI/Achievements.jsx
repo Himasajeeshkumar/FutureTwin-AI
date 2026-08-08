@@ -1,122 +1,214 @@
+import {
+    Award,
+    BriefcaseBusiness,
+    CheckCircle2,
+    FileText,
+    Target,
+    Trophy
+} from "lucide-react";
+
 import { useResume } from "../../context/ResumeContext";
+
 function Achievements() {
+
     const {
+        xp,
+        analysis,
+        placementReadiness,
+        completedMissions
+    } = useResume();
 
-    xp,
-
-    analysis,
-
-    placementReadiness,
-
-    completedMissions
-
-} = useResume();
 
     const achievements = [
 
         {
             title: "Resume Master",
-            icon: "📄",
-            progress: analysis ? Math.min(analysis.resumeScore || 0, 100) : 0
+            icon: FileText,
+
+            progress: analysis
+                ? Math.min(
+                    Math.max(
+                        analysis.resumeScore || 0,
+                        0
+                    ),
+                    100
+                )
+                : 0
         },
+
 
         {
             title: "ATS Optimizer",
-            icon: "🎯",
-            progress: analysis ? Math.min(analysis.atsScore || 0, 100) : 0
+            icon: Target,
+
+            progress: analysis
+                ? Math.min(
+                    Math.max(
+                        analysis.atsScore || 0,
+                        0
+                    ),
+                    100
+                )
+                : 0
         },
+
 
         {
             title: "Consistency",
-            icon: "🔥",
-            progress: Math.min(xp, 100)
+            icon: Award,
+
+            progress: Math.min(
+                Math.max(
+                    Math.round(xp || 0),
+                    0
+                ),
+                100
+            )
         },
+
 
         {
             title: "Interview Ready",
-            icon: "💼",
-            progress: placementReadiness
+            icon: BriefcaseBusiness,
+
+            progress: Math.min(
+                Math.max(
+                    placementReadiness || 0,
+                    0
+                ),
+                100
+            )
         }
 
-
     ];
+
 
     return (
 
         <div className="dashboard-card">
 
-            <h2>🏆 Achievements</h2>
+            <h2 className="card-title-with-icon">
+
+                <Trophy
+                    size={22}
+                    strokeWidth={2}
+                />
+
+                Achievements
+
+            </h2>
+
+
             <p className="coach-advice">
-                Unlock achievements by improving your resume, ATS score, consistency, and placement readiness.
+                Unlock achievements by improving your
+                resume, ATS score, consistency, and
+                placement readiness.
             </p>
 
-            {achievements.map((item, index) => (
 
-                <div
-                    key={index}
-                    className="achievement-item"
-                >
+            {achievements.map(
+                (item, index) => {
 
-                    <div className="achievement-header">
+                    const Icon = item.icon;
 
-                        <span>
-
-                            {item.icon} {item.title}
-
-                        </span>
-
-                        <span>
-
-                            {item.progress}%
-
-                        </span>
-
-                    </div>
-
-                    <div className="progress-bar">
+                    return (
 
                         <div
-                            className="progress-fill"
-                            style={{
+                            key={index}
+                            className="achievement-item"
+                        >
 
-                                width: `${item.progress}%`
+                            <div className="achievement-header">
 
-                            }}
-                        ></div>
+                                <span className="achievement-title">
 
-                    </div>
+                                    <Icon
+                                        size={18}
+                                        strokeWidth={2}
+                                    />
+
+                                    {item.title}
+
+                                </span>
 
 
-                </div>
+                                <span>
+                                    {item.progress}%
+                                </span>
 
-            ))}
+                            </div>
 
-            <hr/>
 
-            <h3>Completed Missions</h3>
+                            <div className="progress-bar">
 
-            <p>
+                                <div
+                                    className="progress-fill"
+                                    style={{
+                                        width:
+                                            `${item.progress}%`
+                                    }}
+                                />
 
+                            </div>
+
+                        </div>
+
+                    );
+
+                }
+            )}
+
+
+            <hr />
+
+
+            <h3>
+                Completed Missions
+            </h3>
+
+
+            <p className="mission-count">
                 {completedMissions.length} Completed
-
             </p>
 
+
             {completedMissions.length === 0 ? (
-                <p>No missions completed yet. Start today's mission! 🚀</p>
+
+                <p className="coach-advice">
+                    No missions completed yet.
+                    Start today's mission to begin
+                    building your consistency.
+                </p>
+
             ) : (
-                <ul>
-                    {completedMissions.map((mission, index) => (
-                        <li key={index}>
-                            ✅ {mission}
-                        </li>
-                    ))}
+
+                <ul className="completed-missions">
+
+                    {completedMissions.map(
+                        (mission, index) => (
+
+                            <li key={index}>
+
+                                <CheckCircle2
+                                    size={17}
+                                />
+
+                                <span>
+                                    {mission}
+                                </span>
+
+                            </li>
+
+                        )
+                    )}
+
                 </ul>
+
             )}
 
         </div>
 
     );
-
 }
 
 export default Achievements;

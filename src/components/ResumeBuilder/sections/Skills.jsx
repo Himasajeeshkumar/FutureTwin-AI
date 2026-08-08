@@ -1,18 +1,24 @@
 function Skills({ resume, setResume }) {
 
-    // Convert any AI format into a simple editable list
     const skills = Array.isArray(resume.skills)
-        ? resume.skills.flatMap(skill => {
+        ? resume.skills.flatMap((skill) => {
 
-            if (typeof skill === "string") return skill;
+            if (typeof skill === "string") {
+                return skill;
+            }
 
-            if (skill.items && Array.isArray(skill.items))
+            if (
+                skill.items &&
+                Array.isArray(skill.items)
+            ) {
                 return skill.items;
+            }
 
             return [];
 
         })
         : [];
+
 
     const updateSkill = (index, value) => {
 
@@ -27,18 +33,25 @@ function Skills({ resume, setResume }) {
 
     };
 
+
     const addSkill = () => {
 
         setResume({
             ...resume,
-            skills: [...skills, ""]
+            skills: [
+                ...skills,
+                ""
+            ]
         });
 
     };
 
+
     const deleteSkill = (index) => {
 
-        const updated = skills.filter((_, i) => i !== index);
+        const updated = skills.filter(
+            (_, i) => i !== index
+        );
 
         setResume({
             ...resume,
@@ -47,51 +60,54 @@ function Skills({ resume, setResume }) {
 
     };
 
+
     return (
+        <div className="editor-card">
 
-        <div className="section-card">
+            {skills.map((skill, index) => (
 
-            <div className="section-content">
-
-                {skills.map((skill, index) => (
-
-                    <div
-                        key={index}
-                        className="dynamic-card"
-                    >
-
-                        <input
-                            placeholder="Skill"
-                            value={skill}
-                            onChange={(e) =>
-                                updateSkill(index, e.target.value)
-                            }
-                        />
-
-                        <button
-                            className="delete-btn"
-                            onClick={() => deleteSkill(index)}
-                        >
-                            Delete
-                        </button>
-
-                    </div>
-
-                ))}
-
-                <button
-                    className="add-btn"
-                    onClick={addSkill}
+                <div
+                    key={index}
+                    className="dynamic-card"
                 >
-                    + Add Skill
-                </button>
 
-            </div>
+                    <input
+                        type="text"
+                        placeholder="Skill"
+                        value={skill}
+                        onChange={(e) =>
+                            updateSkill(
+                                index,
+                                e.target.value
+                            )
+                        }
+                    />
+
+                    <button
+                        type="button"
+                        className="delete-btn"
+                        onClick={() =>
+                            deleteSkill(index)
+                        }
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            ))}
+
+
+            <button
+                type="button"
+                className="add-btn"
+                onClick={addSkill}
+            >
+                Add Skill
+            </button>
 
         </div>
-
     );
-
 }
 
 export default Skills;

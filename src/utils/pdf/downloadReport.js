@@ -1,57 +1,153 @@
 import jsPDF from "jspdf";
 
 const checkPage = (doc, y) => {
-
     if (y > 270) {
-
         doc.addPage();
-
         return 20;
-
     }
 
     return y;
+};
 
+const addBulletList = (doc, items, y) => {
+
+    if (!Array.isArray(items)) {
+        return y;
+    }
+
+    items.forEach((item) => {
+
+        y = checkPage(doc, y);
+
+        const lines = doc.splitTextToSize(
+            `• ${String(item)}`,
+            160
+        );
+
+        doc.text(lines, 25, y);
+
+        y += lines.length * 7 + 2;
+    });
+
+    return y;
 };
 
 export const downloadReport = (aiResult) => {
 
+    if (!aiResult) {
+        alert("No AI analysis available.");
+        return;
+    }
+
     const doc = new jsPDF();
 
+    const parsed = aiResult.parsedResume || {};
+
+    // Support both possible response structures
+    const skills =
+        aiResult.skills ||
+        parsed.skills?.flatMap(category =>
+            Array.isArray(category.items)
+                ? category.items
+                : []
+        ) ||
+        [];
+
+    const strengths =
+        aiResult.strengths ||
+        parsed.strengths ||
+        [];
+
+    const weaknesses =
+        aiResult.weaknesses ||
+        parsed.weaknesses ||
+        [];
+
+    const missingSkills =
+        aiResult.missingSkills ||
+        parsed.missingSkills ||
+        [];
+
+    const suggestions =
+        aiResult.suggestions ||
+        parsed.suggestions ||
+        [];
+
+    const careerRecommendation =
+        aiResult.careerRecommendation ||
+        parsed.careerRecommendation ||
+        "No career recommendation available.";
+
+    // --------------------------------
+    // HEADER
+    // --------------------------------
+
     doc.setFontSize(22);
-    doc.text("FutureTwin AI",20,20);
+    doc.setTextColor(124, 58, 237);
+    doc.text("FutureTwin AI", 20, 20);
+
+    doc.setTextColor(0, 0, 0);
 
     doc.setFontSize(16);
-    doc.text("Resume Analysis Report",20,30);
+    doc.text("Resume Analysis Report", 20, 30);
 
-    doc.line(20,35,190,35);
+    doc.line(20, 35, 190, 35);
+
+    // --------------------------------
+    // SCORES
+    // --------------------------------
 
     doc.setFontSize(12);
 
-    doc.text(`Resume Score: ${aiResult.resumeScore}%`,20,50);
+    doc.text(
+        `Resume Score: ${aiResult.resumeScore ?? "--"}%`,
+        20,
+        50
+    );
 
-    doc.text(`ATS Score: ${aiResult.atsScore}%`,20,60);
+    doc.text(
+        `ATS Score: ${aiResult.atsScore ?? "--"}%`,
+        20,
+        60
+    );
 
-    doc.text(`Recruiter Score: ${aiResult.recruiterScore}%`,20,70);
+    doc.text(
+        `Recruiter Score: ${aiResult.recruiterScore ?? "--"}%`,
+        20,
+        70
+    );
 
-    doc.text(`Interview Readiness: ${aiResult.interviewReadiness}%`,20,80);
+    doc.text(
+        `Interview Readiness: ${aiResult.interviewReadiness ?? "--"}%`,
+        20,
+        80
+    );
+
+    // --------------------------------
+    // VERDICT
+    // --------------------------------
 
     doc.setFontSize(16);
-
-    doc.text("Recruiter Verdict",20,100);
+    doc.text("Recruiter Verdict", 20, 100);
 
     doc.setFontSize(12);
 
-    doc.text(aiResult.verdict,20,110);
+    const verdict = aiResult.verdict || "No verdict available.";
 
-    doc.line(20,115,190,115);
+    const verdictLines = doc.splitTextToSize(
+        String(verdict),
+        160
+    );
 
-    let y = 130;
+    doc.text(verdictLines, 20, 110);
 
-    doc.setFontSize(16);
-    doc.text("Detected Skills",20,y);
+    let y = 110 + verdictLines.length * 7 + 10;
 
-    y += 10;
+    // --------------------------------
+    // DETECTED SKILLS
+    // --------------------------------
+
+    y = checkPage(doc, y);
 
     doc.setFontSize(16);
     doc.text("Detected Skills", 20, y);
@@ -60,17 +156,15 @@ export const downloadReport = (aiResult) => {
 
     doc.setFontSize(12);
 
-    aiResult.skills.forEach((skill) => {
+    y = addBulletList(doc, skills, y);
 
-        y = checkPage(doc, y);
-
-        doc.text(`• ${skill}`, 25, y);
-
-        y += 8;
-
-    });
+    // --------------------------------
+    // STRENGTHS
+    // --------------------------------
 
     y += 5;
+    y = checkPage(doc, y);
+
     doc.setFontSize(16);
     doc.text("Strengths", 20, y);
 
@@ -78,17 +172,15 @@ export const downloadReport = (aiResult) => {
 
     doc.setFontSize(12);
 
-    aiResult.strengths.forEach((strength) => {
+    y = addBulletList(doc, strengths, y);
 
-        y = checkPage(doc, y);
-
-        doc.text(`• ${strength}`, 25, y);
-
-        y += 8;
-
-    });
+    // --------------------------------
+    // WEAKNESSES
+    // --------------------------------
 
     y += 5;
+    y = checkPage(doc, y);
+
     doc.setFontSize(16);
     doc.text("Weaknesses", 20, y);
 
@@ -96,17 +188,15 @@ export const downloadReport = (aiResult) => {
 
     doc.setFontSize(12);
 
-    aiResult.weaknesses.forEach((weakness) => {
+    y = addBulletList(doc, weaknesses, y);
 
-        y = checkPage(doc, y);
-
-        doc.text(`• ${weakness}`, 25, y);
-
-        y += 8;
-
-    });
+    // --------------------------------
+    // MISSING SKILLS
+    // --------------------------------
 
     y += 5;
+    y = checkPage(doc, y);
+
     doc.setFontSize(16);
     doc.text("Missing Skills", 20, y);
 
@@ -114,17 +204,15 @@ export const downloadReport = (aiResult) => {
 
     doc.setFontSize(12);
 
-    aiResult.missingSkills.forEach((skill) => {
+    y = addBulletList(doc, missingSkills, y);
 
-        y = checkPage(doc, y);
-
-        doc.text(`• ${skill}`, 25, y);
-
-        y += 8;
-
-    });
+    // --------------------------------
+    // AI SUGGESTIONS
+    // --------------------------------
 
     y += 5;
+    y = checkPage(doc, y);
+
     doc.setFontSize(16);
     doc.text("AI Suggestions", 20, y);
 
@@ -132,17 +220,14 @@ export const downloadReport = (aiResult) => {
 
     doc.setFontSize(12);
 
-    aiResult.suggestions.forEach((suggestion) => {
+    y = addBulletList(doc, suggestions, y);
 
-        y = checkPage(doc, y);
-
-        doc.text(`• ${suggestion}`, 25, y);
-
-        y += 8;
-
-    });
+    // --------------------------------
+    // CAREER RECOMMENDATION
+    // --------------------------------
 
     y += 5;
+    y = checkPage(doc, y);
 
     doc.setFontSize(16);
     doc.text("Career Recommendation", 20, y);
@@ -152,26 +237,32 @@ export const downloadReport = (aiResult) => {
     doc.setFontSize(12);
 
     const careerText = doc.splitTextToSize(
-        aiResult.careerRecommendation,
+        String(careerRecommendation),
         160
     );
 
     doc.text(careerText, 25, y);
 
-    y += 20;
+    y += careerText.length * 7 + 15;
 
     y = checkPage(doc, y);
 
-    doc.setFontSize(10);
+    // --------------------------------
+    // FOOTER
+    // --------------------------------
 
+    doc.setFontSize(10);
     doc.setTextColor(120);
 
     doc.text(
-        `Generated on: ${new Date().toLocaleDateString()}`,
+        `Generated by FutureTwin AI • ${new Date().toLocaleDateString()}`,
         20,
         y
     );
 
-        doc.save("FutureTwin_Resume_Report.pdf");
+    // --------------------------------
+    // DOWNLOAD
+    // --------------------------------
 
-    };
+    doc.save("FutureTwin_AI_Resume_Report.pdf");
+};

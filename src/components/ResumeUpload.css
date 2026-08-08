@@ -1,230 +1,899 @@
-.score-row{
-    margin-bottom:22px;
+/* =========================================
+   RESUME UPLOAD / ANALYSIS
+   ========================================= */
+
+.resume-upload {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.score-header{
 
-    display:flex;
+/* =========================================
+   HERO
+   ========================================= */
 
-    justify-content:space-between;
+.resume-hero-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-    margin-bottom:8px;
-
-    font-weight:600;
-
+    color: white;
+    margin-bottom: 10px;
 }
 
-.score-title{
-
-    text-transform:capitalize;
-
+.resume-hero-title svg {
+    flex-shrink: 0;
 }
 
-.progress-bar{
-
-    width:100%;
-
-    height:10px;
-
-    background:#2d2d2d;
-
-    border-radius:999px;
-
-    overflow:hidden;
-
+.resume-upload > p {
+    color: #9ca3af;
+    line-height: 1.6;
 }
 
-.progress-fill{
 
-    height:100%;
+/* =========================================
+   UPLOAD SECTION
+   ========================================= */
 
-    border-radius:999px;
+.upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 
-    background:linear-gradient(
+    gap: 20px;
+
+    margin: 28px 0 24px;
+}
+
+.upload-card,
+.upload-info-card {
+    padding: 24px;
+
+    background: #1d1d25;
+
+    border: 1px solid rgba(139, 92, 246, 0.18);
+
+    border-radius: 20px;
+
+    box-sizing: border-box;
+}
+
+.upload-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: white;
+
+    margin: 0 0 18px;
+}
+
+.upload-card-title svg {
+    flex-shrink: 0;
+    color: #a855f7;
+}
+
+.upload-icon {
+    width: 72px;
+    height: 72px;
+
+    margin: 18px auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #a855f7;
+
+    background: rgba(139, 92, 246, 0.1);
+
+    border: 1px solid rgba(139, 92, 246, 0.25);
+
+    border-radius: 18px;
+}
+
+
+/* =========================================
+   FEATURE LIST
+   ========================================= */
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 13px 15px;
+
+    margin-bottom: 10px;
+
+    cursor: pointer;
+
+    border-radius: 12px;
+
+    color: #d1d5db;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        color .25s ease;
+}
+
+.feature-item svg {
+    flex-shrink: 0;
+    color: #a855f7;
+}
+
+.feature-item:hover {
+    transform: translateX(5px);
+
+    background: rgba(139, 92, 246, 0.1);
+
+    color: #c4b5fd;
+}
+
+
+/* =========================================
+   RESULT CONTAINER
+   ========================================= */
+
+.resume-result {
+    width: 100%;
+
+    padding: 26px;
+
+    margin-top: 24px;
+
+    background: #15151c;
+
+    border-radius: 22px;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   ANALYSIS COMPLETE
+   ========================================= */
+
+.analysis-success {
+    padding: 20px 22px;
+
+    margin-bottom: 22px;
+
+    border-radius: 16px;
+
+    background: rgba(34, 197, 94, 0.08);
+
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.analysis-complete-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: white;
+
+    margin: 0 0 6px;
+}
+
+.analysis-complete-title svg {
+    flex-shrink: 0;
+    color: #22c55e;
+}
+
+.analysis-success p {
+    margin: 0;
+
+    color: #9ca3af;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   SCORE CARDS
+   ========================================= */
+
+.analysis-stats {
+    display: grid;
+
+    gap: 18px;
+
+    margin-bottom: 24px;
+}
+
+.top-row {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+.bottom-row {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    margin-top: 18px;
+}
+
+.bottom-row .stat-card {
+    width: 320px;
+}
+
+.stat-card {
+    padding: 20px;
+
+    background: #1d1d25;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    border-radius: 16px;
+
+    text-align: center;
+
+    box-sizing: border-box;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(139, 92, 246, 0.4);
+
+    box-shadow:
+        0 10px 25px rgba(139, 92, 246, 0.12);
+}
+
+.stat-icon {
+    width: 42px;
+    height: 42px;
+
+    margin: 0 auto 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #a855f7;
+
+    background: rgba(139, 92, 246, 0.1);
+
+    border-radius: 12px;
+}
+
+.stat-card h3 {
+    margin: 0 0 8px;
+
+    color: #9ca3af;
+
+    font-size: 14px;
+}
+
+.stat-card strong {
+    color: white;
+
+    font-size: 28px;
+}
+
+
+/* =========================================
+   SCORE PROGRESS
+   ========================================= */
+
+.score-row {
+    margin-bottom: 20px;
+}
+
+.score-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+
+    font-weight: 600;
+}
+
+.score-title {
+    text-transform: capitalize;
+
+    color: #e5e7eb;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+
+    border-radius: 999px;
+
+    background: #252525;
+
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+
+    border-radius: 999px;
+
+    background: linear-gradient(
         90deg,
         #22c55e,
         #3b82f6
     );
 
-    transition:0.5s;
-
+    transition: width .5s ease;
 }
 
-.score-row{
 
-    margin-bottom:20px;
+/* =========================================
+   ANALYSIS SECTION TITLES
+   ========================================= */
 
+.analysis-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: white;
+
+    margin-top: 22px;
+    margin-bottom: 12px;
 }
 
-.score-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    margin-bottom:8px;
-
-    font-weight:600;
-
+.analysis-card-title svg {
+    flex-shrink: 0;
+    color: #a855f7;
 }
 
-.score-title{
 
-    text-transform:capitalize;
+/* =========================================
+   SECTION CARDS
+   ========================================= */
 
+.section-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
 }
 
-.progress-bar{
+.section-item {
+    padding: 20px;
 
-    width:100%;
+    background: #1d1d25;
 
-    height:10px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
 
-    border-radius:100px;
+    border-radius: 16px;
 
-    background:#252525;
-
-    overflow:hidden;
-
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
 }
 
-.progress-fill{
+.section-item:hover {
+    transform: translateY(-4px);
 
-    height:100%;
+    border-color: rgba(139, 92, 246, 0.4);
 
-    border-radius:100px;
-
-    background:linear-gradient(
-        90deg,
-        #22c55e,
-        #3b82f6
-    );
-
-    transition:.5s;
-
+    box-shadow:
+        0 10px 25px rgba(139, 92, 246, 0.15);
 }
 
-.feature-item{
-    cursor:pointer;
-    transition:all 0.25s ease;
+.section-item.success {
+    border-color: #22c55e;
 }
 
-.feature-item:hover{
-    transform:translateX(6px);
-    background:rgba(59,130,246,0.12);
-    color:#60a5fa;
+.section-item.success:hover {
+    box-shadow:
+        0 10px 25px rgba(34, 197, 94, 0.2);
 }
 
-.section-highlight{
+.section-item.danger {
+    border-color: #ef4444;
+}
+
+.section-item.danger:hover {
+    box-shadow:
+        0 10px 25px rgba(239, 68, 68, 0.2);
+}
+
+
+/* =========================================
+   STRENGTHS / WEAKNESSES
+   ========================================= */
+
+.strength-weakness-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+
+    margin: 22px 0;
+}
+
+
+/* =========================================
+   ANALYSIS LIST
+   ========================================= */
+
+.analysis-list {
+    list-style: none;
+
+    padding: 0;
+
+    margin: 14px 0 0;
+}
+
+.analysis-list li {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+    padding: 12px 15px;
+
+    margin-bottom: 9px;
+
+    background: #242424;
+
+    border: 1px solid #333;
+
+    border-radius: 12px;
+
+    color: #e5e7eb;
+
+    line-height: 1.5;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease;
+}
+
+.analysis-list li svg {
+    flex-shrink: 0;
+
+    margin-top: 3px;
+}
+
+.analysis-list li:hover {
+    transform: translateX(4px);
+
+    border-color: #8b5cf6;
+}
+
+
+/* =========================================
+   MISSING SKILLS
+   ========================================= */
+
+.missing-skill-badge {
+    display: inline-block;
+
+    padding: 9px 16px;
+
+    margin: 4px;
+
+    background: #7c3aed;
+
+    color: white;
+
+    border-radius: 50px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
+}
+
+.missing-skill-badge:hover {
+    transform: translateY(-2px);
+
+    background: #6d28d9;
+}
+
+
+/* =========================================
+   CAREER RECOMMENDATION
+   ========================================= */
+
+.career-card {
+    width: 100%;
+
+    margin-top: 22px;
+
+    padding: 26px;
+
+    border-radius: 18px;
+
+    background: #1b1b1b;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-sizing: border-box;
+}
+
+.career-card h3 {
+    margin-bottom: 12px;
+}
+
+.career-card p {
+    margin: 0;
+
+    font-size: 17px;
+
+    color: #f5f5f5;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   DOWNLOAD REPORT
+   ========================================= */
+
+.download-report-container {
+    display: flex;
+
+    justify-content: flex-end;
+
+    margin: 14px 0;
+}
+
+.download-report-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 11px 18px;
+
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
+}
+
+.download-report-btn:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   EMPTY MESSAGE
+   ========================================= */
+
+.empty-message {
+    text-align: center;
+
+    padding: 14px;
+
+    margin: 0;
+
+    color: #9ca3af;
+
+    font-size: 15px;
+
+    font-style: italic;
+}
+
+
+/* =========================================
+   SECTION HIGHLIGHT
+   ========================================= */
+
+.section-highlight {
     animation: sectionGlow 1s ease;
 }
 
-@keyframes sectionGlow{
+@keyframes sectionGlow {
 
-    0%{
+    0% {
         transform: scale(1);
-        box-shadow: 0 0 0 rgba(59,130,246,0);
+
+        box-shadow:
+            0 0 0 rgba(139, 92, 246, 0);
     }
 
-    50%{
+    50% {
         transform: scale(1.02);
-        box-shadow: 0 0 30px rgba(59,130,246,.55);
+
+        box-shadow:
+            0 0 30px rgba(139, 92, 246, 0.35);
     }
 
-    100%{
+    100% {
         transform: scale(1);
-        box-shadow: 0 0 0 rgba(59,130,246,0);
+
+        box-shadow:
+            0 0 0 rgba(139, 92, 246, 0);
+    }
+}
+
+
+/* =========================================
+   LOADING / UPLOAD BUTTON AREA
+   ========================================= */
+
+.upload-btn,
+.download-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (max-width: 992px) {
+
+    .top-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bottom-row {
+        flex-wrap: wrap;
+    }
+
+    .bottom-row .stat-card {
+        width: calc(50% - 9px);
+    }
+
+    .section-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .strength-weakness-grid {
+        grid-template-columns: 1fr;
     }
 
 }
 
-.download-report-container{
 
-    display:flex;
+/* =========================================
+   MOBILE
+   ========================================= */
 
-    justify-content:flex-end;
+@media (max-width: 768px) {
 
-    margin:20px 0;
+    .resume-upload {
+        width: 100%;
+    }
+
+    .resume-hero-title {
+        font-size: 30px;
+
+        gap: 8px;
+    }
+
+    .resume-hero-title svg {
+        width: 27px;
+        height: 27px;
+    }
+
+    .upload-grid {
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+
+        margin: 22px 0 18px;
+    }
+
+    .upload-card,
+    .upload-info-card {
+        padding: 20px;
+    }
+
+    .upload-icon {
+        width: 64px;
+        height: 64px;
+
+        margin: 14px auto;
+    }
+
+    .feature-item {
+        padding: 11px 12px;
+
+        margin-bottom: 7px;
+
+        font-size: 14px;
+    }
+
+    .resume-result {
+        padding: 18px;
+
+        margin-top: 18px;
+
+        border-radius: 18px;
+    }
+
+    .analysis-success {
+        padding: 18px;
+
+        margin-bottom: 18px;
+    }
+
+    .analysis-complete-title {
+        font-size: 22px;
+    }
+
+    .analysis-stats {
+        gap: 12px;
+
+        margin-bottom: 18px;
+    }
+
+    .top-row {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+    .bottom-row {
+        flex-direction: column;
+
+        gap: 12px;
+
+        margin-top: 12px;
+    }
+
+    .bottom-row .stat-card {
+        width: 100%;
+    }
+
+    .stat-card {
+        padding: 16px;
+    }
+
+    .stat-card strong {
+        font-size: 25px;
+    }
+
+    .section-grid {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+    .section-item {
+        padding: 17px;
+    }
+
+    .strength-weakness-grid {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+
+        margin: 18px 0;
+    }
+
+    .analysis-card-title {
+        font-size: 19px;
+
+        margin-top: 18px;
+
+        margin-bottom: 10px;
+    }
+
+    .analysis-list {
+        margin-top: 10px;
+    }
+
+    .analysis-list li {
+        padding: 11px 13px;
+
+        margin-bottom: 7px;
+
+        font-size: 14px;
+    }
+
+    .missing-skill-badge {
+        padding: 8px 13px;
+
+        font-size: 13px;
+    }
+
+    .career-card {
+        margin-top: 18px;
+
+        padding: 20px;
+    }
+
+    .career-card p {
+        font-size: 15px;
+
+        line-height: 1.6;
+    }
+
+    .download-report-container {
+        justify-content: stretch;
+
+        margin: 12px 0;
+    }
+
+    .download-report-btn {
+        width: 100%;
+    }
 
 }
 
-.download-report-btn{
 
-    background:#2563eb;
+/* =========================================
+   SMALL MOBILE
+   ========================================= */
 
-    color:white;
+@media (max-width: 480px) {
 
-    border:none;
+    .resume-hero-title {
+        font-size: 26px;
+    }
 
-    padding:12px 22px;
+    .upload-card,
+    .upload-info-card {
+        padding: 17px;
+    }
 
-    border-radius:10px;
+    .resume-result {
+        padding: 15px;
+    }
 
-    font-size:15px;
+    .analysis-success {
+        padding: 15px;
+    }
 
-    font-weight:600;
+    .stat-card {
+        padding: 14px;
+    }
 
-    cursor:pointer;
+    .stat-card strong {
+        font-size: 23px;
+    }
 
-    transition:.3s;
+    .career-card {
+        padding: 17px;
+    }
 
-}
-
-.download-report-btn:hover{
-
-    background:#1d4ed8;
-
-    transform:translateY(-2px);
-
-}
-
-.career-card{
-
-    width:100%;
-
-    margin-top:25px;
-
-    padding:25px;
-
-    border-radius:18px;
-
-    background:#1b1b1b;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    box-sizing:border-box;
-
-}
-
-.career-card h3{
-
-    margin-bottom:15px;
-
-}
-
-.career-card p{
-
-    font-size:18px;
-
-    color:#f5f5f5;
-
-    line-height:1.7;
-
-}
-
-.top-row{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:24px;
-}
-
-.bottom-row{
-    display:flex;
-    justify-content:center;
-    gap:24px;
-    margin-top:24px;
-}
-
-.bottom-row .stat-card{
-    width:320px;
 }

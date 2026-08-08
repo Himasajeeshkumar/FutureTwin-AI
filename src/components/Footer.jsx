@@ -2,11 +2,10 @@ import "./Footer.css";
 
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
+import { Link } from "react-router-dom";
 
-function Footer(){
-
-    return(
-
+function Footer() {
+    return (
         <footer className="footer">
 
             <div className="footer-top">
@@ -16,22 +15,35 @@ function Footer(){
                     <h2>FutureTwin AI</h2>
 
                     <p>
-                        AI-powered career intelligence platform helping
-                        students become placement ready.
+                        AI-powered career intelligence platform
+                        helping students become placement ready.
                     </p>
 
                     <div className="footer-social">
 
-                        <a href="#">
+                        <a
+                            href="https://github.com/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="GitHub"
+                        >
                             <FaGithub size={20} />
                         </a>
 
-                        <a href="#">
-                            <FaLinkedin size={20}/>
+                        <a
+                            href="https://www.linkedin.com/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="LinkedIn"
+                        >
+                            <FaLinkedin size={20} />
                         </a>
 
-                        <a href="#">
-                            <MdEmail size={20}/>
+                        <a
+                            href="mailto:himasajeesh2005@gmail.com"
+                            aria-label="Email"
+                        >
+                            <MdEmail size={20} />
                         </a>
 
                     </div>
@@ -41,24 +53,32 @@ function Footer(){
                 <div className="footer-links">
 
                     <div>
-
                         <h4>Platform</h4>
 
-                        <a href="#">Home</a>
-                        <a href="#">About</a>
-                        <a href="#">Workflow</a>
-                        <a href="#">Dashboard</a>
-
+                        <Link to="/">Home</Link>
+                        <Link to="/about">About</Link>
+                        <Link to="/dashboard">Dashboard</Link>
+                        <Link to="/momentum">Momentum AI</Link>
                     </div>
 
                     <div>
-
                         <h4>Features</h4>
 
-                        <a href="#">Resume Analysis</a>
-                        <a href="#">Job Match</a>
-                        <a href="#">Skill Gap</a>
-                        <a href="#">AI Mentor</a>
+                        <Link to="/resume-analysis">
+                            Resume Analysis
+                        </Link>
+
+                        <Link to="/job-match">
+                            Job Match
+                        </Link>
+
+                        <Link to="/skill-gap">
+                            Skill Gap
+                        </Link>
+
+                        <Link to="/mentor">
+                            AI Mentor
+                        </Link>
 
                     </div>
 
@@ -67,17 +87,15 @@ function Footer(){
             </div>
 
             <div className="footer-bottom">
+                <span>© 2026 FutureTwin AI</span>
 
-                © 2026 FutureTwin AI
-
-                Built with React, Express, MongoDB & Groq AI
-
+                <span>
+                    Built with React, Express, MongoDB & Groq AI
+                </span>
             </div>
 
         </footer>
-
     );
-
 }
 
 export default Footer;

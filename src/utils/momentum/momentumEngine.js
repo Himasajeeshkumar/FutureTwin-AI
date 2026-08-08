@@ -1,154 +1,188 @@
 export function calculateMomentum(data) {
 
     const {
-
         analysis,
         jobMatch,
         skillGap,
         futureSimulation,
         studyMinutes,
-        completedMissions,
-        xp
-
+        completedMissions = [],
+        xp = 0
     } = data;
+
+
+    // =========================================
+    // Career Health
+    // =========================================
 
     let careerHealth = 0;
 
-    // Resume Uploaded
-    if (analysis)
-        careerHealth += 15;
 
-    // Resume Score
-    if ((analysis?.resumeScore || 0) >= 80)
+    if (analysis) {
         careerHealth += 15;
+    }
 
-    // ATS Score
-    if ((analysis?.atsScore || 0) >= 80)
+
+    if ((analysis?.resumeScore || 0) >= 80) {
         careerHealth += 15;
+    }
 
-    // Job Match
-    if (jobMatch)
+
+    if ((analysis?.atsScore || 0) >= 80) {
+        careerHealth += 15;
+    }
+
+
+    if (jobMatch) {
         careerHealth += 20;
+    }
 
-    // Skill Gap
-    if (skillGap)
+
+    if (skillGap) {
         careerHealth += 15;
+    }
 
-    // Future Simulator
-    if (futureSimulation)
+
+    if (futureSimulation) {
         careerHealth += 20;
+    }
 
-    if (careerHealth > 100)
-        careerHealth = 100;
 
-    //---------------------------------------
+    careerHealth = Math.min(careerHealth, 100);
+
+
+    // =========================================
     // XP & Level
-    //---------------------------------------
+    // =========================================
 
     let level = 1;
-let nextLevelXP = 100;
+    let nextLevelXP = 100;
 
-if (xp >= 800) {
 
-    level = 5;
-    nextLevelXP = 1200;
+    if (xp >= 800) {
 
-} else if (xp >= 500) {
+        level = 5;
+        nextLevelXP = 1200;
 
-    level = 4;
-    nextLevelXP = 800;
+    } else if (xp >= 500) {
 
-} else if (xp >= 250) {
+        level = 4;
+        nextLevelXP = 800;
 
-    level = 3;
-    nextLevelXP = 500;
+    } else if (xp >= 250) {
 
-} else if (xp >= 100) {
+        level = 3;
+        nextLevelXP = 500;
 
-    level = 2;
-    nextLevelXP = 250;
+    } else if (xp >= 100) {
 
-}
+        level = 2;
+        nextLevelXP = 250;
 
-    //---------------------------------------
+    }
+
+
+    // =========================================
     // Placement Readiness
-    //---------------------------------------
+    // =========================================
 
     const placementReadiness = Math.min(
-
         100,
-
         Math.round(
-
             careerHealth * 0.7 +
-
-            Math.min(xp,100) * 0.15 +
-
-            ((analysis?.atsScore || 0) * 0.15)
-
+            Math.min(xp, 100) * 0.15 +
+            (analysis?.atsScore || 0) * 0.15
         )
-
     );
 
-    //---------------------------------------
+
+    // =========================================
     // Burnout
-    //---------------------------------------
+    // =========================================
 
     let burnoutRisk = "Low";
 
-    if(studyMinutes>240){
 
-        burnoutRisk="High";
+    if (studyMinutes > 240) {
+
+        burnoutRisk = "High";
+
+    } else if (studyMinutes > 150) {
+
+        burnoutRisk = "Medium";
 
     }
 
-    else if(studyMinutes>150){
 
-        burnoutRisk="Medium";
-
-    }
-
-    //---------------------------------------
+    // =========================================
     // Today's Mission
-    //---------------------------------------
+    // =========================================
 
-    let mission="Upload Resume";
+    const missions = [
 
-    if(analysis){
+        {
+            title: "Upload Resume",
+            available: !analysis
+        },
 
-        mission="Improve Resume";
+        {
+            title: "Improve Resume",
+            available:
+                analysis &&
+                (analysis?.atsScore || 0) < 80
+        },
 
-    }
+        {
+            title: "Analyze Job Match",
+            available:
+                analysis &&
+                (analysis?.atsScore || 0) >= 80 &&
+                !jobMatch
+        },
 
-    if((analysis?.atsScore||0)>=80){
+        {
+            title: "Complete Skill Gap Analysis",
+            available:
+                jobMatch &&
+                !skillGap
+        },
 
-        mission="Analyze Job Match";
+        {
+            title: "Run Future Simulator",
+            available:
+                skillGap &&
+                !futureSimulation
+        },
 
-    }
+        {
+            title: "Solve 2 DSA Problems",
+            available:
+                futureSimulation
+        }
 
-    if(jobMatch){
+    ];
 
-        mission="Complete Skill Gap Analysis";
 
-    }
+    const nextMission = missions.find(
+        mission =>
+            mission.available &&
+            !completedMissions.includes(
+                mission.title
+            )
+    );
 
-    if(skillGap){
 
-        mission="Run Future Simulator";
+    const mission =
+        nextMission?.title ||
+        "Continue DSA and interview preparation";
 
-    }
 
-    if(futureSimulation){
-
-        mission="Solve 2 DSA Problems";
-
-    }
-
-    //---------------------------------------
+    // =========================================
     // AI Coach
-    //---------------------------------------
+    // =========================================
 
     let coachMessage = "";
+
 
     if (!analysis) {
 
@@ -184,94 +218,98 @@ if (xp >= 800) {
 
         coachMessage =
             "Excellent progress! Stay consistent with DSA, projects, and interview preparation.";
+
     }
 
-    //---------------------------------------
-// Achievements
-//---------------------------------------
 
-const achievements = [];
+    // =========================================
+    // Achievements
+    // =========================================
 
-if (analysis)
+    const achievements = [];
 
-    achievements.push("🥉 First Resume");
 
-if ((analysis?.atsScore || 0) >= 80)
+    if (analysis) {
 
-    achievements.push("🥈 ATS Expert");
+        achievements.push("First Resume");
 
-if (jobMatch)
+    }
 
-    achievements.push("💼 Job Ready");
 
-if (skillGap)
+    if ((analysis?.atsScore || 0) >= 80) {
 
-    achievements.push("🧠 Skill Master");
+        achievements.push("ATS Expert");
 
-if (futureSimulation)
+    }
 
-    achievements.push("🚀 Future Planner");
 
-if (xp >= 500)
+    if (jobMatch) {
 
-    achievements.push("🏆 Consistency Master");
+        achievements.push("Job Ready");
 
-    //---------------------------------------
-// Overall Progress
-//---------------------------------------
+    }
 
-const completedPercent = Math.round(
 
-    (
+    if (skillGap) {
 
+        achievements.push("Skill Master");
+
+    }
+
+
+    if (futureSimulation) {
+
+        achievements.push("Future Planner");
+
+    }
+
+
+    if (xp >= 500) {
+
+        achievements.push("Consistency Master");
+
+    }
+
+
+    // =========================================
+    // Overall Progress
+    // =========================================
+
+    const completedSteps =
         (analysis ? 1 : 0) +
-
         (jobMatch ? 1 : 0) +
-
         (skillGap ? 1 : 0) +
+        (futureSimulation ? 1 : 0);
 
-        (futureSimulation ? 1 : 0)
 
-    ) / 4 * 100
+    const completedPercent = Math.round(
+        (completedSteps / 4) * 100
+    );
 
-);
 
-//---------------------------------------
-// Today's XP
-//---------------------------------------
-
-const todayXP = Math.min(
-
-    xp,
-
-    100
-
-);
-
-    //---------------------------------------
+    // =========================================
+    // Return
+    // =========================================
 
     return {
 
-    careerHealth,
+        careerHealth,
 
-    placementReadiness,
+        placementReadiness,
 
-    burnoutRisk,
+        burnoutRisk,
 
-    currentMission: mission,
+        currentMission: mission,
 
-    coachMessage,
+        coachMessage,
 
-    level,
+        level,
 
-    nextLevelXP,
+        nextLevelXP,
 
-    achievements,
+        achievements,
 
-    completedPercent,
+        completedPercent
 
-    todayXP
-
-};
-
+    };
 }

@@ -13,6 +13,8 @@ import SkillGap from "./models/SkillGap.js";
 import CareerSimulation from "./models/CareerSimulation.js";
 import MentorChat from "./models/MentorChat.js";
 import { scoreResume } from "./utils/scoreResume.js";
+import PasswordReset from "./models/PasswordReset.js";
+import { sendOTP } from "./utils/sendEmail.js";
 
 dotenv.config();
 connectDB();
@@ -201,6 +203,60 @@ ${message}
     error: error.message,
   });
   }
+});
+
+app.post("/generate-summary", verifyToken, async (req, res) => {
+
+    try {
+
+        const { resume } = req.body;
+
+        if (!resume) {
+            return res.status(400).json({
+                error: "Resume data is required."
+            });
+        }
+
+        const prompt = `
+You are FutureTwin AI Resume Writer.
+
+Generate a professional resume summary based ONLY on the candidate information provided below.
+
+Requirements:
+
+- Write 2–4 sentences.
+- Professional and ATS-friendly.
+- Suitable for a fresher / early-career candidate.
+- Highlight the candidate's strongest technical skills.
+- Mention relevant experience, internships, projects, or education when useful.
+- Do not invent experience, skills, companies, achievements, or technologies.
+- Avoid first-person language.
+- Do not use bullet points.
+- Return ONLY the summary text.
+- Do not add quotation marks.
+- Do not add headings.
+
+Candidate Resume:
+
+${JSON.stringify(resume, null, 2)}
+`;
+
+        const summary = await askAI(prompt);
+
+        res.json({
+            summary: summary.trim()
+        });
+
+    } catch (error) {
+
+        console.error("Summary generation error:", error);
+
+        res.status(500).json({
+            error: "Unable to generate AI summary."
+        });
+
+    }
+
 });
 
 const PORT = process.env.PORT || 5000;
@@ -655,6 +711,199 @@ app.post("/login", async (req, res) => {
     });
 
   }
+
+});
+
+app.post("/forgot-password", async (req, res) => {
+
+    try {
+
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                error: "Email is required."
+            });
+        }
+
+        const normalizedEmail = email.toLowerCase().trim();
+
+        const user = await User.findOne({
+            email: normalizedEmail
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                error: "No account found with this email."
+            });
+        }
+
+        const otp = Math.floor(
+            100000 + Math.random() * 900000
+        ).toString();
+
+        const expiresAt = new Date(
+            Date.now() + 10 * 60 * 1000
+        );
+
+        await PasswordReset.deleteMany({
+            email: normalizedEmail
+        });
+
+        await PasswordReset.create({
+            email: normalizedEmail,
+            otp,
+            expiresAt
+        });
+
+        await sendOTP(
+            normalizedEmail,
+            otp
+        );
+
+        res.json({
+            message: "OTP sent successfully."
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            error: "Unable to send password reset OTP."
+        });
+
+    }
+
+});
+
+app.post("/verify-otp", async (req, res) => {
+
+    try {
+
+        const { email, otp } = req.body;
+
+        if (!email || !otp) {
+            return res.status(400).json({
+                error: "Email and OTP are required."
+            });
+        }
+
+        const normalizedEmail = email.toLowerCase().trim();
+
+        const reset = await PasswordReset.findOne({
+            email: normalizedEmail,
+            otp: otp.toString()
+        });
+
+        if (!reset) {
+            return res.status(400).json({
+                error: "Invalid OTP."
+            });
+        }
+
+        if (reset.expiresAt < new Date()) {
+
+            await PasswordReset.deleteOne({
+                _id: reset._id
+            });
+
+            return res.status(400).json({
+                error: "OTP has expired."
+            });
+
+        }
+
+        res.json({
+            message: "OTP verified successfully."
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            error: "Unable to verify OTP."
+        });
+
+    }
+
+});
+
+app.post("/reset-password", async (req, res) => {
+
+    try {
+
+        const {
+            email,
+            otp,
+            newPassword
+        } = req.body;
+
+        if (!email || !otp || !newPassword) {
+            return res.status(400).json({
+                error: "Email, OTP and new password are required."
+            });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({
+                error: "Password must be at least 6 characters."
+            });
+        }
+
+        const normalizedEmail = email.toLowerCase().trim();
+
+        const reset = await PasswordReset.findOne({
+            email: normalizedEmail,
+            otp: otp.toString()
+        });
+
+        if (!reset) {
+            return res.status(400).json({
+                error: "Invalid OTP."
+            });
+        }
+
+        if (reset.expiresAt < new Date()) {
+
+            await PasswordReset.deleteOne({
+                _id: reset._id
+            });
+
+            return res.status(400).json({
+                error: "OTP has expired."
+            });
+
+        }
+
+        const hashedPassword = await bcrypt.hash(
+            newPassword,
+            10
+        );
+
+        await User.findOneAndUpdate(
+            { email: normalizedEmail },
+            { password: hashedPassword }
+        );
+
+        await PasswordReset.deleteOne({
+            _id: reset._id
+        });
+
+        res.json({
+            message: "Password reset successfully."
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            error: "Unable to reset password."
+        });
+
+    }
 
 });
 

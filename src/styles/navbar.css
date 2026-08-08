@@ -232,3 +232,23 @@
     }
 
 }
+
+.profile-btn,
+.profile-dropdown a,
+.profile-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-btn svg,
+.profile-dropdown a svg,
+.profile-dropdown button svg {
+    flex-shrink: 0;
+}
+
+.menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

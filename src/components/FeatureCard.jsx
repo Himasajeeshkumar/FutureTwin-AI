@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function FeatureCard({ title, description, icon }) {
+function FeatureCard({ title, description, icon: Icon }) {
 
     const navigate = useNavigate();
 
@@ -34,39 +34,39 @@ function FeatureCard({ title, description, icon }) {
 
             default:
                 break;
-
         }
-
     };
 
     return (
-
         <div
             className="card"
             onClick={handleClick}
-            style={{ cursor: "pointer" }}
         >
 
             <div className="feature-icon">
-
-                {icon}
-
+                <Icon
+                    size={30}
+                    strokeWidth={2}
+                />
             </div>
 
             <h2>{title}</h2>
 
             <p>{description}</p>
 
-            <button className="feature-btn">
-
-                Explore →
-
+            <button
+                className="feature-btn"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    handleClick();
+                }}
+            >
+                Explore
+                <span aria-hidden="true">→</span>
             </button>
 
         </div>
-
     );
-
 }
 
 export default FeatureCard;

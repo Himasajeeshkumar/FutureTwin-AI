@@ -24,6 +24,7 @@ import Simulator from "./pages/Simulator";
 import SkillGapPage from "./pages/SkillGap";
 import About from "./pages/About";
 import Momentum from "./pages/Momentum";
+import ForgotPassword from "./pages/ForgotPassword";
 
 
 function App() {
@@ -70,6 +71,8 @@ function App() {
             path="/signup"
             element={<Signup />}
         />
+
+        
         <Route
           path="/dashboard"
           element={
@@ -77,6 +80,11 @@ function App() {
                 <Dashboard />
             </ProtectedRoute>
           }
+        />
+        
+        <Route
+            path="/forgot-password"
+            element={<ForgotPassword />}
         />
 
         <Route

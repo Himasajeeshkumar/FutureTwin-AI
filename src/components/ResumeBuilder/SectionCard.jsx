@@ -1,40 +1,52 @@
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
-function SectionCard({ title, children, defaultOpen = true }) {
+function SectionCard({
+    title,
+    children,
+    defaultOpen = true
+}) {
 
     const [open, setOpen] = useState(defaultOpen);
 
-    return (
+    const toggleSection = () => {
+        setOpen((prev) => !prev);
+    };
 
+    const ChevronIcon = open
+        ? ChevronDown
+        : ChevronRight;
+
+    return (
         <div className="section-card">
 
-            <div
+            <button
+                type="button"
                 className="section-header"
-                onClick={() => setOpen(!open)}
+                onClick={toggleSection}
+                aria-expanded={open}
             >
 
+                <ChevronIcon
+                    size={20}
+                    strokeWidth={2}
+                />
+
                 <h2>
-
-                    {open ? "▼" : "▶"} {title}
-
+                    {title}
                 </h2>
 
-            </div>
+            </button>
+
 
             {open && (
-
                 <div className="section-content">
-
                     {children}
-
                 </div>
-
             )}
 
         </div>
-
     );
-
 }
 
 export default SectionCard;

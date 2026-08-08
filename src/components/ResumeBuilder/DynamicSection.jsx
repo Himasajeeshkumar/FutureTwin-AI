@@ -1,4 +1,3 @@
-
 function DynamicSection({
     data,
     setData,
@@ -9,11 +8,18 @@ function DynamicSection({
 
     const updateField = (index, field, value) => {
 
-        const updated = [...data];
-        updated[index][field] = value;
+        const updated = data.map((item, itemIndex) =>
+            itemIndex === index
+                ? {
+                    ...item,
+                    [field]: value
+                }
+                : item
+        );
 
         setData(updated);
     };
+
 
     const addItem = () => {
 
@@ -21,20 +27,22 @@ function DynamicSection({
             ...data,
             { ...emptyItem }
         ]);
-
     };
+
 
     const deleteItem = (index) => {
 
         setData(
-            data.filter((_, i) => i !== index)
+            data.filter(
+                (_, itemIndex) =>
+                    itemIndex !== index
+            )
         );
-
     };
 
-    return (
 
-        <>
+    return (
+        <div className="dynamic-section">
 
             {data.map((item, index) => (
 
@@ -43,58 +51,86 @@ function DynamicSection({
                     key={index}
                 >
 
-                    {fields.map((field) => (
+                    {fields.map((field) => {
 
-                        <input
-                            key={field.name}
-                            placeholder={field.placeholder}
-                            value={
-                                Array.isArray(item[field.name])
-                                    ? item[field.name].join(", ")
-                                    : item[field.name]
-                            }
-                            onChange={(e) => {
+                        const fieldValue =
+                            item[field.name];
 
-                                const value = e.target.value;
+                        const isArray =
+                            Array.isArray(fieldValue);
 
-                                updateField(
-                                    index,
-                                    field.name,
-                                    Array.isArray(item[field.name])
-                                        ? value
-                                            .split(",")
-                                            .map(v => v.trim())
-                                            .filter(Boolean)
-                                        : value
-                                );
 
-                            }}
-                        />
+                        return (
+                            <input
+                                key={field.name}
+                                type={
+                                    field.name
+                                        .toLowerCase()
+                                        .includes("url")
+                                        ? "url"
+                                        : "text"
+                                }
+                                placeholder={
+                                    field.placeholder
+                                }
+                                value={
+                                    isArray
+                                        ? fieldValue.join(", ")
+                                        : fieldValue || ""
+                                }
+                                onChange={(e) => {
 
-                    ))}
+                                    const value =
+                                        e.target.value;
+
+                                    updateField(
+                                        index,
+                                        field.name,
+                                        isArray
+                                            ? value
+                                                .split(",")
+                                                .map(
+                                                    (v) =>
+                                                        v.trim()
+                                                )
+                                                .filter(
+                                                    Boolean
+                                                )
+                                            : value
+                                    );
+
+                                }}
+                            />
+                        );
+
+                    })}
+
 
                     <button
+                        type="button"
                         className="delete-btn"
-                        onClick={() => deleteItem(index)}
+                        onClick={() =>
+                            deleteItem(index)
+                        }
                     >
-                        🗑 Delete
+                        Delete
                     </button>
 
                 </div>
 
             ))}
 
+
             <button
+                type="button"
                 className="add-btn"
                 onClick={addItem}
             >
                 {addButtonText}
             </button>
 
-        </>
-
+        </div>
     );
-
 }
 
 export default DynamicSection;

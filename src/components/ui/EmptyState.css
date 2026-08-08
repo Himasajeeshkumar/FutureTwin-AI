@@ -1,26 +1,51 @@
 .empty-state {
     max-width: 500px;
-    margin: 60px auto;
-    padding: 40px;
+    margin: 50px auto;
+    padding: 40px 30px;
+
     text-align: center;
-    background: #ffffff;
+
+    background: #1d1d25;
+    border: 1px solid rgba(139, 92, 246, 0.2);
     border-radius: 20px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .empty-icon {
-    font-size: 60px;
-    margin-bottom: 20px;
+    width: 80px;
+    height: 80px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #a855f7;
+
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+
+    border-radius: 18px;
 }
 
 .empty-state h2 {
-    margin-bottom: 12px;
-    color: #111827;
+    margin: 0 0 12px;
+
+    color: #ffffff;
+
+    font-size: 24px;
+    font-weight: 700;
 }
 
 .empty-state p {
-    color: #6b7280;
-    line-height: 1.6;
-    margin-bottom: 24px;
+    margin: 0 auto 24px;
+
+    max-width: 420px;
+
+    color: #9ca3af;
+
+    font-size: 15px;
+    line-height: 1.7;
 }
