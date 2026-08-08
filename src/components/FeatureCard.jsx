@@ -34,39 +34,71 @@ function FeatureCard({ title, description, icon: Icon }) {
 
             default:
                 break;
+
         }
+
     };
 
     return (
-        <div
+        <article
             className="card"
             onClick={handleClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(event) => {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+                    event.preventDefault();
+                    handleClick();
+                }
+
+            }}
         >
 
             <div className="feature-icon">
-                <Icon
-                    size={30}
-                    strokeWidth={2}
-                />
+
+                {typeof Icon === "function" ? (
+                    <Icon
+                        size={30}
+                        strokeWidth={2}
+                    />
+                ) : null}
+
             </div>
 
-            <h2>{title}</h2>
+            <h2>
+                {title}
+            </h2>
 
-            <p>{description}</p>
+            <p>
+                {description}
+            </p>
 
             <button
+                type="button"
                 className="feature-btn"
-                onClick={(e) => {
-                    e.stopPropagation();
+                onClick={(event) => {
+
+                    event.stopPropagation();
                     handleClick();
+
                 }}
             >
+
                 Explore
-                <span aria-hidden="true">→</span>
+
+                <span aria-hidden="true">
+                    →
+                </span>
+
             </button>
 
-        </div>
+        </article>
     );
+
 }
 
 export default FeatureCard;
