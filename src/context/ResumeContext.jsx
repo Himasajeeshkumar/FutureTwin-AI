@@ -9,6 +9,7 @@ import { calculateMomentum } from "../utils/momentum/momentumEngine";
 
 const ResumeContext = createContext();
 
+
 /* =========================================
    Session Storage Helpers
 ========================================= */
@@ -410,6 +411,91 @@ export function ResumeProvider({ children }) {
         }
 
     });
+
+
+    /* =====================================
+       XP Award Function
+    ===================================== */
+
+    const awardXP = (amount) => {
+
+        const points =
+            Number(amount) || 0;
+
+
+        if (points <= 0) {
+
+            return;
+
+        }
+
+
+        /*
+         * Lifetime XP
+         */
+
+        setXP(prev =>
+            prev + points
+        );
+
+
+        /*
+         * Today's XP
+         */
+
+        setTodayXP(prev =>
+            prev + points
+        );
+
+
+        /*
+         * Weekly XP
+         */
+
+        setWeeklyXP(prev => {
+
+            const today =
+                new Date().getDay();
+
+
+            /*
+             * JavaScript:
+             *
+             * Sunday = 0
+             * Monday = 1
+             * ...
+             * Saturday = 6
+             *
+             * Our chart:
+             *
+             * Monday = 0
+             * Tuesday = 1
+             * ...
+             * Sunday = 6
+             */
+
+            const todayIndex =
+                today === 0
+                    ? 6
+                    : today - 1;
+
+
+            const updated = [
+                ...prev
+            ];
+
+
+            updated[todayIndex] =
+                (Number(
+                    updated[todayIndex]
+                ) || 0) + points;
+
+
+            return updated;
+
+        });
+
+    };
 
 
     /* =====================================
@@ -832,6 +918,8 @@ export function ResumeProvider({ children }) {
 
                 weeklyXP,
                 setWeeklyXP,
+
+                awardXP,
 
 
                 /* Study */

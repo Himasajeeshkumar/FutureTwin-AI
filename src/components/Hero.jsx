@@ -1,15 +1,31 @@
+import {
+    Sparkles,
+    Hand,
+    BarChart3,
+    FileText,
+    Rocket
+} from "lucide-react";
+
 import { Link } from "react-router-dom";
+
 import { useResume } from "../context/ResumeContext";
+
 import "./Hero.css";
+
 
 function Hero() {
 
     const {
-
         parsedResume,
         analysis
-
     } = useResume();
+
+
+    /*
+     * ========================================
+     * Logged-in / Resume Uploaded Hero
+     * ========================================
+     */
 
     if (parsedResume) {
 
@@ -17,145 +33,268 @@ function Hero() {
 
             <section className="hero">
 
-              <div className="hero-left">
+                <div className="hero-left">
 
-                  <div className="logged-in-hero">
+                    <div className="logged-in-hero">
 
-                    <div className="logged-in-header">
+                        <div className="logged-in-header">
 
-                        <span className="hero-badge">
-                            👋 Welcome back
-                        </span>
+                            <span className="hero-badge">
 
-                        <h1>
-                            Hi, {parsedResume.personal?.name?.split(" ")[0]}!
-                        </h1>
+                                <Hand
+                                    size={18}
+                                    strokeWidth={2}
+                                />
 
-                        <p>
-                            Your AI career dashboard is ready.
-                        </p>
+                                Welcome back
 
-                    </div>
+                            </span>
 
-                    <div className="hero-score-grid">
 
-                        <div className="hero-score-card">
-                            <span>Resume Score</span>
-                            <h2>{analysis?.resumeScore ?? "--"}%</h2>
+                            <h1>
+
+                                Hi,{" "}
+
+                                {
+                                    parsedResume.personal?.name
+                                        ?.split(" ")[0]
+                                }!
+
+                            </h1>
+
+
+                            <p>
+                                Your AI career dashboard is ready.
+                            </p>
+
                         </div>
 
-                        <div className="hero-score-card">
-                            <span>ATS Score</span>
-                            <h2>{analysis?.atsScore ?? "--"}%</h2>
+
+                        <div className="hero-score-grid">
+
+                            <div className="hero-score-card">
+
+                                <span>
+                                    Resume Score
+                                </span>
+
+                                <h2>
+                                    {analysis?.resumeScore ?? "--"}%
+                                </h2>
+
+                            </div>
+
+
+                            <div className="hero-score-card">
+
+                                <span>
+                                    ATS Score
+                                </span>
+
+                                <h2>
+                                    {analysis?.atsScore ?? "--"}%
+                                </h2>
+
+                            </div>
+
                         </div>
 
-                    </div>
 
-                    <div className="hero-buttons">
+                        <div className="hero-buttons">
 
-                        <Link to="/dashboard">
-                            <button className="primary-btn">
-                                📊 Open Dashboard
-                            </button>
-                        </Link>
+                            <Link to="/dashboard">
 
-                        <Link to="/resume-analysis">
-                            <button className="secondary-btn">
-                                📄 Resume Analysis
-                            </button>
-                        </Link>
+                                <button className="primary-btn">
+
+                                    <BarChart3
+                                        size={18}
+                                        strokeWidth={2}
+                                    />
+
+                                    Open Dashboard
+
+                                </button>
+
+                            </Link>
+
+
+                            <Link to="/resume-analysis">
+
+                                <button className="secondary-btn">
+
+                                    <FileText
+                                        size={18}
+                                        strokeWidth={2}
+                                    />
+
+                                    Resume Analysis
+
+                                </button>
+
+                            </Link>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-              </div>
 
-              <div className="hero-right">
+                <div className="hero-right">
 
-                  {/* Optional:
-                    Put a hero card here like your landing page,
-                    or leave it empty for now.
-                  */}
+                </div>
 
-              </div>
-
-          </section>
+            </section>
 
         );
 
     }
 
+
+    /*
+     * ========================================
+     * Landing Hero
+     * ========================================
+     */
+
     return (
-  <section className="hero">
 
-    <div className="hero-left">
+        <section className="hero">
 
-      <div className="hero-badge">
-        ✨ AI Powered Career Intelligence
-      </div>
+            <div className="hero-left">
 
-      <h1 className="hero-title">
-        Build Your Future
-        <br />
-        <span>With AI</span>
-      </h1>
+                <div className="hero-badge">
 
-      <p className="hero-description">
-        Analyze your resume, discover skill gaps, compare with real jobs,
-        and predict your career growth—all powered by AI.
-      </p>
+                    <Sparkles
+                        size={18}
+                        strokeWidth={2}
+                    />
 
-      <div className="hero-buttons">
+                    AI Powered Career Intelligence
 
-        <Link to="/resume-analysis">
-          <button className="primary-btn">
-            🚀 Get Started
-          </button>
-        </Link>
+                </div>
 
-        <Link to="/about">
-          <button className="secondary-btn">
-            Learn More
-          </button>
-        </Link>
 
-      </div>
+                <h1 className="hero-title">
 
-    </div>
+                    Build Your Future
 
-    <div className="hero-right">
+                    <br />
 
-      <div className="hero-card">
+                    <span>
+                        With AI
+                    </span>
 
-        <h3>FutureTwin AI</h3>
+                </h1>
 
-        <div className="hero-stat">
-          <span>Resume Score</span>
-          <strong>91%</strong>
-        </div>
 
-        <div className="hero-stat">
-          <span>ATS Score</span>
-          <strong>87%</strong>
-        </div>
+                <p className="hero-description">
 
-        <div className="hero-stat">
-          <span>Future Success</span>
-          <strong>88%</strong>
-        </div>
+                    Analyze your resume, discover skill gaps,
+                    compare with real jobs, and predict your
+                    career growth—all powered by AI.
 
-        <div className="hero-stat">
-          <span>Career Readiness</span>
-          <strong>82%</strong>
-        </div>
+                </p>
 
-      </div>
 
-    </div>
+                <div className="hero-buttons">
 
-  </section>
-);
+                    <Link to="/resume-analysis">
+
+                        <button className="primary-btn">
+
+                            <Rocket
+                                size={18}
+                                strokeWidth={2}
+                            />
+
+                            Get Started
+
+                        </button>
+
+                    </Link>
+
+
+                    <Link to="/about">
+
+                        <button className="secondary-btn">
+                            Learn More
+                        </button>
+
+                    </Link>
+
+                </div>
+
+            </div>
+
+
+            <div className="hero-right">
+
+                <div className="hero-card">
+
+                    <h3>
+                        FutureTwin AI
+                    </h3>
+
+
+                    <div className="hero-stat">
+
+                        <span>
+                            Resume Score
+                        </span>
+
+                        <strong>
+                            91%
+                        </strong>
+
+                    </div>
+
+
+                    <div className="hero-stat">
+
+                        <span>
+                            ATS Score
+                        </span>
+
+                        <strong>
+                            87%
+                        </strong>
+
+                    </div>
+
+
+                    <div className="hero-stat">
+
+                        <span>
+                            Future Success
+                        </span>
+
+                        <strong>
+                            88%
+                        </strong>
+
+                    </div>
+
+
+                    <div className="hero-stat">
+
+                        <span>
+                            Career Readiness
+                        </span>
+
+                        <strong>
+                            82%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    );
 
 }
 
