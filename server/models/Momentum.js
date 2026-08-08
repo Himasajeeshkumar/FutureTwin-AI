@@ -2,14 +2,24 @@ import mongoose from "mongoose";
 
 const momentumSchema = new mongoose.Schema(
     {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+            unique: true,
+            index: true
+        },
+
         xp: {
             type: Number,
-            default: 0
+            default: 0,
+            min: 0
         },
 
         todayXP: {
             type: Number,
-            default: 0
+            default: 0,
+            min: 0
         },
 
         todayXPDate: {
@@ -44,7 +54,8 @@ const momentumSchema = new mongoose.Schema(
 
         streak: {
             type: Number,
-            default: 0
+            default: 0,
+            min: 0
         },
 
         lastActivityDate: {
@@ -52,40 +63,10 @@ const momentumSchema = new mongoose.Schema(
             default: ""
         },
 
-        studyMinutes: {
+        totalStudyMinutes: {
             type: Number,
-            default: 0
-        }
-    },
-    {
-        _id: false
-    }
-);
-
-const userSchema = new mongoose.Schema(
-    {
-        name: {
-            type: String,
-            required: true,
-            trim: true
-        },
-
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            lowercase: true,
-            trim: true
-        },
-
-        password: {
-            type: String,
-            required: true
-        },
-
-        momentum: {
-            type: momentumSchema,
-            default: () => ({})
+            default: 0,
+            min: 0
         }
     },
     {
@@ -93,4 +74,7 @@ const userSchema = new mongoose.Schema(
     }
 );
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model(
+    "Momentum",
+    momentumSchema
+);

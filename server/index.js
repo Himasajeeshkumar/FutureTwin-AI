@@ -1,20 +1,28 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+
 import { askAI } from "./services/aiService.js";
 import connectDB from "./config/db.js";
+
 import Resume from "./models/Resume.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "./models/User.js";
+
 import { verifyToken } from "./middleware/authMiddleware.js";
+
 import JobMatch from "./models/JobMatch.js";
 import SkillGap from "./models/SkillGap.js";
 import CareerSimulation from "./models/CareerSimulation.js";
 import MentorChat from "./models/MentorChat.js";
+
 import { scoreResume } from "./utils/scoreResume.js";
+
 import PasswordReset from "./models/PasswordReset.js";
 import { sendOTP } from "./utils/sendEmail.js";
+
+import momentumRoutes from "./routes/momentum.js";
 
 dotenv.config();
 connectDB();
@@ -29,6 +37,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
+app.use("/momentum", momentumRoutes);
 
 
 app.get("/", (req, res) => {
@@ -961,6 +970,7 @@ app.get("/dashboard", verifyToken, async (req, res) => {
     }
 
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
