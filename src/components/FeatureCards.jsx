@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 import FeatureCard from "./FeatureCard";
+import "../styles/cards.css";
 
 function FeatureCards() {
 
